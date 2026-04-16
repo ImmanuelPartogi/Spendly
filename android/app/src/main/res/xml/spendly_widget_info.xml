@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Metadata AppWidgetProvider untuk Spendly.
+  File ini direferensi di AndroidManifest.xml:
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/spendly_widget_info" />
+
+  Ukuran:
+    minWidth  110dp  = ~2 kolom di grid 4×4 standar (1 kolom ≈ 70-80dp)
+    minHeight  40dp  = ~1 baris
+    targetCellWidth/Height untuk Android 12+ (API 31+)
+
+  updatePeriodMillis = 1800000 ms = 30 menit.
+  Catatan: Android membatasi minimum 30 menit untuk update otomatis.
+  Untuk update real-time, gunakan HomeWidget.updateWidget() dari Flutter
+  setiap kali ada transaksi baru.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="110dp"
+    android:minHeight="40dp"
+    android:targetCellWidth="2"
+    android:targetCellHeight="1"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/spendly_widget"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:description="@string/widget_description"
+    android:previewLayout="@layout/spendly_widget" />

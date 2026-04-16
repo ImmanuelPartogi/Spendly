@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Layout homescreen widget Spendly (2×1 cell).
+  Drawables yang digunakan:
+    @drawable/widget_background  → rounded white card + border
+    @drawable/widget_add_bg      → lingkaran biru untuk tombol +
+    @drawable/ic_add             → ikon plus putih
+
+  IDs yang direferensi di SpendlyWidget.kt:
+    @id/widget_root              → root layout (tap → buka app)
+    @id/widget_balance           → TextView saldo total
+    @id/widget_today_expense     → TextView pengeluaran hari ini
+    @id/widget_last_updated      → TextView jam terakhir update
+    @id/widget_add_btn           → ImageButton tambah transaksi
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_background"
+    android:padding="14dp"
+    android:gravity="center_vertical">
+
+    <!-- Saldo total -->
+    <TextView
+        android:id="@+id/widget_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rp 0"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#1A1D2E"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Row bawah: pengeluaran hari ini + jam update + tombol + -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical">
+
+        <!-- Pengeluaran hari ini -->
+        <TextView
+            android:id="@+id/widget_today_expense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hari ini: Rp 0"
+            android:textSize="11sp"
+            android:textColor="#6B7080"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <!-- Jam terakhir update -->
+        <TextView
+            android:id="@+id/widget_last_updated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text=""
+            android:textSize="9sp"
+            android:textColor="#B0B7C3" />
+
+        <!-- Tombol tambah transaksi -->
+        <ImageButton
+            android:id="@+id/widget_add_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_add"
+            android:background="@drawable/widget_add_bg"
+            android:scaleType="center"
+            android:padding="6dp"
+            android:contentDescription="Tambah transaksi" />
+
+    </LinearLayout>
+
+</LinearLayout>
