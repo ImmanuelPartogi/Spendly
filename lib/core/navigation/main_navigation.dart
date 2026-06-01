@@ -10,7 +10,7 @@ import '../../features/analytics/presentation/screens/analytics_screen.dart';
 import '../../features/budget/presentation/screens/budget_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 
-// ─── Screen registry ──────────────────────────────────────────────────────────
+// ─── Daftar layar ─────────────────────────────────────────────────────────────
 const List<Widget> _screens = [
   DashboardScreen(),
   TransactionsScreen(),
@@ -22,11 +22,11 @@ const List<Widget> _screens = [
 const double kScrollPaddingBottom = 100.0;
 
 const _navItems = [
-  _NavMeta(icon: Icons.home_rounded, label: 'Home'),
+  _NavMeta(icon: Icons.home_rounded,         label: 'Beranda'),
   _NavMeta(icon: Icons.receipt_long_rounded, label: 'Transaksi'),
-  _NavMeta(icon: Icons.bar_chart_rounded, label: 'Analytics'),
-  _NavMeta(icon: Icons.savings_rounded, label: 'Budget'),
-  _NavMeta(icon: Icons.person_rounded, label: 'Profil'),
+  _NavMeta(icon: Icons.bar_chart_rounded,    label: 'Analitik'),
+  _NavMeta(icon: Icons.savings_rounded,      label: 'Anggaran'),
+  _NavMeta(icon: Icons.person_rounded,       label: 'Profil'),
 ];
 
 class _NavMeta {
@@ -35,7 +35,7 @@ class _NavMeta {
   const _NavMeta({required this.icon, required this.label});
 }
 
-// ─── Main shell ───────────────────────────────────────────────────────────────
+// ─── Shell utama ──────────────────────────────────────────────────────────────
 
 class MainNavigation extends ConsumerWidget {
   const MainNavigation({super.key});
@@ -59,7 +59,7 @@ class MainNavigation extends ConsumerWidget {
   }
 }
 
-// ─── Floating Nav Bar ─────────────────────────────────────────────────────────
+// ─── Nav Bar Mengambang ───────────────────────────────────────────────────────
 
 class _FloatingNavBar extends StatelessWidget {
   final int currentIndex;
@@ -72,13 +72,12 @@ class _FloatingNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = isDark ? AppColors.cardDark : AppColors.card;
+    final isDark   = Theme.of(context).brightness == Brightness.dark;
+    final bgColor  = isDark ? AppColors.cardDark : AppColors.card;
     final bdrColor = isDark ? AppColors.borderDark : AppColors.border;
 
     return SafeArea(
       child: Padding(
-        // Floating margin bawah
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
         child: Container(
           height: 64,
@@ -88,7 +87,6 @@ class _FloatingNavBar extends StatelessWidget {
             border: Border.all(color: bdrColor, width: 1),
             boxShadow: [
               BoxShadow(
-                // Colored shadow sesuai brand — lebih premium dari black shadow
                 color: isDark
                     ? Colors.black.withOpacity(0.35)
                     : AppColors.primary.withOpacity(0.10),
@@ -120,7 +118,7 @@ class _FloatingNavBar extends StatelessWidget {
   }
 }
 
-// ─── Individual Nav Item ──────────────────────────────────────────────────────
+// ─── Item Navigasi ────────────────────────────────────────────────────────────
 
 class _NavItem extends StatelessWidget {
   final _NavMeta meta;
@@ -139,9 +137,8 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSelected = currentIndex == index;
-    final inactiveColor =
-        isDark ? AppColors.textSecondaryDark : AppColors.textHint;
+    final isSelected    = currentIndex == index;
+    final inactiveColor = isDark ? AppColors.textSecondaryDark : AppColors.textHint;
 
     return GestureDetector(
       onTap: () => onTap(index),
@@ -149,11 +146,11 @@ class _NavItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // ── Animated icon container ────────────────────────────────────
+          // ── Kontainer ikon animasi ─────────────────────────────────────
           AnimatedContainer(
             duration: kDurationFast,
             curve: kCurveDefault,
-            width: isSelected ? 48 : 40,
+            width:  isSelected ? 48 : 40,
             height: isSelected ? 34 : 30,
             decoration: BoxDecoration(
               color: isSelected
@@ -179,14 +176,14 @@ class _NavItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 3),
-          // ── Animated label ─────────────────────────────────────────────
+          // ── Label animasi ──────────────────────────────────────────────
           AnimatedDefaultTextStyle(
             duration: kDurationFast,
             curve: kCurveDefault,
             style: TextStyle(
-              fontSize: 10,
+              fontSize:   10,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              color: isSelected ? AppColors.primary : inactiveColor,
+              color:      isSelected ? AppColors.primary : inactiveColor,
             ),
             child: Text(meta.label),
           ),

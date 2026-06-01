@@ -28,145 +28,6 @@ class SyncService {
     return _firestore.collection('users').doc(uid).collection(name);
   }
 
-  /// Dokumen utama user — untuk settings seperti PIN
-  static DocumentReference<Map<String, dynamic>> get _userDoc {
-    final uid = FirebaseAuthService.currentUserId;
-    if (uid == null) throw Exception('User not logged in');
-    return _firestore.collection('users').doc(uid);
-  }
-
-  // ── PIN LOOKUP (pra-login, publicly readable) ─────────────────────────────
-  //
-  // Collection: pin_lookup/{email_lowercase}
-  // Fields    : { pinEnabled: bool, pinHash: string, updatedAt: timestamp }
-  //
-  // Dokumen ini TIDAK menyimpan PIN mentah — hanya hash-nya.
-  // Hash format: sha256(pin + ":" + email.toLowerCase())
-  //
-  // Firestore Rules yang dibutuhkan:
-  //   match /pin_lookup/{emailKey} {
-  //     allow read: if true;
-  //     allow write: if request.auth != null;
-  //   }
-  //
-  // Dipakai oleh LoginScreen untuk menentukan apakah harus tampilkan
-  // PIN step atau password step, sebelum user terautentikasi ke Firebase.
-  //
-
-  static DocumentReference<Map<String, dynamic>> _pinLookupDoc(String email) =>
-      _firestore
-          .collection('pin_lookup')
-          .doc(email.toLowerCase().trim());
-
-  /// Upload/update pin_lookup entry untuk email.
-  /// Dipanggil oleh AuthService.setPin(), disablePin(), dan restorePin().
-  static Future<void> uploadPinLookup({
-    required String email,
-    required bool   enabled,
-    required String pinHash,
-  }) async {
-    if (email.isEmpty) return;
-    if (!await isOnline) return;
-    try {
-      await _pinLookupDoc(email).set(
-        {
-          'pinEnabled': enabled,
-          'pinHash':    enabled ? pinHash : FieldValue.delete(),
-          'updatedAt':  FieldValue.serverTimestamp(),
-        },
-        SetOptions(merge: true),
-      );
-      debugPrint('[Sync] pin_lookup updated (email=$email, enabled=$enabled)');
-    } catch (e) {
-      debugPrint('[Sync] Upload pin_lookup error: $e');
-    }
-  }
-
-  /// Cek PIN status untuk email — tanpa perlu Firebase Auth.
-  /// Return: { 'pinEnabled': bool, 'pinHash': String } atau null jika tidak ada.
-  static Future<Map<String, dynamic>?> checkPinByEmail(String email) async {
-    if (email.isEmpty) return null;
-    if (!await isOnline) return null;
-    try {
-      final snap = await _pinLookupDoc(email).get();
-      if (!snap.exists) return null;
-      final data = snap.data();
-      if (data == null) return null;
-      final pinEnabled = data['pinEnabled'] as bool? ?? false;
-      final pinHash    = data['pinHash'] as String?;
-      if (!pinEnabled || pinHash == null || pinHash.isEmpty) return null;
-      return {'pinEnabled': pinEnabled, 'pinHash': pinHash};
-    } catch (e) {
-      debugPrint('[Sync] Check pin_lookup error: $e');
-      return null;
-    }
-  }
-
-  // ── PIN (users/{uid}) ─────────────────────────────────────────────────────
-  //
-  // PIN mentah (terenkripsi implisit oleh Firestore rules) disimpan di
-  // dokumen utama user: users/{uid}
-  // Fields: { pin: string, pinEnabled: bool, updatedAt: timestamp }
-  //
-  // Ini adalah sumber kebenaran PIN yang sebenarnya, dilindungi auth rules.
-  // pin_lookup hanya menyimpan hash-nya untuk keperluan lookup pra-login.
-  //
-
-  static Future<void> uploadPin({
-    required String pin,
-    required bool   enabled,
-  }) async {
-    if (!await isOnline) return;
-    try {
-      await _userDoc.set(
-        {
-          'pin':        pin,
-          'pinEnabled': enabled,
-          'updatedAt':  FieldValue.serverTimestamp(),
-        },
-        SetOptions(merge: true),
-      );
-      debugPrint('[Sync] PIN uploaded (enabled=$enabled)');
-    } catch (e) {
-      debugPrint('[Sync] Upload PIN error: $e');
-    }
-  }
-
-  /// Mengembalikan {'pin': String, 'pinEnabled': bool} atau null jika tidak ada.
-  static Future<Map<String, dynamic>?> downloadPin() async {
-    if (!await isOnline) return null;
-    try {
-      final snap = await _userDoc.get();
-      if (!snap.exists) return null;
-      final data = snap.data();
-      if (data == null) return null;
-      final pin        = data['pin'] as String?;
-      final pinEnabled = data['pinEnabled'] as bool? ?? false;
-      if (pin == null) return null;
-      return {'pin': pin, 'pinEnabled': pinEnabled};
-    } catch (e) {
-      debugPrint('[Sync] Download PIN error: $e');
-      return null;
-    }
-  }
-
-  static Future<void> disablePin() async {
-    if (!await isOnline) return;
-    try {
-      await _userDoc.set(
-        {
-          'pin':        null,
-          'pinEnabled': false,
-          'updatedAt':  FieldValue.serverTimestamp(),
-        },
-        SetOptions(merge: true),
-      );
-      debugPrint('[Sync] PIN disabled in Firebase');
-    } catch (e) {
-      debugPrint('[Sync] Disable PIN error: $e');
-    }
-  }
-
   // ── TRANSACTIONS ──────────────────────────────────────────────────────────
 
   static Future<void> uploadTransaction(Map<String, dynamic> data) async {
@@ -312,13 +173,11 @@ class SyncService {
         downloadAllTransactions(),
         downloadAllWallets(),
         downloadAllBudgets(),
-        downloadPin(),
       ]);
       return SyncDownloadResult(
         transactions: results[0] as List<Map<String, dynamic>>,
         wallets:      results[1] as List<Map<String, dynamic>>,
         budgets:      results[2] as List<Map<String, dynamic>>,
-        pinData:      results[3] as Map<String, dynamic>?,
       );
     } catch (e) {
       debugPrint('[Sync] Download all error: $e');
@@ -350,22 +209,16 @@ class SyncDownloadResult {
   final List<Map<String, dynamic>> wallets;
   final List<Map<String, dynamic>> budgets;
 
-  /// Data PIN dari Firebase: {'pin': String, 'pinEnabled': bool}
-  /// null = user belum pernah set PIN
-  final Map<String, dynamic>? pinData;
-
   const SyncDownloadResult({
     required this.transactions,
     required this.wallets,
     required this.budgets,
-    this.pinData,
   });
 
   factory SyncDownloadResult.empty() => const SyncDownloadResult(
         transactions: [],
         wallets:      [],
         budgets:      [],
-        pinData:      null,
       );
 
   bool get isEmpty =>

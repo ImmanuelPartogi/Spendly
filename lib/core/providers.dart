@@ -62,8 +62,6 @@ final budgetRepositoryProvider = Provider<BudgetRepository>(
     (ref) => BudgetRepositoryImpl(ref.watch(budgetDaoProvider)));
 
 // ─── Sync / Restore Service ───────────────────────────────────────────────────
-// Note: Restore functionality is implemented in SyncService
-// RestoreService was refactored, this provider is kept for backwards compatibility
 
 final restoreServiceProvider = Provider<RestoreService>(
   (ref) => RestoreService(
@@ -75,33 +73,12 @@ final restoreServiceProvider = Provider<RestoreService>(
 
 // ─── Auth & PIN State ─────────────────────────────────────────────────────────
 //
-// Semua provider ini dibuat sebagai StateNotifier/StateProvider agar bisa
-// di-invalidate setelah RestoreService.downloadAll() + AuthService.restorePin()
-// selesai, sehingga AppGate langsung bereaksi tanpa perlu restart app.
+// Setelah restorePin() selesai, panggil:
+//   ref.invalidate(pinEnabledProvider)
 
 /// Dipakai AppGate untuk memutuskan apakah perlu tampil PinScreen.
-/// Setelah restorePin() selesai, panggil:
-///   ref.invalidate(pinEnabledProvider)
 final pinEnabledProvider = FutureProvider<bool>((ref) async {
   return AuthService.isPinEnabled();
-});
-
-/// Dipakai SettingsScreen untuk toggle biometric.
-/// Setelah setBiometricEnabled() dipanggil, invalidate provider ini.
-final biometricEnabledProvider = FutureProvider<bool>((ref) async {
-  return AuthService.isBiometricEnabled();
-});
-
-/// True jika hardware biometric tersedia di device.
-/// Tidak perlu di-invalidate — nilai ini statis per device.
-final biometricAvailableProvider = FutureProvider<bool>((ref) async {
-  return AuthService.isBiometricAvailable();
-});
-
-/// Dipakai AppGate/OnboardingFlow: apakah user belum menyelesaikan setup PIN.
-/// Setelah setup selesai (setPinSetupPending(false)), invalidate provider ini.
-final pinSetupPendingProvider = FutureProvider<bool>((ref) async {
-  return AuthService.isPinSetupPending();
 });
 
 // ─── Use Cases — Transactions ──────────────────────────────────────────────────
@@ -215,12 +192,9 @@ final recentTransactionsProvider =
 
 // ─── Monthly Stats (reactive) ──────────────────────────────────────────────────
 
-/// Balance dihitung dari semua transaksi (income - expense) agar selalu
-/// akurat setelah restore, tanpa bergantung pada wallet.balance di DB.
 final totalBalanceProvider = Provider<double>((ref) {
   final allAsync = ref.watch(allTransactionsStreamProvider);
 
-  // Fallback sementara saat stream masih loading
   if (allAsync.isLoading) {
     final wallets = ref.watch(walletListProvider).valueOrNull ?? [];
     return wallets.fold(0.0, (sum, w) => sum + w.balance);

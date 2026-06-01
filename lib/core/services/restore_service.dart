@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:spendly/core/database/app_database.dart';
-import 'package:spendly/features/auth/domain/services/auth_service.dart';
 import '../database/daos/transaction_dao.dart';
 import '../database/daos/wallet_dao.dart';
 import '../database/daos/budget_dao.dart';
@@ -15,14 +14,7 @@ class RestoreService {
   RestoreService(this._txDao, this._walletDao, this._budgetDao);
 
   // ─── Clear data lokal ─────────────────────────────────────────────────────
-  //
-  // Wajib dipanggil sebelum restore agar data akun lama tidak tercampur.
-  //
-  // Tambahkan ke masing-masing DAO jika belum ada:
-  //   TransactionDao: Future<void> deleteAll() => delete(transactions).go();
-  //   WalletDao:      Future<void> deleteAll() => delete(wallets).go();
-  //   BudgetDao:      Future<void> deleteAll() => delete(budgets).go();
-  //
+
   Future<void> clearLocalData() async {
     debugPrint('[Restore] Clearing local data...');
     await _txDao.deleteAll();
@@ -33,31 +25,17 @@ class RestoreService {
 
   // ─── Restore dari Firebase ────────────────────────────────────────────────
   //
-  // Mengembalikan true jika PIN aktif setelah restore.
-  // AppGate menggunakan nilai ini untuk memutuskan apakah PinScreen ditampilkan.
-  //
-  Future<bool> restoreFromFirebase() async {
+  // Mengembalikan data transaksi, wallet, dan budget dari Firebase.
+  // PIN TIDAK di-restore dari Firebase karena PIN hanya disimpan lokal.
+
+  Future<void> restoreFromFirebase() async {
     debugPrint('[Restore] Starting restore from Firebase...');
 
-    // 1. Bersihkan data lokal terlebih dahulu
     await clearLocalData();
 
-    // 2. Download semua data (termasuk PIN) secara paralel
     final result = await SyncService.downloadAll();
 
-    // 3. Restore PIN dari Firebase ke cache lokal
-    //    Harus selesai sebelum AppGate membaca isPinEnabled()
-    bool pinEnabled = false;
-    if (result.pinData != null) {
-      pinEnabled = await AuthService.restorePin(result.pinData!);
-      debugPrint('[Restore] PIN restored (enabled=$pinEnabled)');
-    } else {
-      // Tidak ada PIN di Firebase — bersihkan cache lokal juga
-      await AuthService.restorePin({'pin': null, 'pinEnabled': false});
-      debugPrint('[Restore] No PIN in Firebase');
-    }
-
-    // 4. Restore wallets
+    // Restore wallets
     for (final data in result.wallets) {
       try {
         await _walletDao.upsertWallet(WalletsCompanion(
@@ -74,7 +52,7 @@ class RestoreService {
       }
     }
 
-    // 5. Restore transactions
+    // Restore transactions
     for (final data in result.transactions) {
       try {
         await _txDao.insertTransactionRaw(TransactionsCompanion(
@@ -94,7 +72,7 @@ class RestoreService {
       }
     }
 
-    // 6. Restore budgets
+    // Restore budgets
     for (final data in result.budgets) {
       try {
         await _budgetDao.upsertBudget(BudgetsCompanion.insert(
@@ -111,13 +89,8 @@ class RestoreService {
         'wallets:${result.wallets.length} '
         'budgets:${result.budgets.length}');
 
-    // 7. Hitung ulang balance
     await recalculateBalances();
-
-    // 8. Upload wallet lokal yang belum tersync
     await _syncUnsyncedWallets();
-
-    return pinEnabled;
   }
 
   // ─── Recalculate balance ──────────────────────────────────────────────────

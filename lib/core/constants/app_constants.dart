@@ -5,51 +5,51 @@ class AppConstants {
   static const String typeIncome = 'income';
   static const String typeExpense = 'expense';
 
-  // ── Expense Categories (18) ───────────────────────────────────────────────
+  // ── Kategori Pengeluaran (18) ─────────────────────────────────────────────
   static const List<String> expenseCategories = [
-    'Food & Drink',
-    'Transport',
-    'Shopping',
-    'Entertainment',
-    'Health & Medical',
-    'Bills & Utilities',
-    'Education',
-    'Personal Care',
-    'Home & Furniture',
-    'Electronics',
-    'Travel',
-    'Restaurant & Cafe',
-    'Subscription',
-    'Insurance',
-    'Sport & Fitness',
-    'Gifts & Charity',
-    'Pets',
-    'Others',
+    'Makanan & Minuman',
+    'Transportasi',
+    'Belanja',
+    'Hiburan',
+    'Kesehatan',
+    'Tagihan & Utilitas',
+    'Pendidikan',
+    'Perawatan Diri',
+    'Rumah & Perabot',
+    'Elektronik',
+    'Perjalanan',
+    'Restoran & Kafe',
+    'Langganan',
+    'Asuransi',
+    'Olahraga',
+    'Hadiah & Amal',
+    'Hewan Peliharaan',
+    'Lainnya',
   ];
 
-  // ── Income Categories (10) ────────────────────────────────────────────────
+  // ── Kategori Pemasukan (10) ───────────────────────────────────────────────
   static const List<String> incomeCategories = [
-    'Salary',
+    'Gaji',
     'Freelance',
-    'Business',
-    'Investment',
+    'Bisnis',
+    'Investasi',
     'Bonus',
-    'Gift',
-    'Rental',
-    'Dividend',
-    'Side Job',
-    'Others',
+    'Hadiah',
+    'Sewa',
+    'Dividen',
+    'Kerja Sampingan',
+    'Lainnya',
   ];
 
   static const String periodMonthly = 'monthly';
 
   static const List<String> daysOfWeek = [
-    'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+    'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min',
   ];
 
   static const List<String> daysOfWeekFull = [
-  'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu',
-];
+    'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu',
+  ];
 
   static const int defaultUserId = 1;
 }
