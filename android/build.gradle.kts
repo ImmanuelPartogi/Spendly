@@ -1,7 +1,3 @@
-// buildscript block DIHAPUS — sudah ditangani oleh settings.gradle.kts
-// Mendaftarkan plugin via settings.gradle.kts adalah cara yang benar
-// untuk Flutter project dengan Gradle modern (versi 7+)
-
 allprojects {
     repositories {
         google()
