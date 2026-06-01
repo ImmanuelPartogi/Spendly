@@ -125,11 +125,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             padding: const EdgeInsets.fromLTRB(20, 16, 12, 0),
             child: Row(
               children: [
-                Text('Filter & Sort',
+                Text('Filter & Urutkan',
                     style: Theme.of(context).textTheme.headlineSmall),
                 const Spacer(),
                 TextButton(
-                    onPressed: _reset, child: const Text('Reset')),
+                    onPressed: _reset, child: const Text('Atur Ulang')),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close_rounded),

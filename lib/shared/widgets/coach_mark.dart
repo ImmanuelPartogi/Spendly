@@ -56,9 +56,9 @@ class CoachMarkService {
             align: ContentAlign.bottom,
             builder: (_, __) => _CoachContent(
               icon: '💳',
-              title: 'Total Balance',
+              title: 'Total Saldo',
               body:
-                  'Di sini kamu bisa lihat total saldo dari semua wallet yang kamu punya.',
+                  'Di sini kamu bisa lihat total saldo dari semua dompet yang kamu punya.',
             ),
           ),
         ],
@@ -95,9 +95,9 @@ class CoachMarkService {
             align: ContentAlign.bottom,
             builder: (_, __) => _CoachContent(
               icon: '✨',
-              title: 'Smart Insights',
+              title: 'Analisis Cerdas',
               body:
-                  'Spendly menganalisis pola belanjamu dan memberikan insight otomatis setiap hari.',
+                  'Spendly menganalisis pola belanjamu dan memberikan wawasan otomatis setiap hari.',
             ),
           ),
         ],
@@ -117,7 +117,7 @@ class CoachMarkService {
               icon: '📋',
               title: 'Transaksi Terbaru',
               body:
-                  'Semua transaksimu tampil di sini. Tap untuk lihat detail, swipe untuk hapus.',
+                  'Semua transaksimu tampil di sini. Ketuk untuk lihat detail, geser untuk hapus.',
             ),
           ),
         ],
@@ -128,7 +128,7 @@ class CoachMarkService {
       targets: targets,
       colorShadow: Colors.black,
       opacityShadow: 0.85,
-      textSkip: 'SKIP',
+      textSkip: 'LEWATI',
       paddingFocus: 8,
       hideSkip: false,
       onFinish: () => markTourDone(),

@@ -46,7 +46,7 @@ class TransactionsScreen extends ConsumerWidget {
         ),
         error: (e, _) => Center(
           child: Text(
-            'Error: $e',
+            'Terjadi kesalahan: $e',
             style: TextStyle(
               color: isDark
                   ? AppColors.textSecondaryDark

@@ -183,7 +183,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                   ),
                 ),
                 error: (e, _) => Center(
-                  child: Text('Error: $e',
+                  child: Text('Terjadi kesalahan: $e',
                       style: TextStyle(color: txtSec)),
                 ),
                 data: (all) {

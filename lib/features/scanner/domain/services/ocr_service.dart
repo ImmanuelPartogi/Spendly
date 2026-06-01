@@ -50,10 +50,7 @@ class OcrService {
     for (final pattern in patterns) {
       final match = pattern.firstMatch(text);
       if (match != null) {
-        final raw = match
-            .group(1)!
-            .replaceAll('.', '')
-            .replaceAll(',', '');
+        final raw = match.group(1)!.replaceAll('.', '').replaceAll(',', '');
         final value = double.tryParse(raw);
         // Abaikan nilai terlalu kecil (bukan total belanja)
         if (value != null && value >= 100) return value;
@@ -70,14 +67,14 @@ class OcrService {
       r'(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{2,4})',
     );
     for (final match in pattern.allMatches(text)) {
-      final day   = int.tryParse(match.group(1)!);
+      final day = int.tryParse(match.group(1)!);
       final month = int.tryParse(match.group(2)!);
-      var   year  = int.tryParse(match.group(3)!);
+      var year = int.tryParse(match.group(3)!);
 
       if (year != null && year < 100) year += 2000;
       if (day == null || month == null || year == null) continue;
       if (month < 1 || month > 12) continue;
-      if (day   < 1 || day   > 31) continue;
+      if (day < 1 || day > 31) continue;
 
       try {
         return DateTime(year, month, day);

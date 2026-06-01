@@ -48,9 +48,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
     });
 
     try {
-      final text     = await OcrService.extractText(_image!);
-      final total    = OcrService.extractTotal(text);
-      final date     = OcrService.extractDate(text);
+      final text = await OcrService.extractText(_image!);
+      final total = OcrService.extractTotal(text);
+      final date = OcrService.extractDate(text);
       final merchant = OcrService.extractMerchant(text);
 
       setState(() {
@@ -84,12 +84,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark   = Theme.of(context).brightness == Brightness.dark;
-    final bgColor  = isDark ? AppColors.backgroundDark : AppColors.background;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final surfColor = isDark ? AppColors.surfaceDark : AppColors.surface;
     final bdrColor = isDark ? AppColors.borderDark : AppColors.border;
     final cardColor = isDark ? AppColors.cardDark : AppColors.card;
-    final txtSec   = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
+    final txtSec =
+        isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -103,7 +104,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
             GestureDetector(
               onTap: _showSourcePicker,
               child: Container(
-                width: double.infinity, height: 220,
+                width: double.infinity,
+                height: 220,
                 decoration: BoxDecoration(
                   color: surfColor,
                   borderRadius: BorderRadius.circular(20),
@@ -119,7 +121,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: 60, height: 60,
+                            width: 60,
+                            height: 60,
                             decoration: BoxDecoration(
                               color: AppColors.primary.withOpacity(0.1),
                               shape: BoxShape.circle,
@@ -129,16 +132,18 @@ class _ScannerScreenState extends State<ScannerScreen> {
                           ),
                           const SizedBox(height: 12),
                           Text('Tap untuk foto atau pilih gambar struk',
-                            style: TextStyle(color: txtSec, fontSize: 14),
-                            textAlign: TextAlign.center),
+                              style: TextStyle(color: txtSec, fontSize: 14),
+                              textAlign: TextAlign.center),
                         ],
                       )
                     : Stack(
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(18),
-                            child: Image.file(_image!, width: double.infinity,
-                                height: 220, fit: BoxFit.cover),
+                            child: Image.file(_image!,
+                                width: double.infinity,
+                                height: 220,
+                                fit: BoxFit.cover),
                           ),
                           if (_isProcessing)
                             Container(
@@ -150,23 +155,27 @@ class _ScannerScreenState extends State<ScannerScreen> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    CircularProgressIndicator(color: Colors.white),
+                                    CircularProgressIndicator(
+                                        color: Colors.white),
                                     SizedBox(height: 12),
                                     Text('Memproses struk…',
-                                      style: TextStyle(color: Colors.white,
-                                          fontWeight: FontWeight.w600)),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600)),
                                   ],
                                 ),
                               ),
                             ),
                           Positioned(
-                            top: 8, right: 8,
+                            top: 8,
+                            right: 8,
                             child: GestureDetector(
                               onTap: _showSourcePicker,
                               child: Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: const BoxDecoration(
-                                    color: Colors.black54, shape: BoxShape.circle),
+                                    color: Colors.black54,
+                                    shape: BoxShape.circle),
                                 child: const Icon(Icons.refresh_rounded,
                                     color: Colors.white, size: 18),
                               ),
@@ -180,7 +189,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
             // ── Scan result ───────────────────────────────────────────────
             if (_result != null) ...[
-              Text('Hasil Scan', style: Theme.of(context).textTheme.titleMedium),
+              Text('Hasil Scan',
+                  style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(16),
@@ -193,7 +203,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   children: [
                     _ResultRow(
                       icon: Icons.store_rounded,
-                      label: 'Merchant',
+                      label: 'Nama Toko',
                       value: _result!.merchant ?? 'Tidak terdeteksi',
                       isDetected: _result!.merchant != null,
                     ),
@@ -211,7 +221,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
                     _ResultRow(
                       icon: Icons.calendar_today_rounded,
                       label: 'Tanggal',
-                      value: '${_result!.date.day}/${_result!.date.month}/${_result!.date.year}',
+                      value:
+                          '${_result!.date.day}/${_result!.date.month}/${_result!.date.year}',
                       isDetected: true,
                     ),
                   ],
@@ -226,10 +237,15 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   border: Border.all(color: AppColors.primary.withOpacity(0.2)),
                 ),
                 child: Row(children: [
-                  const Icon(Icons.info_outline_rounded, size: 16, color: AppColors.primary),
+                  const Icon(Icons.info_outline_rounded,
+                      size: 16, color: AppColors.primary),
                   const SizedBox(width: 8),
-                  Expanded(child: Text('Kamu bisa mengedit semua detail sebelum menyimpan.',
-                    style: TextStyle(fontSize: 12, color: AppColors.primary.withOpacity(0.8)))),
+                  Expanded(
+                      child: Text(
+                          'Kamu bisa mengedit semua detail sebelum menyimpan.',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.primary.withOpacity(0.8)))),
                 ]),
               ),
               const SizedBox(height: 20),
@@ -247,13 +263,17 @@ class _ScannerScreenState extends State<ScannerScreen> {
             if (_image == null && !_isProcessing) ...[
               const SizedBox(height: 24),
               Row(children: [
-                Expanded(child: _SourceButton(
-                  icon: Icons.camera_alt_rounded, label: 'Ambil Foto',
-                  onTap: () => _pickImage(ImageSource.camera))),
+                Expanded(
+                    child: _SourceButton(
+                        icon: Icons.camera_alt_rounded,
+                        label: 'Ambil Foto',
+                        onTap: () => _pickImage(ImageSource.camera))),
                 const SizedBox(width: 12),
-                Expanded(child: _SourceButton(
-                  icon: Icons.photo_library_rounded, label: 'Dari Galeri',
-                  onTap: () => _pickImage(ImageSource.gallery))),
+                Expanded(
+                    child: _SourceButton(
+                        icon: Icons.photo_library_rounded,
+                        label: 'Dari Galeri',
+                        onTap: () => _pickImage(ImageSource.gallery))),
               ]),
               const SizedBox(height: 24),
               const _HowItWorks(),
@@ -273,14 +293,22 @@ class _ScannerScreenState extends State<ScannerScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.camera_alt_rounded, color: AppColors.primary),
+              leading: const Icon(Icons.camera_alt_rounded,
+                  color: AppColors.primary),
               title: const Text('Ambil Foto'),
-              onTap: () { Navigator.pop(context); _pickImage(ImageSource.camera); },
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.camera);
+              },
             ),
             ListTile(
-              leading: const Icon(Icons.photo_library_rounded, color: AppColors.primary),
+              leading: const Icon(Icons.photo_library_rounded,
+                  color: AppColors.primary),
               title: const Text('Pilih dari Galeri'),
-              onTap: () { Navigator.pop(context); _pickImage(ImageSource.gallery); },
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery);
+              },
             ),
           ],
         ),
@@ -321,7 +349,8 @@ class _ReviewScreenState extends State<_ReviewScreen> {
   }
 
   void _confirm() {
-    final total = double.tryParse(_amountCtrl.text.replaceAll('.', '').replaceAll(',', ''));
+    final total = double.tryParse(
+        _amountCtrl.text.replaceAll('.', '').replaceAll(',', ''));
     final returnData = ScanReturn(
       total: total,
       merchant: _note.trim().isEmpty ? null : _note.trim(),
@@ -335,9 +364,9 @@ class _ReviewScreenState extends State<_ReviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark    = Theme.of(context).brightness == Brightness.dark;
-    final bgColor   = isDark ? AppColors.backgroundDark : AppColors.background;
-    final bdrColor  = isDark ? AppColors.borderDark     : AppColors.border;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
+    final bdrColor = isDark ? AppColors.borderDark : AppColors.border;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -355,12 +384,16 @@ class _ReviewScreenState extends State<_ReviewScreen> {
                 border: Border.all(color: AppColors.income.withOpacity(0.3)),
               ),
               child: Row(children: [
-                const Icon(Icons.check_circle_rounded, color: AppColors.income, size: 20),
+                const Icon(Icons.check_circle_rounded,
+                    color: AppColors.income, size: 20),
                 const SizedBox(width: 10),
-                Expanded(child: Text(
-                  'Struk berhasil discan. Periksa sebelum melanjutkan.',
-                  style: TextStyle(fontSize: 13, color: AppColors.income.withOpacity(0.9),
-                      fontWeight: FontWeight.w500))),
+                Expanded(
+                    child: Text(
+                        'Struk berhasil discan. Periksa sebelum melanjutkan.',
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.income.withOpacity(0.9),
+                            fontWeight: FontWeight.w500))),
               ]),
             ),
             const SizedBox(height: 20),
@@ -372,12 +405,14 @@ class _ReviewScreenState extends State<_ReviewScreen> {
               decoration: const InputDecoration(prefixText: 'Rp '),
             ),
             const SizedBox(height: 16),
-            Text('Catatan / Merchant', style: Theme.of(context).textTheme.titleSmall),
+            Text('Catatan / Nama Toko',
+                style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             TextFormField(
               initialValue: _note,
               onChanged: (v) => _note = v,
-              decoration: const InputDecoration(hintText: 'Nama merchant atau catatan'),
+              decoration:
+                  const InputDecoration(hintText: 'Nama toko atau catatan'),
             ),
             const SizedBox(height: 16),
             Text('Tanggal', style: Theme.of(context).textTheme.titleSmall),
@@ -393,16 +428,18 @@ class _ReviewScreenState extends State<_ReviewScreen> {
                 if (picked != null) setState(() => _date = picked);
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: bdrColor),
                 ),
                 child: Row(children: [
-                  const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.primary),
+                  const Icon(Icons.calendar_today_rounded,
+                      size: 16, color: AppColors.primary),
                   const SizedBox(width: 10),
                   Text('${_date.day}/${_date.month}/${_date.year}',
-                    style: const TextStyle(fontWeight: FontWeight.w600)),
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
                 ]),
               ),
             ),
@@ -429,8 +466,11 @@ class _ScanResult {
   final String? merchant;
   final String rawText;
 
-  const _ScanResult({required this.total, required this.date,
-      required this.merchant, required this.rawText});
+  const _ScanResult(
+      {required this.total,
+      required this.date,
+      required this.merchant,
+      required this.rawText});
 }
 
 class _ResultRow extends StatelessWidget {
@@ -438,23 +478,30 @@ class _ResultRow extends StatelessWidget {
   final String label, value;
   final bool isDetected, highlight;
 
-  const _ResultRow({required this.icon, required this.label,
-      required this.value, required this.isDetected, this.highlight = false});
+  const _ResultRow(
+      {required this.icon,
+      required this.label,
+      required this.value,
+      required this.isDetected,
+      this.highlight = false});
 
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Icon(icon, size: 16, color: isDetected ? AppColors.primary : AppColors.textHint),
+      Icon(icon,
+          size: 16, color: isDetected ? AppColors.primary : AppColors.textHint),
       const SizedBox(width: 8),
-      Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+      Text(label,
+          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
       const Spacer(),
-      Text(value, style: TextStyle(
-        fontSize: highlight ? 16 : 13,
-        fontWeight: highlight ? FontWeight.w800 : FontWeight.w600,
-        color: isDetected
-            ? (highlight ? AppColors.primary : AppColors.textPrimary)
-            : AppColors.textHint,
-      )),
+      Text(value,
+          style: TextStyle(
+            fontSize: highlight ? 16 : 13,
+            fontWeight: highlight ? FontWeight.w800 : FontWeight.w600,
+            color: isDetected
+                ? (highlight ? AppColors.primary : AppColors.textPrimary)
+                : AppColors.textHint,
+          )),
     ]);
   }
 }
@@ -463,7 +510,8 @@ class _SourceButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
-  const _SourceButton({required this.icon, required this.label, required this.onTap});
+  const _SourceButton(
+      {required this.icon, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -479,8 +527,11 @@ class _SourceButton extends StatelessWidget {
         child: Column(children: [
           Icon(icon, color: AppColors.primary, size: 28),
           const SizedBox(height: 6),
-          Text(label, style: const TextStyle(fontSize: 13,
-              fontWeight: FontWeight.w600, color: AppColors.primary)),
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary)),
         ]),
       ),
     );
@@ -504,25 +555,31 @@ class _HowItWorks extends StatelessWidget {
         Text('Cara Kerja', style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 12),
         ...steps.asMap().entries.map((e) => Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Row(children: [
-            Container(
-              width: 28, height: 28,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(child: Text('${e.key + 1}',
-                style: const TextStyle(fontSize: 12,
-                    fontWeight: FontWeight.w700, color: AppColors.primary))),
-            ),
-            const SizedBox(width: 10),
-            Text(e.value.$1, style: const TextStyle(fontSize: 16)),
-            const SizedBox(width: 8),
-            Expanded(child: Text(e.value.$2,
-              style: const TextStyle(fontSize: 13, color: AppColors.textSecondary))),
-          ]),
-        )),
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(children: [
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                      child: Text('${e.key + 1}',
+                          style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primary))),
+                ),
+                const SizedBox(width: 10),
+                Text(e.value.$1, style: const TextStyle(fontSize: 16)),
+                const SizedBox(width: 8),
+                Expanded(
+                    child: Text(e.value.$2,
+                        style: const TextStyle(
+                            fontSize: 13, color: AppColors.textSecondary))),
+              ]),
+            )),
       ],
     );
   }

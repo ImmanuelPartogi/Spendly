@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart'; // ← tambah ini
 import 'package:spendly/core/providers.dart';
 
 import 'core/theme/app_theme.dart';
@@ -16,6 +17,8 @@ String? _activeUid;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeDateFormatting('id', null); // ← tambah ini
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
@@ -36,28 +39,45 @@ void main() async {
 
   _container = ProviderContainer();
 
+  // ── Auth state listener ───────────────────────────────────────────────────
+  //
+  // Saat user login → restore data dari Firebase (transaksi, wallet, budget)
+  // PIN TIDAK di-restore dari sini karena PIN hanya ada di local storage.
+  //
   FirebaseAuth.instance.authStateChanges().listen((user) async {
-  if (user == null) { _activeUid = null; return; }
-
-  final restore = _container.read(restoreServiceProvider);
-
-  if (user.uid != _activeUid) {
-    _activeUid = user.uid;
-    // Tandai restore belum selesai
-    _container.read(restoreReadyProvider.notifier).state = false;
-    try {
-      await restore.restoreFromFirebase();
-    } catch (e) {
-      debugPrint('[Main] Restore error: $e');
+    if (user == null) {
+      _activeUid = null;
+      _container.read(restoreReadyProvider.notifier).state = false;
+      return;
     }
-    // Restore selesai — beri sinyal ke AppGate
-    _container.read(restoreReadyProvider.notifier).state = true;
-  } else {
-    _container.read(restoreReadyProvider.notifier).state = true;
-    try { await restore.recalculateBalances(); } catch (_) {}
-  }
-});
 
+    final restore = _container.read(restoreServiceProvider);
+
+    if (user.uid != _activeUid) {
+      _activeUid = user.uid;
+      _container.read(restoreReadyProvider.notifier).state = false;
+      try {
+        await restore.restoreFromFirebase().timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            debugPrint('[Main] Restore timeout — lanjut pakai cache');
+          },
+        );
+        debugPrint('[Main] Restore complete for uid=${user.uid}');
+      } catch (e) {
+        debugPrint('[Main] Restore error: $e');
+      }
+      _container.read(restoreReadyProvider.notifier).state = true;
+    } else {
+      // Uid sama (app restart / reconnect) — tidak perlu full restore
+      _container.read(restoreReadyProvider.notifier).state = true;
+      try {
+        await restore.recalculateBalances();
+      } catch (_) {}
+    }
+  });
+
+  // ── Sync pending saat online kembali ─────────────────────────────────────
   SyncService.onConnectivityChanged.listen((isOnline) async {
     if (!isOnline) return;
     try {

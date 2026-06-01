@@ -128,7 +128,7 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
     final picked = await _showDatePicker(
         initialDate: _start, firstDate: DateTime(2020), lastDate: _end);
     if (picked != null) setState(() {
-      _start = picked; _selectedPreset = 'Custom';
+      _start = picked; _selectedPreset = 'Kustom';
     });
   }
 
@@ -136,7 +136,7 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
     final picked = await _showDatePicker(
         initialDate: _end, firstDate: _start, lastDate: DateTime.now());
     if (picked != null) setState(() {
-      _end = picked; _selectedPreset = 'Custom';
+      _end = picked; _selectedPreset = 'Kustom';
     });
   }
 
