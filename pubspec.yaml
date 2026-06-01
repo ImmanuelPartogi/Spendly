@@ -1,15 +1,12 @@
 name: spendly
 description: Personal finance tracker — smart, fast, and beautiful.
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+4
 
 environment:
   sdk: '>=3.6.0 <4.0.0'
   flutter: '>=3.10.0'
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Dependencies
-# ─────────────────────────────────────────────────────────────────────────────
 dependencies:
   flutter:
     sdk: flutter
@@ -38,9 +35,6 @@ dependencies:
 
   # Image
   image_picker: ^1.1.2
-
-  # Authentication & Security
-  local_auth: ^2.2.0
 
   # Export
   pdf: ^3.11.1
@@ -89,14 +83,39 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
   custom_lint: ^0.6.4
   riverpod_lint: ^2.3.10
+  flutter_native_splash: ^2.4.0
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Flutter
 # ─────────────────────────────────────────────────────────────────────────────
 flutter:
   uses-material-design: true
-  # assets:
-  #   - assets/images/
-  #   - assets/icons/
+  assets:
+    - assets/images/
+    # - assets/icons/
 
   # Fonts tersedia via google_fonts — tidak perlu bundle manual
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Splash Screen  ← TAMBAH DI SINI, LUAR BLOK flutter:
+# ─────────────────────────────────────────────────────────────────────────────
+flutter_native_splash:
+  # ── Light Mode ──────────────────────────────────────────
+  color: "#FFFFFF"
+  image: assets/images/logo.png
+  fullscreen: true
+  android_gravity: center
+
+  # ── Dark Mode ───────────────────────────────────────────
+  color_dark: "#121212"
+  image_dark: assets/images/logo.png
+
+  # ── Android 12+ ─────────────────────────────────────────
+  android_12:
+    color: "#FFFFFF"
+    image: assets/images/logo.png
+    icon_background_color: "#FFFFFF"
+
+    color_dark: "#121212"
+    image_dark: assets/images/logo.png
+    icon_background_color_dark: "#121212"

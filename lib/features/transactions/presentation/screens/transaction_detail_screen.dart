@@ -8,19 +8,6 @@ import '../../../../core/utils/currency_formatter.dart';
 import '../../domain/entities/transaction_entity.dart';
 import 'add_transaction_screen.dart';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TransactionDetailScreen — Upgraded premium detail view
-//
-// Improvements vs v1:
-// - Hero header: gradient lebih halus + soft blurred overlay di bottom
-// - Amount text: lebih besar, letter-spacing dikencangkan
-// - Detail card: setiap row punya icon container berwarna
-// - Type badge di hero: pill yang lebih readable
-// - Locked badge: lebih prominent
-// - Floating action area di bottom untuk Edit (tidak hanya di AppBar)
-// - Subtle background pattern di hero
-// ─────────────────────────────────────────────────────────────────────────────
-
 bool _isLocked(TransactionEntity tx) {
   final age = DateTime.now().difference(tx.createdAt).inDays;
   return age >= 3;
@@ -53,15 +40,14 @@ class TransactionDetailScreen extends ConsumerWidget {
             slivers: [
               // ── Hero Header ────────────────────────────────────────────
               SliverAppBar(
-                expandedHeight: 240,
+                expandedHeight: 260,
                 pinned: true,
                 backgroundColor: color,
                 surfaceTintColor: Colors.transparent,
                 elevation: 0,
                 leading: IconButton(
                   icon: Container(
-                    width: 34,
-                    height: 34,
+                    width: 34, height: 34,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.18),
                       shape: BoxShape.circle,
@@ -75,24 +61,25 @@ class TransactionDetailScreen extends ConsumerWidget {
                   onPressed: () => Navigator.pop(context),
                 ),
                 actions: [
-                  // Edit
+                  // Edit — disabled saat locked
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
                     child: IconButton(
                       icon: Container(
-                        width: 34,
-                        height: 34,
+                        width: 34, height: 34,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.18),
+                          color: Colors.white.withOpacity(locked ? 0.08 : 0.18),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.edit_rounded,
-                          color: Colors.white,
+                          color: locked
+                              ? Colors.white30
+                              : Colors.white,
                           size: 16,
                         ),
                       ),
-                      onPressed: () => _edit(context),
+                      onPressed: locked ? null : () => _edit(context),
                     ),
                   ),
                   // Delete / Lock
@@ -100,11 +87,10 @@ class TransactionDetailScreen extends ConsumerWidget {
                     padding: const EdgeInsets.only(right: 8),
                     child: IconButton(
                       icon: Container(
-                        width: 34,
-                        height: 34,
+                        width: 34, height: 34,
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(
-                              locked ? 0.10 : 0.18),
+                              locked ? 0.08 : 0.18),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -127,11 +113,9 @@ class TransactionDetailScreen extends ConsumerWidget {
                   background: _HeroBackground(
                     color: color,
                     catColor: catColor,
-                    catIcon:
-                        CategoryUtils.getIcon(transaction.category),
+                    catIcon: CategoryUtils.getIcon(transaction.category),
                     category: transaction.category,
-                    amount:
-                        CurrencyFormatter.format(transaction.amount),
+                    amount: CurrencyFormatter.format(transaction.amount),
                     isExpense: isExpense,
                     isLocked: locked,
                   ),
@@ -158,35 +142,13 @@ class TransactionDetailScreen extends ConsumerWidget {
                 ),
               ),
 
-              // Bottom spacer for FAB
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 100),
-              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 100)),
             ],
           ),
-
-          // ── Floating Edit Button (bottom) ─────────────────────────────
-          // Positioned(
-          //   left: 16,
-          //   right: 16,
-          //   bottom: MediaQuery.of(context).padding.bottom + 20,
-          //   child: _FloatingActions(
-          //     isLocked: locked,
-          //     color: color,
-          //     isDark: isDark,
-          //     txtSec: txtSec,
-          //     onEdit: () => _edit(context),
-          //     onDelete: locked
-          //         ? () => _showLockedInfo(context)
-          //         : () => _confirmDelete(context, ref),
-          //   ),
-          // ),
         ],
       ),
     );
   }
-
-  // ── Actions ──────────────────────────────────────────────────────────────
 
   void _edit(BuildContext context) {
     showModalBottomSheet(
@@ -212,16 +174,12 @@ class TransactionDetailScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor:
-            isDark ? AppColors.cardDark : AppColors.card,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
+        backgroundColor: isDark ? AppColors.cardDark : AppColors.card,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           'Hapus Transaksi?',
           style: TextStyle(
-            color: isDark
-                ? AppColors.textPrimaryDark
-                : AppColors.textPrimary,
+            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.3,
           ),
@@ -260,8 +218,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                   if (context.mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Transaksi dihapus')),
+                      const SnackBar(content: Text('Transaksi dihapus')),
                     );
                   }
                 } catch (e) {
@@ -276,8 +233,8 @@ class TransactionDetailScreen extends ConsumerWidget {
                 backgroundColor: AppColors.expense,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
               child: const Text(
                 'Hapus',
@@ -290,18 +247,6 @@ class TransactionDetailScreen extends ConsumerWidget {
       ),
     );
   }
-
-  String _formatDate(DateTime d) {
-    const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des',
-    ];
-    return '${days[d.weekday - 1]}, ${d.day} ${months[d.month - 1]} ${d.year}';
-  }
-
-  String _formatTime(DateTime d) =>
-      '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
 }
 
 // ─── Hero background ──────────────────────────────────────────────────────────
@@ -316,9 +261,13 @@ class _HeroBackground extends StatelessWidget {
   final bool isLocked;
 
   const _HeroBackground({
-    required this.color, required this.catColor, required this.catIcon,
-    required this.category, required this.amount,
-    required this.isExpense, required this.isLocked,
+    required this.color,
+    required this.catColor,
+    required this.catIcon,
+    required this.category,
+    required this.amount,
+    required this.isExpense,
+    required this.isLocked,
   });
 
   @override
@@ -338,11 +287,9 @@ class _HeroBackground extends StatelessWidget {
         children: [
           // Decorative circles
           Positioned(
-            top: -30,
-            right: -30,
+            top: -30, right: -30,
             child: Container(
-              width: 160,
-              height: 160,
+              width: 160, height: 160,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white.withOpacity(0.05),
@@ -350,11 +297,9 @@ class _HeroBackground extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 20,
-            left: -40,
+            bottom: 20, left: -40,
             child: Container(
-              width: 120,
-              height: 120,
+              width: 120, height: 120,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white.withOpacity(0.04),
@@ -362,30 +307,31 @@ class _HeroBackground extends StatelessWidget {
             ),
           ),
 
-          // Content
+          // ── Content — fix overflow: hapus top padding 56, pakai SafeArea
+          // mainAxisAlignment.end sudah push konten ke bawah
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 56, 24, 24),
+              // Hapus top:56 → jadi 0, bottom diperbesar jadi 28
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 28),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  // Category icon
+                  // Category icon — ukuran dikecilkan dari 54 → 46
                   Container(
-                    width: 54,
-                    height: 54,
+                    width: 46, height: 46,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.20),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(14),
                       border: Border.all(
                           color: Colors.white.withOpacity(0.25)),
                     ),
                     child: Center(
-                      child: Icon(catIcon,
-                          color: Colors.white, size: 24),
+                      child: Icon(catIcon, color: Colors.white, size: 22),
                     ),
                   ),
-const SizedBox(height: 10),
+                  const SizedBox(height: 8), // dikurangi dari 10
 
                   // Type badge
                   Container(
@@ -395,8 +341,7 @@ const SizedBox(height: 10),
                       color: Colors.white.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                          color: Colors.white.withOpacity(0.25),
-                          width: 1),
+                          color: Colors.white.withOpacity(0.25), width: 1),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -420,14 +365,14 @@ const SizedBox(height: 10),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 5), // dikurangi dari 6
 
                   // Amount
                   Text(
                     '${isExpense ? '− ' : '+ '}$amount',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 30,
+                      fontSize: 28, // dikurangi dari 30
                       fontWeight: FontWeight.w800,
                       letterSpacing: -1.0,
                       height: 1.0,
@@ -438,14 +383,14 @@ const SizedBox(height: 10),
                     category,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.80),
-                      fontSize: 14,
+                      fontSize: 13.5,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
 
-                  // Locked indicator
+                  // Locked badge — tambah padding bawah eksplisit
                   if (isLocked) ...[
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
@@ -491,11 +436,16 @@ class _DetailCard extends StatelessWidget {
   final bool isDark, isExpense, isLocked;
 
   const _DetailCard({
-    required this.transaction, required this.cardColor,
-    required this.bdrColor, required this.divColor,
-    required this.txtPrim, required this.txtSec,
-    required this.catColor, required this.color,
-    required this.isDark, required this.isExpense,
+    required this.transaction,
+    required this.cardColor,
+    required this.bdrColor,
+    required this.divColor,
+    required this.txtPrim,
+    required this.txtSec,
+    required this.catColor,
+    required this.color,
+    required this.isDark,
+    required this.isExpense,
     required this.isLocked,
   });
 
@@ -607,28 +557,25 @@ class _Row extends StatelessWidget {
   final bool isDark;
 
   const _Row({
-    required this.icon, required this.iconColor,
-    required this.label, required this.value,
-    required this.isDark, this.valueColor,
+    required this.icon,
+    required this.iconColor,
+    required this.label,
+    required this.value,
+    required this.isDark,
+    this.valueColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final txtPrim = isDark
-        ? AppColors.textPrimaryDark
-        : AppColors.textPrimary;
-    final txtSec  = isDark
-        ? AppColors.textSecondaryDark
-        : AppColors.textSecondary;
+    final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
+    final txtSec  = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Row(
         children: [
-          // Icon container
           Container(
-            width: 32,
-            height: 32,
+            width: 32, height: 32,
             decoration: BoxDecoration(
               color: iconColor.withOpacity(isDark ? 0.14 : 0.09),
               borderRadius: BorderRadius.circular(9),
@@ -677,8 +624,7 @@ class _LockedRow extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 32,
-            height: 32,
+            width: 32, height: 32,
             decoration: BoxDecoration(
               color: AppColors.warning.withOpacity(0.12),
               borderRadius: BorderRadius.circular(9),
@@ -693,9 +639,7 @@ class _LockedRow extends StatelessWidget {
             child: Text(
               'Transaksi ini sudah > 3 hari dan tidak dapat dihapus.',
               style: TextStyle(
-                  fontSize: 12.5,
-                  color: txtSec,
-                  height: 1.4),
+                  fontSize: 12.5, color: txtSec, height: 1.4),
             ),
           ),
         ],
@@ -703,123 +647,3 @@ class _LockedRow extends StatelessWidget {
     );
   }
 }
-
-// ─── Floating actions bar ─────────────────────────────────────────────────────
-
-// class _FloatingActions extends StatelessWidget {
-//   final bool isLocked;
-//   final Color color;
-//   final bool isDark;
-//   final Color txtSec;
-//   final VoidCallback onEdit;
-//   final VoidCallback onDelete;
-
-//   const _FloatingActions({
-//     required this.isLocked, required this.color,
-//     required this.isDark, required this.txtSec,
-//     required this.onEdit, required this.onDelete,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final surfColor = isDark ? AppColors.cardDark : AppColors.card;
-//     final bdrColor  = isDark ? AppColors.borderDark : AppColors.border;
-
-//     return Container(
-//       padding: const EdgeInsets.all(4),
-//       decoration: BoxDecoration(
-//         color: surfColor,
-//         borderRadius: BorderRadius.circular(18),
-//         border: Border.all(color: bdrColor),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(isDark ? 0.40 : 0.10),
-//             blurRadius: 24,
-//             offset: const Offset(0, 6),
-//           ),
-//         ],
-//       ),
-//       child: Row(
-//         children: [
-//           // Edit button
-//           Expanded(
-//             child: GestureDetector(
-//               onTap: onEdit,
-//               child: Container(
-//                 height: 48,
-//                 decoration: BoxDecoration(
-//                   gradient: LinearGradient(
-//                     colors: [
-//                       AppColors.primary,
-//                       Color.lerp(AppColors.primary, Colors.white, 0.1)!,
-//                     ],
-//                     begin: Alignment.topLeft,
-//                     end: Alignment.bottomRight,
-//                   ),
-//                   borderRadius: BorderRadius.circular(14),
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: AppColors.primary.withOpacity(0.30),
-//                       blurRadius: 12,
-//                       offset: const Offset(0, 4),
-//                     ),
-//                   ],
-//                 ),
-//                 child: const Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Icon(Icons.edit_rounded,
-//                         color: Colors.white, size: 16),
-//                     SizedBox(width: 7),
-//                     Text(
-//                       'Edit',
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 14,
-//                         fontWeight: FontWeight.w700,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//           const SizedBox(width: 8),
-
-//           // Delete / Locked button
-//           GestureDetector(
-//             onTap: onDelete,
-//             child: Container(
-//               width: 52,
-//               height: 48,
-//               decoration: BoxDecoration(
-//                 color: isLocked
-//                     ? (isDark
-//                         ? AppColors.surfaceDark
-//                         : AppColors.surface)
-//                     : AppColors.expense.withOpacity(0.12),
-//                 borderRadius: BorderRadius.circular(14),
-//                 border: Border.all(
-//                   color: isLocked
-//                       ? bdrColor
-//                       : AppColors.expense.withOpacity(0.30),
-//                 ),
-//               ),
-//               child: Center(
-//                 child: Icon(
-//                   isLocked
-//                       ? Icons.lock_rounded
-//                       : Icons.delete_outline_rounded,
-//                   color: isLocked
-//                       ? txtSec.withOpacity(0.5)
-//                       : AppColors.expense,
-//                   size: 18,
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

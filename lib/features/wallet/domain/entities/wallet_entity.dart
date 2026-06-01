@@ -12,17 +12,17 @@ enum WalletType {
   String get label {
     switch (this) {
       case WalletType.cash:
-        return 'Cash';
+        return 'Tunai';
       case WalletType.bank:
         return 'Bank';
       case WalletType.ewallet:
-        return 'E-Wallet';
+        return 'Dompet Digital';
       case WalletType.credit:
-        return 'Credit Card';
+        return 'Kartu Kredit';
       case WalletType.investment:
-        return 'Investment';
+        return 'Investasi';
       case WalletType.other:
-        return 'Other';
+        return 'Lainnya';
     }
   }
 

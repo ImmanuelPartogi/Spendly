@@ -16,7 +16,7 @@ class WalletScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('My Wallets'),
+        title: const Text('Dompet Saya'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add_rounded),
@@ -36,7 +36,7 @@ class WalletScreen extends ConsumerWidget {
               const Icon(Icons.error_outline_rounded,
                   size: 48, color: AppColors.expense),
               const SizedBox(height: 12),
-              Text('Gagal memuat wallet', style: Theme.of(context).textTheme.bodyLarge),
+              Text('Gagal memuat dompet', style: Theme.of(context).textTheme.bodyLarge),
               const SizedBox(height: 4),
               Text('$e',
                   style: const TextStyle(
@@ -52,7 +52,7 @@ class WalletScreen extends ConsumerWidget {
                 children: [
                   Text('👛', style: TextStyle(fontSize: 48)),
                   SizedBox(height: 12),
-                  Text('Belum ada wallet',
+                  Text('Belum ada dompet',
                       style: TextStyle(color: AppColors.textSecondary)),
                 ],
               ),
@@ -64,7 +64,7 @@ class WalletScreen extends ConsumerWidget {
           return CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
-              // ── Total balance card ────────────────────────────────────────
+              // ── Total Saldo card ────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -85,7 +85,7 @@ class WalletScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Total Balance',
+                          'Total Saldo',
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.8),
                             fontSize: 13,
@@ -104,7 +104,7 @@ class WalletScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '${wallets.length} wallet aktif',
+                          '${wallets.length} dompet aktif',
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.7),
                             fontSize: 12,
@@ -165,14 +165,14 @@ class WalletScreen extends ConsumerWidget {
       BuildContext context, WidgetRef ref, WalletEntity wallet) {
     if (wallet.isDefault) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Wallet default tidak bisa dihapus')),
+        const SnackBar(content: Text('Dompet utama tidak bisa dihapus')),
       );
       return;
     }
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Hapus Wallet?'),
+        title: const Text('Hapus Dompet?'),
         content: Text(
             '"${wallet.name}" akan dihapus permanen beserta semua riwayat transaksinya.'),
         actions: [
@@ -251,7 +251,7 @@ class _WalletCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: const Text(
-                          'Default',
+                          'Utama',
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
@@ -396,7 +396,7 @@ class _TransferSheetState extends ConsumerState<_TransferSheet> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('Transfer Antar Wallet',
+            Text('Transfer Antar Dompet',
                 style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 20),
             _WalletDropdown(
