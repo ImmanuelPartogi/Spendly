@@ -176,7 +176,7 @@ class _IncomeExpenseComparisonScreenState
       body: txAsync.when(
         loading: () => const SafeArea(child: AnalyticsSkeleton()),
         error: (e, _) =>
-            Center(child: Text('Error: $e', style: TextStyle(color: txtSec))),
+            Center(child: Text('Terjadi kesalahan: $e', style: TextStyle(color: txtSec))),
         data: (all) {
           final data = _buildData(all);
           final incomeCats = _categoryTotals(all, false);

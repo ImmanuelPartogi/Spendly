@@ -16,16 +16,15 @@ class BudgetScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
-    final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
-    final safeTop = MediaQuery.of(context).padding.top;
-    final safeBottom = MediaQuery.of(context).padding.bottom;
+    final isDark      = Theme.of(context).brightness == Brightness.dark;
+    final bgColor     = isDark ? AppColors.backgroundDark : AppColors.background;
+    final txtPrim     = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
+    final safeTop     = MediaQuery.of(context).padding.top;
+    final safeBottom  = MediaQuery.of(context).padding.bottom;
 
-    final budgets = ref.watch(budgetsWithSpentProvider);
-
-    final totalLimit = budgets.fold<double>(0, (s, b) => s + b.limitAmount);
-    final totalSpent = budgets.fold<double>(0, (s, b) => s + b.spent);
+    final budgets       = ref.watch(budgetsWithSpentProvider);
+    final totalLimit    = budgets.fold<double>(0, (s, b) => s + b.limitAmount);
+    final totalSpent    = budgets.fold<double>(0, (s, b) => s + b.spent);
     final exceededCount = budgets.where((b) => b.isExceeded).length;
 
     return Scaffold(
@@ -39,8 +38,8 @@ class BudgetScreen extends ConsumerWidget {
             onAdd: () => _openSetBudget(context, ref, null),
           ),
           SliverPadding(
-            padding:
-                EdgeInsets.fromLTRB(16, 4, 16, _kBottomPad + safeBottom),
+            padding: EdgeInsets.fromLTRB(
+                16, 4, 16, _kBottomPad + safeBottom),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 if (budgets.isNotEmpty) ...[
@@ -53,16 +52,15 @@ class BudgetScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 20),
                 ],
-                // _SetBudgetCTA(onTap: () => _openSetBudget(context, ref, null)),
-                // const SizedBox(height: 24),
+
                 if (budgets.isEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: EmptyState(
-                      title: 'Belum ada budget',
+                      title: 'Belum ada anggaran',
                       subtitle:
-                          'Set batas pengeluaran untuk mulai tracking',
-                      actionLabel: 'Set Budget',
+                          'Tetapkan batas pengeluaran per kategori untuk mulai memantau keuangan',
+                      actionLabel: 'Buat Anggaran',
                       onAction: () => _openSetBudget(context, ref, null),
                       icon: Icons.account_balance_wallet_outlined,
                     ),
@@ -127,8 +125,7 @@ class _BudgetAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
-    final txtSec =
-        isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
+    final txtSec  = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
     return SliverAppBar(
       expandedHeight: 88,
@@ -142,13 +139,15 @@ class _BudgetAppBar extends StatelessWidget {
       flexibleSpace: LayoutBuilder(builder: (context, constraints) {
         final isCollapsed = constraints.maxHeight < 72 + safeTop;
         return Stack(clipBehavior: Clip.none, children: [
+          // Expanded state
           AnimatedOpacity(
             opacity: isCollapsed ? 0.0 : 1.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(20, safeTop + 12, 60, 14),
+                padding:
+                    EdgeInsets.fromLTRB(20, safeTop + 12, 60, 14),
                 child: OverflowBox(
                   alignment: Alignment.bottomLeft,
                   maxHeight: double.infinity,
@@ -156,24 +155,30 @@ class _BudgetAppBar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Kelola &',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              color: txtSec)),
-                      Text('Budget',
-                          style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.w800,
-                              color: txtPrim,
-                              letterSpacing: -0.8,
-                              height: 1.1)),
+                      Text(
+                        'Kelola &',
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: txtSec),
+                      ),
+                      Text(
+                        'Anggaran',
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                            color: txtPrim,
+                            letterSpacing: -0.8,
+                            height: 1.1),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
           ),
+
+          // Collapsed state
           AnimatedOpacity(
             opacity: isCollapsed ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 150),
@@ -181,23 +186,26 @@ class _BudgetAppBar extends StatelessWidget {
               alignment: Alignment.bottomLeft,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
-                child: Text('Budget',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        color: txtPrim,
-                        letterSpacing: -0.6)),
+                child: Text(
+                  'Anggaran',
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: txtPrim,
+                      letterSpacing: -0.6),
+                ),
               ),
             ),
           ),
+
+          // Tombol tambah
           Positioned(
             right: 16,
             bottom: 10,
             child: GestureDetector(
               onTap: onAdd,
               child: Container(
-                width: 36,
-                height: 36,
+                width: 36, height: 36,
                 decoration: BoxDecoration(
                   gradient: AppColors.primaryGradient,
                   borderRadius: BorderRadius.circular(11),
@@ -220,7 +228,7 @@ class _BudgetAppBar extends StatelessWidget {
   }
 }
 
-// ─── Budget List Header ───────────────────────────────────────────────────────
+// ─── Header daftar anggaran ───────────────────────────────────────────────────
 
 class _BudgetListHeader extends StatelessWidget {
   final bool isDark;
@@ -240,7 +248,7 @@ class _BudgetListHeader extends StatelessWidget {
     return Row(
       children: [
         Text(
-          'Budget Aktif',
+          'Anggaran Aktif',
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w700,
@@ -250,9 +258,11 @@ class _BudgetListHeader extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          padding:
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(isDark ? 0.18 : 0.10),
+            color: AppColors.primary
+                .withOpacity(isDark ? 0.18 : 0.10),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
@@ -267,117 +277,27 @@ class _BudgetListHeader extends StatelessWidget {
         const Spacer(),
         if (exceededCount > 0)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
               color: AppColors.error.withOpacity(0.10),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.warning_amber_rounded,
-                    color: AppColors.error, size: 11),
-                const SizedBox(width: 3),
-                Text(
-                  '$exceededCount terlampaui',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.error,
-                  ),
+            child: Row(children: [
+              const Icon(Icons.warning_amber_rounded,
+                  color: AppColors.error, size: 11),
+              const SizedBox(width: 3),
+              Text(
+                '$exceededCount terlampaui',
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.error,
                 ),
-              ],
-            ),
+              ),
+            ]),
           ),
       ],
     );
   }
 }
-
-// ─── Set Budget CTA ───────────────────────────────────────────────────────────
-
-// class _SetBudgetCTA extends StatelessWidget {
-//   final VoidCallback onTap;
-//   const _SetBudgetCTA({required this.onTap});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final isDark = Theme.of(context).brightness == Brightness.dark;
-//     final surfColor = isDark ? AppColors.surfaceDark : AppColors.surface;
-//     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
-//     final txtSec =
-//         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
-
-//     return GestureDetector(
-//       onTap: onTap,
-//       child: AnimatedContainer(
-//         duration: kDurationFast,
-//         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-//         decoration: BoxDecoration(
-//           color: surfColor,
-//           borderRadius: BorderRadius.circular(16),
-//           border: Border.all(
-//             color: AppColors.primary.withOpacity(isDark ? 0.35 : 0.25),
-//             width: 1.5,
-//           ),
-//         ),
-//         child: Row(
-//           children: [
-//             Container(
-//               width: 40,
-//               height: 40,
-//               decoration: BoxDecoration(
-//                 gradient: AppColors.primaryGradient,
-//                 borderRadius: BorderRadius.circular(12),
-//                 boxShadow: [
-//                   BoxShadow(
-//                     color: AppColors.primary.withOpacity(0.28),
-//                     blurRadius: 10,
-//                     offset: const Offset(0, 3),
-//                   ),
-//                 ],
-//               ),
-//               child: const Icon(Icons.add_rounded,
-//                   color: Colors.white, size: 20),
-//             ),
-//             const SizedBox(width: 14),
-//             Expanded(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     'Set Budget Baru',
-//                     style: TextStyle(
-//                       color: txtPrim,
-//                       fontWeight: FontWeight.w700,
-//                       fontSize: 14,
-//                       letterSpacing: -0.2,
-//                     ),
-//                   ),
-//                   const SizedBox(height: 2),
-//                   Text(
-//                     'Atur batas pengeluaran per kategori',
-//                     style: TextStyle(color: txtSec, fontSize: 12),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             Container(
-//               width: 28,
-//               height: 28,
-//               decoration: BoxDecoration(
-//                 color:
-//                     AppColors.primary.withOpacity(isDark ? 0.15 : 0.08),
-//                 borderRadius: BorderRadius.circular(8),
-//               ),
-//               child: Icon(
-//                 Icons.chevron_right_rounded,
-//                 color: AppColors.primary,
-//                 size: 18,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

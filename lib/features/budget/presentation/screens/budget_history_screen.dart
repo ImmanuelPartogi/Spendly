@@ -8,7 +8,7 @@ import '../../../../core/utils/currency_formatter.dart';
 // ─────────────────────────────────────────────────────────────────────────────
 
 class BudgetHistoryEntry {
-  final String month;        // "Maret 2026"
+  final String month; // "Maret 2026"
   final double spent;
   final double budget;
   final bool isOnBudget;
@@ -80,9 +80,8 @@ class BudgetHistoryScreen extends ConsumerWidget {
 
     final exceededCount = history.where((h) => !h.isOnBudget).length;
     final onBudgetCount = history.length - exceededCount;
-    final successRate = history.isEmpty
-        ? 0
-        : (onBudgetCount / history.length * 100).round();
+    final successRate =
+        history.isEmpty ? 0 : (onBudgetCount / history.length * 100).round();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -96,7 +95,7 @@ class BudgetHistoryScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _StatBox(
-                    label: 'On Budget',
+                    label: 'Sesuai Budget',
                     value: '${onBudgetCount}x',
                     color: AppColors.income,
                     icon: Icons.check_circle_rounded,
@@ -105,7 +104,7 @@ class BudgetHistoryScreen extends ConsumerWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: _StatBox(
-                    label: 'Exceeded',
+                    label: 'Terlampaui',
                     value: '${exceededCount}x',
                     color: AppColors.expense,
                     icon: Icons.warning_rounded,
@@ -114,7 +113,7 @@ class BudgetHistoryScreen extends ConsumerWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: _StatBox(
-                    label: 'Success Rate',
+                    label: 'Tingkat Sukses',
                     value: '$successRate%',
                     color: AppColors.primary,
                     icon: Icons.trending_up_rounded,
@@ -133,14 +132,12 @@ class BudgetHistoryScreen extends ConsumerWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('📊',
-                            style: TextStyle(fontSize: 44)),
+                        Text('📊', style: TextStyle(fontSize: 44)),
                         SizedBox(height: 12),
                         Text(
                           'Belum ada riwayat budget',
                           style: TextStyle(
-                              color: AppColors.textSecondary,
-                              fontSize: 15),
+                              color: AppColors.textSecondary, fontSize: 15),
                         ),
                       ],
                     ),
@@ -148,10 +145,8 @@ class BudgetHistoryScreen extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: history.length,
-                    separatorBuilder: (_, __) =>
-                        const SizedBox(height: 10),
-                    itemBuilder: (_, i) =>
-                        _HistoryCard(entry: history[i]),
+                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    itemBuilder: (_, i) => _HistoryCard(entry: history[i]),
                   ),
           ),
         ],
@@ -218,8 +213,7 @@ class _HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        entry.isOnBudget ? AppColors.income : AppColors.expense;
+    final color = entry.isOnBudget ? AppColors.income : AppColors.expense;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -237,8 +231,8 @@ class _HistoryCard extends StatelessWidget {
             children: [
               Text(
                 entry.month,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w700, fontSize: 14),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
               ),
               _StatusBadge(isOnBudget: entry.isOnBudget),
             ],
@@ -254,9 +248,8 @@ class _HistoryCard extends StatelessWidget {
                 children: [
                   const Text(
                     'Pengeluaran',
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: AppColors.textSecondary),
+                    style:
+                        TextStyle(fontSize: 10, color: AppColors.textSecondary),
                   ),
                   Text(
                     CurrencyFormatter.format(entry.spent),
@@ -273,9 +266,8 @@ class _HistoryCard extends StatelessWidget {
                 children: [
                   const Text(
                     'Budget',
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: AppColors.textSecondary),
+                    style:
+                        TextStyle(fontSize: 10, color: AppColors.textSecondary),
                   ),
                   Text(
                     CurrencyFormatter.format(entry.budget),
@@ -310,16 +302,13 @@ class _HistoryCard extends StatelessWidget {
               Text(
                 '${(entry.ratio * 100).toStringAsFixed(0)}% digunakan',
                 style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: color),
+                    fontSize: 11, fontWeight: FontWeight.w600, color: color),
               ),
               Text(
                 entry.isOnBudget
                     ? 'Hemat ${CurrencyFormatter.formatCompact(entry.saved)}'
                     : 'Lebih ${CurrencyFormatter.formatCompact(entry.spent - entry.budget)}',
-                style: TextStyle(
-                    fontSize: 11, color: color),
+                style: TextStyle(fontSize: 11, color: color),
               ),
             ],
           ),
@@ -335,16 +324,13 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        isOnBudget ? AppColors.income : AppColors.expense;
-    final label = isOnBudget ? 'On Budget' : 'Exceeded';
-    final icon = isOnBudget
-        ? Icons.check_circle_rounded
-        : Icons.warning_rounded;
+    final color = isOnBudget ? AppColors.income : AppColors.expense;
+    final label = isOnBudget ? 'Sesuai Budget' : 'Terlampaui';
+    final icon =
+        isOnBudget ? Icons.check_circle_rounded : Icons.warning_rounded;
 
     return Container(
-      padding:
-          const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),

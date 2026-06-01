@@ -200,7 +200,7 @@ class _CatList extends StatelessWidget {
                   color: accent.withOpacity(0.10),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: Text('Reset',
+                child: Text('Atur Ulang',
                     style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,

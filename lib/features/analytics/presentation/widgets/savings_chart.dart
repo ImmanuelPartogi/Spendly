@@ -95,7 +95,7 @@ class _SavingsChartState extends State<SavingsChart> {
             child: TextButton.icon(
               onPressed: widget.onSetTarget,
               icon: const Icon(Icons.flag_rounded, size: 14),
-              label: const Text('Set Target'),
+              label: const Text('Atur Target'),
               style: TextButton.styleFrom(
                   foregroundColor: AppColors.primary),
             ),

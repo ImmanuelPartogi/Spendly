@@ -24,11 +24,10 @@ class PinScreen extends StatefulWidget {
 }
 
 class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
-  String  _pin              = '';
+  String  _pin         = '';
   String? _firstPin;
   String? _errorMsg;
-  bool    _isVerifying      = false;
-  bool    _biometricAvailable = false;
+  bool    _isVerifying = false;
 
   late final AnimationController       _shakeCtrl;
   late final Animation<double>         _shakeAnim;
@@ -83,11 +82,6 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
     });
 
     _entranceCtrl.forward();
-    _checkBiometric();
-
-    if (widget.mode == PinScreenMode.verify) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _tryBiometric());
-    }
   }
 
   @override
@@ -99,20 +93,7 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> _checkBiometric() async {
-    final available = await AuthService.isBiometricEnabled();
-    if (mounted) setState(() => _biometricAvailable = available);
-  }
-
-  Future<void> _tryBiometric() async {
-    if (!_biometricAvailable) return;
-    final success = await AuthService.authenticateBiometric();
-    if (success && mounted) widget.onSuccess?.call();
-  }
-
   Future<void> _onKey(String key) async {
-    if (key == 'bio') { await _tryBiometric(); return; }
-
     if (key == 'del') {
       if (_pin.isNotEmpty) {
         _dotCtrls[_pin.length - 1].reverse();
@@ -216,7 +197,6 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
                       else
                         const SizedBox(width: 40),
 
-                      // Step indicator for setup
                       if (widget.mode == PinScreenMode.setup)
                         _SetupStepBadge(isDark: isDark, isConfirm: _firstPin != null),
 
@@ -278,8 +258,6 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: _Numpad(
                     onKey: _onKey,
-                    showBio: _biometricAvailable &&
-                        widget.mode == PinScreenMode.verify,
                     isDark: isDark,
                     isLoading: _isVerifying,
                   ),
@@ -502,7 +480,6 @@ class _PinHeaderSection extends StatelessWidget {
     final txtSec  = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
     return Column(children: [
-      // Logo container
       Container(
         width: 64, height: 64,
         decoration: BoxDecoration(
@@ -529,7 +506,6 @@ class _PinHeaderSection extends StatelessWidget {
 
       const SizedBox(height: 28),
 
-      // Title with animated switcher
       AnimatedSwitcher(
         duration: const Duration(milliseconds: 280),
         transitionBuilder: (child, anim) => FadeTransition(
@@ -685,18 +661,19 @@ class _PinErrorPill extends StatelessWidget {
 
 class _Numpad extends StatelessWidget {
   final Future<void> Function(String) onKey;
-  final bool showBio, isDark, isLoading;
+  final bool isDark, isLoading;
 
   const _Numpad({
-    required this.onKey, required this.showBio,
-    required this.isDark, required this.isLoading,
+    required this.onKey,
+    required this.isDark,
+    required this.isLoading,
   });
 
   static const _rows = [
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    ['bio', '0', 'del'],
+    ['', '0', 'del'],
   ];
 
   @override
@@ -708,7 +685,7 @@ class _Numpad extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: row.map((key) {
-              if (key == 'bio' && !showBio) {
+              if (key.isEmpty) {
                 return const SizedBox(width: 74, height: 74);
               }
               return _NumKey(
@@ -758,7 +735,7 @@ class _NumKeyState extends State<_NumKey> with SingleTickerProviderStateMixin {
   @override
   void dispose() { _pressCtrl.dispose(); super.dispose(); }
 
-  bool get _isSpecial => widget.value == 'del' || widget.value == 'bio';
+  bool get _isSpecial => widget.value == 'del';
 
   @override
   Widget build(BuildContext context) {
@@ -775,9 +752,6 @@ class _NumKeyState extends State<_NumKey> with SingleTickerProviderStateMixin {
               child: CircularProgressIndicator(
                   color: txtSec, strokeWidth: 2))
           : Icon(Icons.backspace_outlined, color: txtPrim, size: 20);
-    } else if (widget.value == 'bio') {
-      keyChild = Icon(Icons.fingerprint_rounded,
-          color: AppColors.primary.withOpacity(0.85), size: 28);
     } else {
       keyChild = Text(
         widget.value,

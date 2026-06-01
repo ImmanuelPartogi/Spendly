@@ -87,7 +87,7 @@ class AnalyticsInsightCard extends StatelessWidget {
         border: Border.all(color: bdr, width: 0.5),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Insight Minggu Ini',
+        Text('Analisis Minggu Ini',
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,

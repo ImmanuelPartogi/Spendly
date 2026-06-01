@@ -127,7 +127,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       body: txAsync.when(
         loading: () => const SafeArea(child: AnalyticsSkeleton()),
         error: (e, _) =>
-            Center(child: Text('Error: $e', style: TextStyle(color: txtSec))),
+            Center(child: Text('Terjadi kesalahan: $e', style: TextStyle(color: txtSec))),
         data: (_) => CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [

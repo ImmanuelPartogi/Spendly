@@ -135,7 +135,7 @@ class _SmartBudgetSuggestionSheetState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Smart Budget',
+                      Text('Budget Cerdas',
                           style: Theme.of(context).textTheme.titleLarge),
                       const Text(
                         'Berdasarkan rata-rata 3 bulan terakhir',
