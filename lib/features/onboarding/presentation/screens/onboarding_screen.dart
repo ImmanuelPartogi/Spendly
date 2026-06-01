@@ -37,11 +37,11 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen>
     with TickerProviderStateMixin {
-  final _pageCtrl  = PageController();
+  final _pageCtrl = PageController();
   int _currentPage = 0;
 
   late AnimationController _btnCtrl;
-  late Animation<double>   _btnScale;
+  late Animation<double> _btnScale;
 
   static const _pages = [
     _PageData(
@@ -51,27 +51,35 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       subtitle:
           'Pilih kategori, masukkan nominal, dan selesai. Tidak ada form panjang, tidak ada kerumitan.',
       gradientStart: Color(0xFF3A7AFE),
-      gradientEnd:   Color(0xFF6B9FFF),
-      features: ['Tambah transaksi instan', 'Kategori otomatis', 'Input nominal cepat'],
+      gradientEnd: Color(0xFF6B9FFF),
+      features: [
+        'Tambah transaksi instan',
+        'Kategori otomatis',
+        'Input nominal cepat'
+      ],
     ),
     _PageData(
       emoji: '✨',
-      badge: 'AI Insights',
+      badge: 'Analisis Cerdas',
       title: 'Insight cerdas\notomatis',
       subtitle:
           'Spendly menganalisis pola belanjamu dan memberikan rekomendasi personal setiap hari.',
       gradientStart: Color(0xFF7C5CBF),
-      gradientEnd:   Color(0xFFAB8EE8),
-      features: ['Analisis pola belanja', 'Rekomendasi hemat', 'Laporan mingguan'],
+      gradientEnd: Color(0xFFAB8EE8),
+      features: [
+        'Analisis pola belanja',
+        'Rekomendasi hemat',
+        'Laporan mingguan'
+      ],
     ),
     _PageData(
       emoji: '🎯',
-      badge: 'Budget & Goals',
+      badge: 'Budget & Target',
       title: 'Kontrol penuh\nkeuanganmu',
       subtitle:
           'Set budget per kategori, buat target tabungan, dan dapatkan peringatan sebelum over-limit.',
       gradientStart: Color(0xFF00C48C),
-      gradientEnd:   Color(0xFF00E5A9),
+      gradientEnd: Color(0xFF00E5A9),
       features: ['Budget per kategori', 'Target tabungan', 'Notifikasi limit'],
     ),
   ];
@@ -80,7 +88,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   void initState() {
     super.initState();
     _btnCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 80),
+        vsync: this,
+        duration: const Duration(milliseconds: 80),
         reverseDuration: const Duration(milliseconds: 160));
     _btnScale = Tween<double>(begin: 1.0, end: 0.96)
         .animate(CurvedAnimation(parent: _btnCtrl, curve: Curves.easeOut));
@@ -130,10 +139,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
         // ── Decorative circles ────────────────────────────────────────────
         Positioned(
-          top: -80, right: -80,
+          top: -80,
+          right: -80,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 500),
-            width: 260, height: 260,
+            width: 260,
+            height: 260,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white.withOpacity(0.08),
@@ -141,9 +152,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
         ),
         Positioned(
-          bottom: 140, left: -60,
+          bottom: 140,
+          left: -60,
           child: Container(
-            width: 180, height: 180,
+            width: 180,
+            height: 180,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white.withOpacity(0.05),
@@ -171,15 +184,15 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 child: GestureDetector(
                   onTap: isLast ? null : _finish,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.20),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                          color: Colors.white.withOpacity(0.30)),
+                      border: Border.all(color: Colors.white.withOpacity(0.30)),
                     ),
-                    child: const Text('Lewati',
+                    child: const Text(
+                      'Lewati',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 13,
@@ -205,7 +218,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   controller: _pageCtrl,
                   count: _pages.length,
                   effect: const ExpandingDotsEffect(
-                    dotWidth: 8, dotHeight: 8,
+                    dotWidth: 8,
+                    dotHeight: 8,
                     activeDotColor: Colors.white,
                     dotColor: Colors.white38,
                     expansionFactor: 3,
@@ -217,20 +231,26 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 // CTA button
                 GestureDetector(
                   onTapDown: (_) => _btnCtrl.forward(),
-                  onTapUp: (_) { _btnCtrl.reverse(); _next(); },
+                  onTapUp: (_) {
+                    _btnCtrl.reverse();
+                    _next();
+                  },
                   onTapCancel: () => _btnCtrl.reverse(),
                   child: ScaleTransition(
                     scale: _btnScale,
                     child: Container(
-                      width: double.infinity, height: 56,
+                      width: double.infinity,
+                      height: 56,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        boxShadow: [BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        )],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+                          )
+                        ],
                       ),
                       child: Center(
                         child: AnimatedSwitcher(
@@ -299,37 +319,33 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
     _ctrl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 700));
 
-    _emojiScale = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(
-          parent: _ctrl,
-          curve: const Interval(0.0, 0.5, curve: Curves.easeOutBack)));
+    _emojiScale = Tween<double>(begin: 0.5, end: 1.0).animate(CurvedAnimation(
+        parent: _ctrl,
+        curve: const Interval(0.0, 0.5, curve: Curves.easeOutBack)));
 
-    _titleFade = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-          parent: _ctrl,
-          curve: const Interval(0.2, 0.6, curve: Curves.easeOut)));
+    _titleFade = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        parent: _ctrl, curve: const Interval(0.2, 0.6, curve: Curves.easeOut)));
 
-    _titleSlide = Tween<Offset>(
-        begin: const Offset(0, 0.3), end: Offset.zero).animate(
-      CurvedAnimation(
-          parent: _ctrl,
-          curve: const Interval(0.2, 0.6, curve: Curves.easeOutCubic)));
+    _titleSlide = Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero)
+        .animate(CurvedAnimation(
+            parent: _ctrl,
+            curve: const Interval(0.2, 0.6, curve: Curves.easeOutCubic)));
 
-    _subtitleFade = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-          parent: _ctrl,
-          curve: const Interval(0.4, 0.8, curve: Curves.easeOut)));
+    _subtitleFade = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        parent: _ctrl, curve: const Interval(0.4, 0.8, curve: Curves.easeOut)));
 
-    _featuresFade = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-          parent: _ctrl,
-          curve: const Interval(0.55, 1.0, curve: Curves.easeOut)));
+    _featuresFade = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        parent: _ctrl,
+        curve: const Interval(0.55, 1.0, curve: Curves.easeOut)));
 
     _ctrl.forward();
   }
 
   @override
-  void dispose() { _ctrl.dispose(); super.dispose(); }
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -348,7 +364,8 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
             ScaleTransition(
               scale: _emojiScale,
               child: Container(
-                width: 110, height: 110,
+                width: 110,
+                height: 110,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.18),
                   borderRadius: BorderRadius.circular(32),
@@ -356,8 +373,7 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
                       color: Colors.white.withOpacity(0.30), width: 1.5),
                 ),
                 child: Center(
-                  child: Text(page.emoji,
-                      style: const TextStyle(fontSize: 52)),
+                  child: Text(page.emoji, style: const TextStyle(fontSize: 52)),
                 ),
               ),
             ),
@@ -367,20 +383,20 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
             FadeTransition(
               opacity: _titleFade,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.20),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                      color: Colors.white.withOpacity(0.30)),
+                  border: Border.all(color: Colors.white.withOpacity(0.30)),
                 ),
-                child: Text(page.badge, style: const TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  letterSpacing: 0.5,
-                )),
+                child: Text(page.badge,
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    )),
               ),
             ),
             const SizedBox(height: 20),
@@ -390,7 +406,8 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
               position: _titleSlide,
               child: FadeTransition(
                 opacity: _titleFade,
-                child: Text(page.title,
+                child: Text(
+                  page.title,
                   style: const TextStyle(
                     fontSize: 38,
                     fontWeight: FontWeight.w800,
@@ -406,7 +423,8 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
             // ── Subtitle ────────────────────────────────────────────────
             FadeTransition(
               opacity: _subtitleFade,
-              child: Text(page.subtitle,
+              child: Text(
+                page.subtitle,
                 style: TextStyle(
                   fontSize: 15.5,
                   color: Colors.white.withOpacity(0.82),
@@ -422,26 +440,30 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
               opacity: _featuresFade,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: page.features.map((f) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(children: [
-                    Container(
-                      width: 22, height: 22,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.22),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.check_rounded,
-                          size: 13, color: Colors.white),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(f, style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white.withOpacity(0.90),
-                    )),
-                  ]),
-                )).toList(),
+                children: page.features
+                    .map((f) => Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Row(children: [
+                            Container(
+                              width: 22,
+                              height: 22,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.22),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.check_rounded,
+                                  size: 13, color: Colors.white),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(f,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white.withOpacity(0.90),
+                                )),
+                          ]),
+                        ))
+                    .toList(),
               ),
             ),
 

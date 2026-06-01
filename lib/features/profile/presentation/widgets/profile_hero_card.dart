@@ -24,7 +24,7 @@ class ProfileHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayName = name.isEmpty ? 'My Account' : name;
+    final displayName = name.isEmpty ? 'Akun Saya' : name;
 
     return SpendlyCard(
       gradient: AppColors.primaryGradient,
@@ -87,9 +87,7 @@ class ProfileHeroCard extends StatelessWidget {
                         height: 6,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isAnon
-                              ? AppColors.warning
-                              : AppColors.income,
+                          color: isAnon ? AppColors.warning : AppColors.income,
                         ),
                       ),
                       const SizedBox(width: 5),
@@ -110,8 +108,7 @@ class ProfileHeroCard extends StatelessWidget {
               ),
             ]),
             const SizedBox(height: 18),
-            Container(
-                height: 1, color: Colors.white.withOpacity(0.14)),
+            Container(height: 1, color: Colors.white.withOpacity(0.14)),
             const SizedBox(height: 16),
             Row(children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -137,13 +134,12 @@ class ProfileHeroCard extends StatelessWidget {
               ]),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                      color: Colors.white.withOpacity(0.20)),
+                  border: Border.all(color: Colors.white.withOpacity(0.20)),
                 ),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   Container(

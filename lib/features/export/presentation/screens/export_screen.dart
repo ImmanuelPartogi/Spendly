@@ -20,7 +20,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     _Period('Bulan ini', 'month', Icons.calendar_month_rounded),
     _Period('3 Bulan', '3months', Icons.date_range_rounded),
     _Period('Tahun ini', 'year', Icons.calendar_today_rounded),
-    _Period('Custom', 'range', Icons.tune_rounded),
+_Period('Kustom', 'range', Icons.tune_rounded),
   ];
 
   Future<void> _export() async {
@@ -105,7 +105,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Export Data')),
+appBar: AppBar(title: const Text('Ekspor Data')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -293,7 +293,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     : const Icon(Icons.upload_rounded),
                 label: Text(_isLoading
                     ? 'Mengekspor…'
-                    : 'Export & Bagikan'),
+                    : 'Ekspor & Bagikan'),
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(vertical: 16),

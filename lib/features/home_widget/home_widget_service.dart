@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 class HomeWidgetService {
   HomeWidgetService._();
 
-  static const _appGroupId = 'group.com.spendly.app'; // iOS App Group
-  static const _qualifiedAndroid = 'com.spendly.app.SpendlyWidget';
+  static const _appGroupId = 'group.com.harimokkar.spendly'; // iOS App Group
+  static const _qualifiedAndroid = 'com.harimokkar.spendly.SpendlyWidget';
   static const _qualifiedIos = 'SpendlyWidget';
 
   static bool _initialized = false;
@@ -37,8 +37,7 @@ class HomeWidgetService {
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
 
     await Future.wait([
-      HomeWidget.saveWidgetData(
-          'widget_balance', fmt.format(totalBalance)),
+      HomeWidget.saveWidgetData('widget_balance', fmt.format(totalBalance)),
       HomeWidget.saveWidgetData(
           'widget_today_expense', fmt.format(todayExpense)),
       HomeWidget.saveWidgetData('widget_last_updated', timeStr),

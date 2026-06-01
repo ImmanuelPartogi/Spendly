@@ -596,7 +596,7 @@ class _BudgetOverviewCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionHeader(
-            label: 'Budget',
+            label: 'Anggaran',
             isDark: isDark,
             count: budgets.length,
             onSeeAll: () {

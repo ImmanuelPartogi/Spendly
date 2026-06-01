@@ -32,7 +32,7 @@ class BudgetSummaryWidget extends StatelessWidget {
               GestureDetector(
                 onTap: onSeeAll,
                 child: const Text(
-                  'See All',
+                  'Lihat Semua',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,

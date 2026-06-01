@@ -19,7 +19,7 @@ class GoalsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Financial Goals')),
+      appBar: AppBar(title: const Text('Target Keuangan')),
       body: goalsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
@@ -43,8 +43,7 @@ class GoalsScreen extends ConsumerWidget {
                   Text('🏆', style: TextStyle(fontSize: 48)),
                   SizedBox(height: 12),
                   Text('Belum ada goals',
-                      style:
-                          TextStyle(color: AppColors.textSecondary)),
+                      style: TextStyle(color: AppColors.textSecondary)),
                 ],
               ),
             );
@@ -61,12 +60,9 @@ class GoalsScreen extends ConsumerWidget {
                 const SizedBox(height: 10),
                 ...active.map((g) => _GoalCard(
                       goal: g,
-                      onAddFunds: () =>
-                          _showAddFundsDialog(context, ref, g),
-                      onEdit: () =>
-                          _openAddEdit(context, existing: g),
-                      onDelete: () =>
-                          _confirmDelete(context, ref, g),
+                      onAddFunds: () => _showAddFundsDialog(context, ref, g),
+                      onEdit: () => _openAddEdit(context, existing: g),
+                      onDelete: () => _confirmDelete(context, ref, g),
                     )),
               ],
               if (completed.isNotEmpty) ...[
@@ -77,8 +73,7 @@ class GoalsScreen extends ConsumerWidget {
                       goal: g,
                       onAddFunds: () {},
                       onEdit: () {},
-                      onDelete: () =>
-                          _confirmDelete(context, ref, g),
+                      onDelete: () => _confirmDelete(context, ref, g),
                     )),
               ],
               const SizedBox(height: 80),
@@ -104,8 +99,8 @@ class GoalsScreen extends ConsumerWidget {
         content: TextField(
           controller: ctrl,
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-              hintText: 'Jumlah', prefixText: 'Rp '),
+          decoration:
+              const InputDecoration(hintText: 'Jumlah', prefixText: 'Rp '),
           autofocus: true,
         ),
         actions: [
@@ -130,8 +125,7 @@ class GoalsScreen extends ConsumerWidget {
     );
   }
 
-  void _confirmDelete(
-      BuildContext context, WidgetRef ref, GoalEntity goal) {
+  void _confirmDelete(BuildContext context, WidgetRef ref, GoalEntity goal) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -147,8 +141,7 @@ class GoalsScreen extends ConsumerWidget {
               ref.read(deleteGoalUseCaseProvider).call(goal.id);
               Navigator.pop(context);
             },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.expense),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.expense),
             child: const Text('Hapus'),
           ),
         ],
@@ -202,14 +195,11 @@ class _GoalCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: goal.isCompleted
-            ? goal.color.withOpacity(0.05)
-            : AppColors.card,
+        color: goal.isCompleted ? goal.color.withOpacity(0.05) : AppColors.card,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: goal.isCompleted
-              ? goal.color.withOpacity(0.3)
-              : AppColors.border,
+          color:
+              goal.isCompleted ? goal.color.withOpacity(0.3) : AppColors.border,
           width: goal.isCompleted ? 1.5 : 1,
         ),
       ),
@@ -226,8 +216,7 @@ class _GoalCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Center(
-                  child: Text(goal.emoji,
-                      style: const TextStyle(fontSize: 22)),
+                  child: Text(goal.emoji, style: const TextStyle(fontSize: 22)),
                 ),
               ),
               const SizedBox(width: 12),
@@ -278,8 +267,7 @@ class _GoalCard extends StatelessWidget {
                   if (v == 'delete') onDelete();
                 },
                 itemBuilder: (_) => [
-                  const PopupMenuItem(
-                      value: 'edit', child: Text('Edit')),
+                  const PopupMenuItem(value: 'edit', child: Text('Edit')),
                   const PopupMenuItem(
                     value: 'delete',
                     child: Text('Hapus',
@@ -344,8 +332,7 @@ class _GoalCard extends StatelessWidget {
                 Text(
                   'Perlu ${CurrencyFormatter.formatCompact(goal.dailySavingsNeeded)}/hari',
                   style: const TextStyle(
-                      fontSize: 11,
-                      color: AppColors.textSecondary),
+                      fontSize: 11, color: AppColors.textSecondary),
                 ),
             ],
           ),
@@ -360,8 +347,7 @@ class _GoalCard extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: goal.color,
                   side: BorderSide(color: goal.color),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
@@ -395,8 +381,18 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
   bool _isLoading = false;
 
   static const _emojis = [
-    '🎯', '🏠', '📱', '🚗', '✈️', '🏝️',
-    '🎓', '💍', '💼', '🛡️', '🏆', '💻',
+    '🎯',
+    '🏠',
+    '📱',
+    '🚗',
+    '✈️',
+    '🏝️',
+    '🎓',
+    '💍',
+    '💼',
+    '🛡️',
+    '🏆',
+    '💻',
   ];
   static const _colors = [
     AppColors.primary,
@@ -470,8 +466,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
       margin: const EdgeInsets.only(top: 60),
       decoration: const BoxDecoration(
         color: AppColors.background,
-        borderRadius:
-            BorderRadius.vertical(top: Radius.circular(28)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
@@ -514,9 +509,8 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                      color: isSel
-                          ? _color.withOpacity(0.15)
-                          : AppColors.surface,
+                      color:
+                          isSel ? _color.withOpacity(0.15) : AppColors.surface,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: isSel ? _color : AppColors.border,
@@ -524,16 +518,14 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                       ),
                     ),
                     child: Center(
-                        child: Text(e,
-                            style: const TextStyle(fontSize: 20))),
+                        child: Text(e, style: const TextStyle(fontSize: 20))),
                   ),
                 );
               }).toList(),
             ),
             const SizedBox(height: 16),
             // Color picker
-            Text('Warna',
-                style: Theme.of(context).textTheme.titleSmall),
+            Text('Warna', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Row(
               children: _colors.map((c) {
@@ -548,13 +540,11 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                       color: c,
                       shape: BoxShape.circle,
                       border: isSel
-                          ? Border.all(
-                              color: AppColors.textPrimary, width: 3)
+                          ? Border.all(color: AppColors.textPrimary, width: 3)
                           : null,
                     ),
                     child: isSel
-                        ? const Icon(Icons.check,
-                            color: Colors.white, size: 16)
+                        ? const Icon(Icons.check, color: Colors.white, size: 16)
                         : null,
                   ),
                 );
@@ -563,8 +553,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
             const SizedBox(height: 16),
             TextField(
               controller: _titleCtrl,
-              decoration:
-                  const InputDecoration(labelText: 'Nama Goal'),
+              decoration: const InputDecoration(labelText: 'Nama Goal'),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -587,8 +576,8 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                 if (d != null) setState(() => _deadline = d);
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(12),
@@ -597,14 +586,12 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                 child: Row(
                   children: [
                     const Icon(Icons.flag_rounded,
-                        size: 18,
-                        color: AppColors.textSecondary),
+                        size: 18, color: AppColors.textSecondary),
                     const SizedBox(width: 10),
                     Text(
                       'Deadline: ${_deadline.day}/${_deadline.month}/${_deadline.year}',
                       style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
+                          fontSize: 14, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -615,8 +602,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _save,
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: _color),
+                style: ElevatedButton.styleFrom(backgroundColor: _color),
                 child: _isLoading
                     ? const SizedBox(
                         width: 20,

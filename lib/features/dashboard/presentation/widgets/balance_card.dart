@@ -71,7 +71,7 @@ class BalanceCard extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'TOTAL BALANCE',
+                              'TOTAL SALDO',
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.60),
                                 fontSize: 10,
@@ -112,7 +112,7 @@ class BalanceCard extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: _StatPill(
-                            label: 'Income',
+                            label: 'Pemasukan',
                             icon: Icons.south_rounded,
                             value: income,
                             isLoading: txLoading,
@@ -122,7 +122,7 @@ class BalanceCard extends ConsumerWidget {
                         _VerticalDivider(),
                         Expanded(
                           child: _StatPill(
-                            label: 'Expense',
+                            label: 'Pengeluaran',
                             icon: Icons.north_rounded,
                             value: expense,
                             isLoading: txLoading,
@@ -132,7 +132,7 @@ class BalanceCard extends ConsumerWidget {
                         _VerticalDivider(),
                         Expanded(
                           child: _StatPill(
-                            label: 'Net',
+                            label: 'Selisih',
                             icon: isDeficit
                                 ? Icons.trending_down_rounded
                                 : Icons.trending_up_rounded,
