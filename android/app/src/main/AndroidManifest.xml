@@ -1,23 +1,22 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ── Permissions ──────────────────────────────────────────────────────── -->
-
-    <!-- Biometric -->
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-
-    <!-- Camera (OCR Scanner) -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- Internet (Google Fonts, ML Kit) -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- ── Application ──────────────────────────────────────────────────────── -->
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove"/>
 
-    <application
+    <application    
         android:label="spendly"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false"/>
 
         <activity
             android:name=".MainActivity"
@@ -28,16 +27,17 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <!-- Homescreen Widget -->
         <receiver
             android:name=".SpendlyWidget"
             android:exported="true">
@@ -49,14 +49,12 @@
                 android:resource="@xml/spendly_widget_info" />
         </receiver>
 
-        <!-- Required by Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
 
     </application>
 
-    <!-- Required for Flutter ProcessTextPlugin -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>

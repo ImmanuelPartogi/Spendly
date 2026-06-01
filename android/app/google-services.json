@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:139253553493:android:4dee0323054016437df7dc",
+        "mobilesdk_app_id": "1:139253553493:android:6459a095984aff337df7dc",
         "android_client_info": {
-          "package_name": "com.spendly.app"
+          "package_name": "com.harimokkar.spendly"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "139253553493-4kpr5dj9glqhsosumrlng49dd9oha9ra.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.harimokkar.spendly",
+            "certificate_hash": "fbb37990e3953a16ffc01ea2a393a4c5ae603019"
+          }
+        },
         {
           "client_id": "139253553493-85bqvdu030mhqotg62vaeitb19dejkol.apps.googleusercontent.com",
           "client_type": 3

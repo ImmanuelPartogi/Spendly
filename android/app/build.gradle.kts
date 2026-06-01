@@ -8,9 +8,18 @@ plugins {
 }
 
 android {
-    namespace = "com.spendly.app"
+    namespace = "com.harimokkar.spendly"
     compileSdk = 35
     ndkVersion = "27.0.12077973"
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("../../spendly-release.jks")
+            storePassword = "Kilangpadicitratani@17072004"
+            keyAlias = "spendly"
+            keyPassword = "Kilangpadicitratani@17072004"
+        }
+    }
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -23,7 +32,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.spendly.app"
+        applicationId = "com.harimokkar.spendly"
         minSdk = 23
         targetSdk = 35
         versionCode = flutter.versionCode
@@ -32,7 +41,7 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
@@ -50,4 +59,3 @@ dependencies {
 flutter {
     source = "../.."
 }
-// ← hapus "apply plugin: ..." yang ada di sini
