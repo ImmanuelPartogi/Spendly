@@ -51,10 +51,10 @@ class ComparisonSavingsCard extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: txtPrim,
-                        letterSpacing: -0.3)),
+                        letterSpacing: -0.3,),),
                 const SizedBox(height: 3),
                 Text('Surplus = Pemasukan − Pengeluaran',
-                    style: TextStyle(fontSize: 11, color: txtSec)),
+                    style: TextStyle(fontSize: 11, color: txtSec),),
               ],
             ),
           ),
@@ -62,7 +62,7 @@ class ComparisonSavingsCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               color: (avg >= 0 ? AppColors.income : AppColors.expense)
-                  .withOpacity(0.10),
+                  .withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -70,10 +70,10 @@ class ComparisonSavingsCard extends StatelessWidget {
               style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  color: avg >= 0 ? AppColors.income : AppColors.expense),
+                  color: avg >= 0 ? AppColors.income : AppColors.expense,),
             ),
           ),
-        ]),
+        ],),
         const SizedBox(height: 20),
         _SavingsLineChart(data: data, isDark: isDark),
         const SizedBox(height: 16),
@@ -84,22 +84,22 @@ class ComparisonSavingsCard extends StatelessWidget {
           Row(children: [
             Expanded(
               child: _PeriodStat(
-                label: 'Terbaik', period: best!.label,
-                value: best!.savings, color: AppColors.income,
+                label: 'Terbaik', period: best.label,
+                value: best.savings, color: AppColors.income,
                 icon: Icons.emoji_events_rounded, isDark: isDark,
               ),
             ),
             Container(width: 0.5, height: 40, color: div),
             Expanded(
               child: _PeriodStat(
-                label: 'Terburuk', period: worst!.label,
-                value: worst!.savings, color: AppColors.expense,
+                label: 'Terburuk', period: worst.label,
+                value: worst.savings, color: AppColors.expense,
                 icon: Icons.warning_amber_rounded, isDark: isDark,
               ),
             ),
-          ]),
+          ],),
         ],
-      ]),
+      ],),
     );
   }
 }
@@ -134,12 +134,12 @@ class _SavingsLineChart extends StatelessWidget {
           HorizontalLine(
             y: 0,
             color: isDark
-                ? Colors.white.withOpacity(0.18)
-                : Colors.black.withOpacity(0.10),
+                ? Colors.white.withValues(alpha: 0.18)
+                : Colors.black.withValues(alpha: 0.10),
             strokeWidth: 1,
             dashArray: [5, 4],
           ),
-        ]),
+        ],),
         titlesData: FlTitlesData(
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
@@ -151,7 +151,7 @@ class _SavingsLineChart extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(data[i].label,
-                      style: TextStyle(fontSize: 9, color: sec)),
+                      style: TextStyle(fontSize: 9, color: sec),),
                 );
               },
             ),
@@ -192,8 +192,8 @@ class _SavingsLineChart extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  AppColors.income.withOpacity(0.12),
-                  AppColors.income.withOpacity(0.0),
+                  AppColors.income.withValues(alpha: 0.12),
+                  AppColors.income.withValues(alpha: 0.0),
                 ],
               ),
               cutOffY: 0,
@@ -201,7 +201,7 @@ class _SavingsLineChart extends StatelessWidget {
             ),
           ),
         ],
-      )),
+      ),),
     );
   }
 }
@@ -229,7 +229,7 @@ class _PeriodStat extends StatelessWidget {
         Container(
           width: 28, height: 28,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.12),
+            color: color.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: color, size: 14),
@@ -239,15 +239,15 @@ class _PeriodStat extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(label,
                 style: TextStyle(
-                    fontSize: 10, color: sec, fontWeight: FontWeight.w500)),
+                    fontSize: 10, color: sec, fontWeight: FontWeight.w500,),),
             Text(period,
                 style: TextStyle(
-                    fontSize: 11, fontWeight: FontWeight.w700, color: color)),
+                    fontSize: 11, fontWeight: FontWeight.w700, color: color,),),
             Text(CurrencyFormatter.formatCompact(value.abs()),
-                style: TextStyle(fontSize: 10, color: sec)),
-          ]),
+                style: TextStyle(fontSize: 10, color: sec),),
+          ],),
         ),
-      ]),
+      ],),
     );
   }
 }

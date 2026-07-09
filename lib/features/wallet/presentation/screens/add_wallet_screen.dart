@@ -100,7 +100,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
           children: [
             // ── Preset chips ─────────────────────────────────────────────────
             Text('Pilih Cepat',
-                style: Theme.of(context).textTheme.titleMedium),
+                style: Theme.of(context).textTheme.titleMedium,),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
@@ -112,10 +112,10 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 180),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 8),
+                        horizontal: 14, vertical: 8,),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? p.color.withOpacity(0.12)
+                          ? p.color.withValues(alpha: 0.12)
                           : AppColors.surface,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
@@ -127,7 +127,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(p.emoji,
-                            style: const TextStyle(fontSize: 14)),
+                            style: const TextStyle(fontSize: 14),),
                         const SizedBox(width: 6),
                         Text(
                           p.name,
@@ -151,7 +151,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
 
             // ── Name ─────────────────────────────────────────────────────────
             Text('Nama Wallet',
-                style: Theme.of(context).textTheme.titleSmall),
+                style: Theme.of(context).textTheme.titleSmall,),
             const SizedBox(height: 8),
             TextField(
               controller: _nameCtrl,
@@ -163,7 +163,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
 
             // ── Initial balance ───────────────────────────────────────────────
             Text('Saldo Awal',
-                style: Theme.of(context).textTheme.titleSmall),
+                style: Theme.of(context).textTheme.titleSmall,),
             const SizedBox(height: 8),
             TextField(
               controller: _balanceCtrl,
@@ -189,7 +189,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
                   onSelected: (_) =>
                       setState(() => _selectedType = t),
                   selectedColor:
-                      AppColors.primary.withOpacity(0.15),
+                      AppColors.primary.withValues(alpha: 0.15),
                   labelStyle: TextStyle(
                     color: isSelected
                         ? AppColors.primary
@@ -208,7 +208,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
             const SizedBox(height: 12),
             Row(
               children: _colors.map((c) {
-                final isSelected = c.value == _selectedColor.value;
+                final isSelected = c.toARGB32() == _selectedColor.toARGB32();
                 return GestureDetector(
                   onTap: () => setState(() => _selectedColor = c),
                   child: Container(
@@ -220,12 +220,12 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
                       shape: BoxShape.circle,
                       border: isSelected
                           ? Border.all(
-                              color: AppColors.textPrimary, width: 3)
+                              color: AppColors.textPrimary, width: 3,)
                           : null,
                     ),
                     child: isSelected
                         ? const Icon(Icons.check,
-                            color: Colors.white, size: 18)
+                            color: Colors.white, size: 18,)
                         : null,
                   ),
                 );
@@ -243,7 +243,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2),
+                            color: Colors.white, strokeWidth: 2,),
                       )
                     : const Text('Simpan Wallet'),
               ),

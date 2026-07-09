@@ -56,10 +56,10 @@ class _ComparisonDonutCardState extends State<ComparisonDonutCard> {
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: txtPrim,
-                letterSpacing: -0.3)),
+                letterSpacing: -0.3,),),
         const SizedBox(height: 3),
         Text('Komposisi pemasukan dan pengeluaran per kategori',
-            style: TextStyle(fontSize: 11, color: txtSec)),
+            style: TextStyle(fontSize: 11, color: txtSec),),
         const SizedBox(height: 20),
 
         if (!hasData)
@@ -67,7 +67,7 @@ class _ComparisonDonutCardState extends State<ComparisonDonutCard> {
             height: 100,
             child: Center(
               child: Text('Belum ada data',
-                  style: TextStyle(fontSize: 12, color: txtSec)),
+                  style: TextStyle(fontSize: 12, color: txtSec),),
             ),
           )
         else
@@ -105,8 +105,8 @@ class _ComparisonDonutCardState extends State<ComparisonDonutCard> {
                 }),
               ),
             ),
-          ]),
-      ]),
+          ],),
+      ],),
     );
   }
 }
@@ -149,11 +149,11 @@ class _DonutSection extends StatelessWidget {
               ),
               child: Icon(Icons.pie_chart_outline_rounded,
                   size: 18,
-                  color: isDark ? AppColors.textHintDark : AppColors.textHint),
+                  color: isDark ? AppColors.textHintDark : AppColors.textHint,),
             ),
             const SizedBox(height: 6),
             Text('Tidak ada data', style: TextStyle(fontSize: 11, color: txtSec)),
-          ]),
+          ],),
         ),
       );
     }
@@ -167,7 +167,7 @@ class _DonutSection extends StatelessWidget {
           style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: accentColor)),
+              color: accentColor,),),
       const SizedBox(height: 12),
       SizedBox(
         height: 110,
@@ -194,7 +194,7 @@ class _DonutSection extends StatelessWidget {
             }).toList(),
             centerSpaceRadius: 28,
             sectionsSpace: 2,
-          )),
+          ),),
           // Center label
           touchedEntry != null
               ? Column(mainAxisSize: MainAxisSize.min, children: [
@@ -204,9 +204,9 @@ class _DonutSection extends StatelessWidget {
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: CategoryUtils.getColor(touchedEntry.key),
-                        letterSpacing: -0.3),
+                        letterSpacing: -0.3,),
                   ),
-                ])
+                ],)
               : Column(mainAxisSize: MainAxisSize.min, children: [
                   Text(
                     CurrencyFormatter.formatCompact(total),
@@ -214,12 +214,12 @@ class _DonutSection extends StatelessWidget {
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         color: txtPrim,
-                        letterSpacing: -0.3),
+                        letterSpacing: -0.3,),
                   ),
                   Text('total',
-                      style: TextStyle(fontSize: 8, color: txtSec)),
-                ]),
-        ]),
+                      style: TextStyle(fontSize: 8, color: txtSec),),
+                ],),
+        ],),
       ),
       const SizedBox(height: 8),
       // Mini legend
@@ -234,7 +234,7 @@ class _DonutSection extends StatelessWidget {
               Container(
                   width: 6, height: 6,
                   decoration: BoxDecoration(
-                      color: color, borderRadius: BorderRadius.circular(2))),
+                      color: color, borderRadius: BorderRadius.circular(2),),),
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
@@ -245,11 +245,11 @@ class _DonutSection extends StatelessWidget {
               ),
               Text('$pct%',
                   style: TextStyle(
-                      fontSize: 9.5, fontWeight: FontWeight.w700, color: color)),
-            ]),
+                      fontSize: 9.5, fontWeight: FontWeight.w700, color: color,),),
+            ],),
           );
         }).toList(),
       ),
-    ]);
+    ],);
   }
 }

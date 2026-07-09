@@ -103,51 +103,51 @@ class WalletPreset {
         name: 'Cash',
         type: WalletType.cash,
         color: Color(0xFF00C48C),
-        emoji: '💵'),
+        emoji: '💵',),
     WalletPreset(
         name: 'BCA',
         type: WalletType.bank,
         color: Color(0xFF0066AE),
-        emoji: '🏦'),
+        emoji: '🏦',),
     WalletPreset(
         name: 'Mandiri',
         type: WalletType.bank,
         color: Color(0xFF003D79),
-        emoji: '🏦'),
+        emoji: '🏦',),
     WalletPreset(
         name: 'BNI',
         type: WalletType.bank,
         color: Color(0xFFEB6823),
-        emoji: '🏦'),
+        emoji: '🏦',),
     WalletPreset(
         name: 'BRI',
         type: WalletType.bank,
         color: Color(0xFF003087),
-        emoji: '🏦'),
+        emoji: '🏦',),
     WalletPreset(
         name: 'GoPay',
         type: WalletType.ewallet,
         color: Color(0xFF00AED6),
-        emoji: '📱'),
+        emoji: '📱',),
     WalletPreset(
         name: 'OVO',
         type: WalletType.ewallet,
         color: Color(0xFF4C3494),
-        emoji: '📱'),
+        emoji: '📱',),
     WalletPreset(
         name: 'Dana',
         type: WalletType.ewallet,
         color: Color(0xFF118EEA),
-        emoji: '📱'),
+        emoji: '📱',),
     WalletPreset(
         name: 'ShopeePay',
         type: WalletType.ewallet,
         color: Color(0xFFEE4D2D),
-        emoji: '📱'),
+        emoji: '📱',),
     WalletPreset(
         name: 'Jenius',
         type: WalletType.bank,
         color: Color(0xFF2B2D42),
-        emoji: '💳'),
+        emoji: '💳',),
   ];
 }

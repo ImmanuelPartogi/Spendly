@@ -43,7 +43,7 @@ class BackupService {
     // Simpan tanggal backup terakhir
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
-        _kLastBackup, DateTime.now().toIso8601String());
+        _kLastBackup, DateTime.now().toIso8601String(),);
 
     return file;
   }
@@ -57,9 +57,11 @@ class BackupService {
 
   /// Share file via OS share sheet.
   static Future<void> shareBackup(File file) async {
-    await Share.shareXFiles(
-      [XFile(file.path)],
-      subject: 'Spendly Backup',
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(file.path)],
+        subject: 'Spendly Backup',
+      ),
     );
   }
 
@@ -219,7 +221,7 @@ class _BackupScreenState extends State<BackupScreen> {
   String _formatDate(DateTime dt) {
     final months = [
       'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des',
     ];
     return '${dt.day} ${months[dt.month - 1]} ${dt.year}, '
         '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
@@ -249,7 +251,7 @@ class _BackupScreenState extends State<BackupScreen> {
                   const Row(
                     children: [
                       Icon(Icons.shield_rounded,
-                          color: Colors.white, size: 20),
+                          color: Colors.white, size: 20,),
                       SizedBox(width: 8),
                       Text(
                         'Status Backup',
@@ -267,7 +269,7 @@ class _BackupScreenState extends State<BackupScreen> {
                         ? 'Belum pernah di-backup'
                         : 'Terakhir: ${_formatDate(_lastBackup!)}',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.85),
+                      color: Colors.white.withValues(alpha: 0.85),
                       fontSize: 14,
                     ),
                   ),
@@ -279,13 +281,13 @@ class _BackupScreenState extends State<BackupScreen> {
             // ── Backup section ────────────────────────────────────────────
             Text('Backup', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Export semua data (transaksi, wallet, budget, goals) ke file JSON '
               'yang bisa disimpan di perangkat atau dibagikan.',
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 13,
                   color: AppColors.textSecondary,
-                  height: 1.5),
+                  height: 1.5,),
             ),
             const SizedBox(height: 16),
             _ActionCard(
@@ -301,13 +303,13 @@ class _BackupScreenState extends State<BackupScreen> {
             // ── Restore section ───────────────────────────────────────────
             Text('Restore', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Pulihkan data dari file backup JSON yang sebelumnya dibuat. '
               'Data yang ada saat ini akan digantikan.',
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 13,
                   color: AppColors.textSecondary,
-                  height: 1.5),
+                  height: 1.5,),
             ),
             const SizedBox(height: 16),
             _ActionCard(
@@ -324,16 +326,16 @@ class _BackupScreenState extends State<BackupScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.warning.withOpacity(0.08),
+                color: AppColors.warning.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                    color: AppColors.warning.withOpacity(0.3)),
+                    color: AppColors.warning.withValues(alpha: 0.3),),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(Icons.info_rounded,
-                      color: AppColors.warning, size: 18),
+                      color: AppColors.warning, size: 18,),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -341,7 +343,7 @@ class _BackupScreenState extends State<BackupScreen> {
                       'Simpan file backup di Google Drive atau cloud storage lainnya.',
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.warning.withOpacity(0.9),
+                        color: AppColors.warning.withValues(alpha: 0.9),
                         height: 1.5,
                       ),
                     ),
@@ -391,7 +393,7 @@ class _ActionCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: isLoading
@@ -414,16 +416,16 @@ class _ActionCard extends StatelessWidget {
                 children: [
                   Text(title,
                       style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w700)),
+                          fontSize: 15, fontWeight: FontWeight.w700,),),
                   Text(subtitle,
                       style: const TextStyle(
                           fontSize: 12,
-                          color: AppColors.textSecondary)),
+                          color: AppColors.textSecondary,),),
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios_rounded,
-                size: 14, color: AppColors.textHint),
+            const Icon(Icons.arrow_forward_ios_rounded,
+                size: 14, color: AppColors.textHint,),
           ],
         ),
       ),

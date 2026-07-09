@@ -63,9 +63,9 @@ class _SavingsChartState extends State<SavingsChart> {
                       child: LinearProgressIndicator(
                         value: progress,
                         backgroundColor:
-                            AppColors.primary.withOpacity(0.12),
+                            AppColors.primary.withValues(alpha: 0.12),
                         valueColor: const AlwaysStoppedAnimation(
-                            AppColors.primary),
+                            AppColors.primary,),
                         minHeight: 8,
                       ),
                     ),
@@ -84,7 +84,7 @@ class _SavingsChartState extends State<SavingsChart> {
               IconButton(
                 onPressed: widget.onSetTarget,
                 icon: const Icon(Icons.edit_rounded,
-                    size: 16, color: AppColors.textSecondary),
+                    size: 16, color: AppColors.textSecondary,),
               ),
             ],
           ),
@@ -97,7 +97,7 @@ class _SavingsChartState extends State<SavingsChart> {
               icon: const Icon(Icons.flag_rounded, size: 14),
               label: const Text('Atur Target'),
               style: TextButton.styleFrom(
-                  foregroundColor: AppColors.primary),
+                  foregroundColor: AppColors.primary,),
             ),
           ),
 
@@ -110,7 +110,7 @@ class _SavingsChartState extends State<SavingsChart> {
                 show: true,
                 drawVerticalLine: false,
                 getDrawingHorizontalLine: (_) => const FlLine(
-                    color: AppColors.divider, strokeWidth: 1),
+                    color: AppColors.divider, strokeWidth: 1,),
               ),
               titlesData: FlTitlesData(
                 bottomTitles: AxisTitles(
@@ -127,18 +127,18 @@ class _SavingsChartState extends State<SavingsChart> {
                           entries[i].key,
                           style: const TextStyle(
                               fontSize: 9,
-                              color: AppColors.textHint),
+                              color: AppColors.textHint,),
                         ),
                       );
                     },
                   ),
                 ),
                 leftTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
                 topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
                 rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
               ),
               borderData: FlBorderData(show: false),
               minX: 0,
@@ -152,7 +152,7 @@ class _SavingsChartState extends State<SavingsChart> {
                   ? ExtraLinesData(horizontalLines: [
                       HorizontalLine(
                         y: target,
-                        color: AppColors.primary.withOpacity(0.5),
+                        color: AppColors.primary.withValues(alpha: 0.5),
                         strokeWidth: 1.5,
                         dashArray: [5, 4],
                         label: HorizontalLineLabel(
@@ -164,7 +164,7 @@ class _SavingsChartState extends State<SavingsChart> {
                           ),
                         ),
                       ),
-                    ])
+                    ],)
                   : null,
               lineBarsData: [
                 LineChartBarData(
@@ -172,7 +172,7 @@ class _SavingsChartState extends State<SavingsChart> {
                       .asMap()
                       .entries
                       .map((e) =>
-                          FlSpot(e.key.toDouble(), e.value.value))
+                          FlSpot(e.key.toDouble(), e.value.value),)
                       .toList(),
                   isCurved: true,
                   color: AppColors.primary,
@@ -193,8 +193,8 @@ class _SavingsChartState extends State<SavingsChart> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        AppColors.primary.withOpacity(0.2),
-                        AppColors.primary.withOpacity(0.02),
+                        AppColors.primary.withValues(alpha: 0.2),
+                        AppColors.primary.withValues(alpha: 0.02),
                       ],
                     ),
                   ),

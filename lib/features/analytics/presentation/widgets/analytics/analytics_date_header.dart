@@ -116,7 +116,7 @@ class AnalyticsDateHeader extends StatelessWidget {
           )
         else
           const SizedBox(width: 8),
-      ]),
+      ],),
     );
   }
 }
@@ -142,7 +142,7 @@ class _NavBtn extends StatelessWidget {
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: active ? AppColors.primary.withOpacity(0.10) : Colors.transparent,
+          color: active ? AppColors.primary.withValues(alpha: 0.10) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(

@@ -18,7 +18,7 @@ class HomeWidgetService {
   static Future<void> init() async {
     if (_initialized) return;
     await HomeWidget.setAppGroupId(_appGroupId);
-    HomeWidget.registerBackgroundCallback(_backgroundCallback);
+    await HomeWidget.registerInteractivityCallback(_backgroundCallback);
     _initialized = true;
   }
 
@@ -39,7 +39,7 @@ class HomeWidgetService {
     await Future.wait([
       HomeWidget.saveWidgetData('widget_balance', fmt.format(totalBalance)),
       HomeWidget.saveWidgetData(
-          'widget_today_expense', fmt.format(todayExpense)),
+          'widget_today_expense', fmt.format(todayExpense),),
       HomeWidget.saveWidgetData('widget_last_updated', timeStr),
     ]);
 

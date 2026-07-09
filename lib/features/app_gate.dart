@@ -3,15 +3,15 @@ import 'dart:math' as math;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spendly/features/auth/domain/services/auth_service.dart';
-import 'package:spendly/features/auth/presentation/screens/login_screen.dart';
-import 'package:spendly/features/auth/presentation/screens/pin_screen.dart';
-import 'package:spendly/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:spendly/core/navigation/main_navigation.dart';
-import 'package:spendly/core/providers.dart';
-import 'package:spendly/core/theme/app_colors.dart';
-import 'package:spendly/core/auth/auth_provider.dart';
-import 'package:spendly/core/services/auth_service_firebase.dart';
+import 'auth/domain/services/auth_service.dart';
+import 'auth/presentation/screens/login_screen.dart';
+import 'auth/presentation/screens/pin_screen.dart';
+import 'onboarding/presentation/screens/onboarding_screen.dart';
+import '../core/navigation/main_navigation.dart';
+import '../core/providers.dart';
+import '../core/theme/app_colors.dart';
+import '../core/auth/auth_provider.dart';
+import '../core/services/auth_service_firebase.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AppGate
@@ -233,7 +233,7 @@ class _SplashViewState extends State<_SplashView> with TickerProviderStateMixin 
   // Durasi total animasi teks
   static const _textDelay    = 420;
   static const _perLetterMs  = 75;
-  static final _textDuration = _appName.length * _perLetterMs + 150;
+  static const _textDuration = _appName.length * _perLetterMs + 150;
 
   @override
   void initState() {
@@ -269,7 +269,7 @@ class _SplashViewState extends State<_SplashView> with TickerProviderStateMixin 
     // 4. Teks per huruf — mulai setelah icon selesai
     _textCtrl = AnimationController(
       vsync:    this,
-      duration: Duration(milliseconds: _textDuration),
+      duration: const Duration(milliseconds: _textDuration),
     );
     Future.delayed(const Duration(milliseconds: _textDelay), () {
       if (mounted) _textCtrl.forward();
@@ -281,7 +281,7 @@ class _SplashViewState extends State<_SplashView> with TickerProviderStateMixin 
       duration: const Duration(milliseconds: 480),
     );
     Future.delayed(
-      Duration(milliseconds: _textDelay + _textDuration + 80),
+      const Duration(milliseconds: _textDelay + _textDuration + 80),
       () { if (mounted) _taglineCtrl.forward(); },
     );
 
@@ -317,7 +317,7 @@ class _SplashViewState extends State<_SplashView> with TickerProviderStateMixin 
     final isDark  = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
-    final txtSec  = txtPrim.withOpacity(0.38);
+    final txtSec  = txtPrim.withValues(alpha: 0.38);
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -449,7 +449,7 @@ class _SplashViewState extends State<_SplashView> with TickerProviderStateMixin 
                     height: 7 * scale,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.primary.withOpacity(opacity),
+                      color: AppColors.primary.withValues(alpha: opacity),
                     ),
                   );
                 }),
@@ -487,7 +487,7 @@ class _ArcRingPainter extends CustomPainter {
     final trackPaint = Paint()
       ..style       = PaintingStyle.stroke
       ..strokeWidth = 1.5
-      ..color       = color.withOpacity(isDark ? 0.12 : 0.10);
+      ..color       = color.withValues(alpha: isDark ? 0.12 : 0.10);
 
     canvas.drawCircle(Offset(cx, cy), r, trackPaint);
 
@@ -497,7 +497,7 @@ class _ArcRingPainter extends CustomPainter {
       ..strokeWidth = 2.0
       ..strokeCap   = StrokeCap.round
       ..shader      = SweepGradient(
-        colors:     [color.withOpacity(0), color],
+        colors:     [color.withValues(alpha: 0), color],
         startAngle: 0,
         endAngle:   math.pi * 2,
       ).createShader(Rect.fromCircle(center: Offset(cx, cy), radius: r));

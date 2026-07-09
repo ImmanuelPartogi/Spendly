@@ -17,22 +17,22 @@ class AnalyticsComparisonCta extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => const IncomeExpenseComparisonScreen()),
+            builder: (_) => const IncomeExpenseComparisonScreen(),),
       ),
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 16, 12, 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
-              AppColors.accentPurple.withOpacity(isDark ? 0.10 : 0.05),
+              AppColors.primary.withValues(alpha: isDark ? 0.14 : 0.08),
+              AppColors.accentPurple.withValues(alpha: isDark ? 0.10 : 0.05),
             ],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-              color: AppColors.primary.withOpacity(0.22), width: 0.5),
+              color: AppColors.primary.withValues(alpha: 0.22), width: 0.5,),
         ),
         child: Row(children: [
           // Icon
@@ -40,13 +40,13 @@ class AnalyticsComparisonCta extends StatelessWidget {
             width: 46, height: 46,
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-                AppColors.primary.withOpacity(0.18),
-                AppColors.accentPurple.withOpacity(0.14),
-              ]),
+                AppColors.primary.withValues(alpha: 0.18),
+                AppColors.accentPurple.withValues(alpha: 0.14),
+              ],),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Icon(Icons.compare_arrows_rounded,
-                color: AppColors.primary, size: 22),
+                color: AppColors.primary, size: 22,),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -58,10 +58,10 @@ class AnalyticsComparisonCta extends StatelessWidget {
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: txtPrim,
-                        letterSpacing: -0.2)),
+                        letterSpacing: -0.2,),),
                 const SizedBox(height: 3),
                 Text('Lihat perbandingan lengkap pemasukan vs pengeluaran per periode, kategori, dan tren tabungan',
-                    style: TextStyle(fontSize: 11, color: txtSec, height: 1.4)),
+                    style: TextStyle(fontSize: 11, color: txtSec, height: 1.4),),
               ],
             ),
           ),
@@ -73,9 +73,9 @@ class AnalyticsComparisonCta extends StatelessWidget {
               borderRadius: BorderRadius.circular(9),
             ),
             child: const Icon(Icons.arrow_forward_ios_rounded,
-                color: Colors.white, size: 13),
+                color: Colors.white, size: 13,),
           ),
-        ]),
+        ],),
       ),
     );
   }

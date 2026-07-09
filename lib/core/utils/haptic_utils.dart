@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 
 /// Centralized haptic feedback helper.
 /// Usage:

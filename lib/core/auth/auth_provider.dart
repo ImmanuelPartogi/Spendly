@@ -8,7 +8,7 @@ final firebaseAuthProvider = Provider<FirebaseAuth>(
   (_) => FirebaseAuth.instance,
 );
 
-/// Stream<User?> — null = belum login, User = sudah login
+/// `Stream<User?>` — null = belum login, User = sudah login
 final authStateProvider = StreamProvider<User?>((ref) {
   return ref.watch(firebaseAuthProvider).authStateChanges();
 });

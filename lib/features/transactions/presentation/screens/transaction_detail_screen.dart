@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -49,7 +48,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                   icon: Container(
                     width: 34, height: 34,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.18),
+                      color: Colors.white.withValues(alpha: 0.18),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -68,7 +67,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                       icon: Container(
                         width: 34, height: 34,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(locked ? 0.08 : 0.18),
+                          color: Colors.white.withValues(alpha: locked ? 0.08 : 0.18),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -89,8 +88,8 @@ class TransactionDetailScreen extends ConsumerWidget {
                       icon: Container(
                         width: 34, height: 34,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(
-                              locked ? 0.08 : 0.18),
+                          color: Colors.white.withValues(alpha: 
+                              locked ? 0.08 : 0.18,),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -163,7 +162,7 @@ class TransactionDetailScreen extends ConsumerWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
-            'Transaksi > 3 hari tidak dapat dihapus untuk menjaga akurasi data'),
+            'Transaksi > 3 hari tidak dapat dihapus untuk menjaga akurasi data',),
         duration: Duration(seconds: 3),
       ),
     );
@@ -232,14 +231,14 @@ class TransactionDetailScreen extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.expense,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
               child: const Text(
                 'Hapus',
                 style: TextStyle(
-                    fontWeight: FontWeight.w700, color: Colors.white),
+                    fontWeight: FontWeight.w700, color: Colors.white,),
               ),
             ),
           ),
@@ -272,7 +271,7 @@ class _HeroBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -292,7 +291,7 @@ class _HeroBackground extends StatelessWidget {
               width: 160, height: 160,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -302,7 +301,7 @@ class _HeroBackground extends StatelessWidget {
               width: 120, height: 120,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.04),
+                color: Colors.white.withValues(alpha: 0.04),
               ),
             ),
           ),
@@ -322,10 +321,10 @@ class _HeroBackground extends StatelessWidget {
                   Container(
                     width: 46, height: 46,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.20),
+                      color: Colors.white.withValues(alpha: 0.20),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                          color: Colors.white.withOpacity(0.25)),
+                          color: Colors.white.withValues(alpha: 0.25),),
                     ),
                     child: Center(
                       child: Icon(catIcon, color: Colors.white, size: 22),
@@ -336,12 +335,12 @@ class _HeroBackground extends StatelessWidget {
                   // Type badge
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                        horizontal: 10, vertical: 4,),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
+                      color: Colors.white.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                          color: Colors.white.withOpacity(0.25), width: 1),
+                          color: Colors.white.withValues(alpha: 0.25), width: 1,),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -382,7 +381,7 @@ class _HeroBackground extends StatelessWidget {
                   Text(
                     category,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.80),
+                      color: Colors.white.withValues(alpha: 0.80),
                       fontSize: 13.5,
                       fontWeight: FontWeight.w500,
                     ),
@@ -393,16 +392,16 @@ class _HeroBackground extends StatelessWidget {
                     const SizedBox(height: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
+                          horizontal: 10, vertical: 5,),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.22),
+                        color: Colors.black.withValues(alpha: 0.22),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.lock_rounded,
-                              color: Colors.white70, size: 11),
+                              color: Colors.white70, size: 11,),
                           SizedBox(width: 5),
                           Text(
                             'Terkunci · lebih dari 3 hari',
@@ -451,7 +450,7 @@ class _DetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(20),
@@ -459,8 +458,8 @@ class _DetailCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.25)
-                : Colors.black.withOpacity(0.05),
+                ? Colors.black.withValues(alpha: 0.25)
+                : Colors.black.withValues(alpha: 0.05),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -577,7 +576,7 @@ class _Row extends StatelessWidget {
           Container(
             width: 32, height: 32,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(isDark ? 0.14 : 0.09),
+              color: iconColor.withValues(alpha: isDark ? 0.14 : 0.09),
               borderRadius: BorderRadius.circular(9),
             ),
             child: Center(
@@ -626,12 +625,12 @@ class _LockedRow extends StatelessWidget {
           Container(
             width: 32, height: 32,
             decoration: BoxDecoration(
-              color: AppColors.warning.withOpacity(0.12),
+              color: AppColors.warning.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(9),
             ),
             child: const Center(
               child: Icon(Icons.lock_outline_rounded,
-                  size: 15, color: AppColors.warning),
+                  size: 15, color: AppColors.warning,),
             ),
           ),
           const SizedBox(width: 12),
@@ -639,7 +638,7 @@ class _LockedRow extends StatelessWidget {
             child: Text(
               'Transaksi ini sudah > 3 hari dan tidak dapat dihapus.',
               style: TextStyle(
-                  fontSize: 12.5, color: txtSec, height: 1.4),
+                  fontSize: 12.5, color: txtSec, height: 1.4,),
             ),
           ),
         ],

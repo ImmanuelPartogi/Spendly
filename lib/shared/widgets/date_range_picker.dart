@@ -21,7 +21,7 @@ class SpendlyDateRangePicker extends StatefulWidget {
   const SpendlyDateRangePicker({super.key, this.initial});
 
   static Future<SpendlyDateRange?> show(BuildContext context,
-      {SpendlyDateRange? initial}) {
+      {SpendlyDateRange? initial,}) {
     return showModalBottomSheet<SpendlyDateRange>(
       context: context,
       isScrollControlled: true,
@@ -46,24 +46,24 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
       final start = now.subtract(Duration(days: now.weekday - 1));
       return SpendlyDateRange(
           start: DateTime(start.year, start.month, start.day),
-          end: now, label: 'Minggu ini');
+          end: now, label: 'Minggu ini',);
     }),
     _Preset('Bulan ini', () {
       final now = DateTime.now();
       return SpendlyDateRange(
-          start: DateTime(now.year, now.month, 1), end: now, label: 'Bulan ini');
+          start: DateTime(now.year, now.month, 1), end: now, label: 'Bulan ini',);
     }),
     _Preset('3 Bulan', () {
       final now = DateTime.now();
       return SpendlyDateRange(
           start: DateTime(now.year, now.month - 2, 1),
-          end: now, label: '3 Bulan Terakhir');
+          end: now, label: '3 Bulan Terakhir',);
     }),
     _Preset('Tahun ini', () {
       final now = DateTime.now();
       return SpendlyDateRange(
           start: DateTime(now.year, 1, 1), end: now,
-          label: 'Tahun ${now.year}');
+          label: 'Tahun ${now.year}',);
     }),
     _Preset('Bulan lalu', () {
       final now  = DateTime.now();
@@ -114,10 +114,9 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
             onSurface: isDark
                 ? AppColors.textPrimaryDark : AppColors.textPrimary,
           ),
-          dialogBackgroundColor: isDark ? AppColors.cardDark : AppColors.card,
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(foregroundColor: AppColors.primary),
-          ),
+          ), dialogTheme: DialogThemeData(backgroundColor: isDark ? AppColors.cardDark : AppColors.card),
         ),
         child: child!,
       ),
@@ -126,25 +125,29 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
 
   Future<void> _pickStart() async {
     final picked = await _showDatePicker(
-        initialDate: _start, firstDate: DateTime(2020), lastDate: _end);
-    if (picked != null) setState(() {
+        initialDate: _start, firstDate: DateTime(2020), lastDate: _end,);
+    if (picked != null) {
+      setState(() {
       _start = picked; _selectedPreset = 'Kustom';
     });
+    }
   }
 
   Future<void> _pickEnd() async {
     final picked = await _showDatePicker(
-        initialDate: _end, firstDate: _start, lastDate: DateTime.now());
-    if (picked != null) setState(() {
+        initialDate: _end, firstDate: _start, lastDate: DateTime.now(),);
+    if (picked != null) {
+      setState(() {
       _end = picked; _selectedPreset = 'Kustom';
     });
+    }
   }
 
   void _apply() {
     final label = _selectedPreset.isNotEmpty
         ? _selectedPreset : '${_fmt(_start)} – ${_fmt(_end)}';
     Navigator.pop(context,
-        SpendlyDateRange(start: _start, end: _end, label: label));
+        SpendlyDateRange(start: _start, end: _end, label: label),);
   }
 
   String _fmt(DateTime d)  => '${d.day}/${d.month}/${d.year}';
@@ -175,15 +178,15 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
           Center(child: Container(
             width: 40, height: 4,
             decoration: BoxDecoration(color: bdrColor,
-                borderRadius: BorderRadius.circular(2)),
-          )),
+                borderRadius: BorderRadius.circular(2),),
+          ),),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
             child: Row(
               children: [
                 Text('Pilih Periode',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700,
-                      color: txtPrim, letterSpacing: -0.3)),
+                      color: txtPrim, letterSpacing: -0.3,),),
                 const Spacer(),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
@@ -206,17 +209,17 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
                     duration: const Duration(milliseconds: 180),
                     margin: const EdgeInsets.only(right: 8),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 8),
+                        horizontal: 14, vertical: 8,),
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.primary : surfColor,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                          color: isSelected ? AppColors.primary : bdrColor),
+                          color: isSelected ? AppColors.primary : bdrColor,),
                     ),
                     child: Text(p.label, style: TextStyle(
                       fontSize: 13, fontWeight: FontWeight.w600,
                       color: isSelected ? Colors.white : txtSec,
-                    )),
+                    ),),
                   ),
                 );
               }).toList(),
@@ -231,22 +234,22 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
                 Expanded(child: _DateTile(
                   label: 'Dari', date: _start,
                   isDark: isDark, onTap: _pickStart,
-                )),
+                ),),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Icon(Icons.arrow_forward_rounded,
-                      color: txtSec, size: 18),
+                      color: txtSec, size: 18,),
                 ),
                 Expanded(child: _DateTile(
                   label: 'Sampai', date: _end,
                   isDark: isDark, onTap: _pickEnd,
-                )),
+                ),),
               ],
             ),
           ),
           const SizedBox(height: 10),
           Text('Durasi: ${_dayDiff()}',
-            style: TextStyle(fontSize: 12, color: txtSec)),
+            style: TextStyle(fontSize: 12, color: txtSec),),
           const SizedBox(height: 20),
 
           Padding(
@@ -305,7 +308,7 @@ class _DateTile extends StatelessWidget {
             const SizedBox(height: 3),
             Text(_fmt(date), style: TextStyle(
               fontSize: 13, fontWeight: FontWeight.w700, color: txtPrim,
-            )),
+            ),),
           ],
         ),
       ),

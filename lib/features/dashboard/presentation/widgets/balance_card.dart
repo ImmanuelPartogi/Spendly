@@ -41,7 +41,7 @@ class BalanceCard extends ConsumerWidget {
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.28),
+              color: AppColors.primary.withValues(alpha: 0.28),
               blurRadius: 32,
               offset: const Offset(0, 14),
               spreadRadius: -6,
@@ -73,7 +73,7 @@ class BalanceCard extends ConsumerWidget {
                             Text(
                               'TOTAL SALDO',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.60),
+                                color: Colors.white.withValues(alpha: 0.60),
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 1.4,
@@ -103,7 +103,7 @@ class BalanceCard extends ConsumerWidget {
                     // ── Divider ───────────────────────────────────────────
                     Container(
                       height: 0.5,
-                      color: Colors.white.withOpacity(0.15),
+                      color: Colors.white.withValues(alpha: 0.15),
                     ),
                     const SizedBox(height: 18),
 
@@ -163,7 +163,7 @@ class _DotGridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.05)
+      ..color = Colors.white.withValues(alpha: 0.05)
       ..style = PaintingStyle.fill;
 
     const spacing = 18.0;
@@ -191,9 +191,9 @@ class _MonthBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.12)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
       ),
       child: Text(
         label,
@@ -256,7 +256,7 @@ class _SavingsBar extends StatelessWidget {
             Text(
               isDeficit ? 'Deficit bulan ini' : 'Tingkat tabungan',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.60),
+                color: Colors.white.withValues(alpha: 0.60),
                 fontSize: 10.5,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 0.2,
@@ -280,7 +280,7 @@ class _SavingsBar extends StatelessWidget {
               Container(
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.12),
+                  color: Colors.white.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -339,7 +339,7 @@ class _StatPill extends StatelessWidget {
                 width: 18,
                 height: 18,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.18),
+                  color: color.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Icon(icon, color: color, size: 11),
@@ -348,7 +348,7 @@ class _StatPill extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.65),
+                  color: Colors.white.withValues(alpha: 0.65),
                   fontSize: 10.5,
                   fontWeight: FontWeight.w500,
                 ),
@@ -386,7 +386,7 @@ class _VerticalDivider extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         width: 0.5,
         height: 36,
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: 0.15),
       );
 }
 
@@ -402,7 +402,7 @@ class _Skeleton extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
+          color: Colors.white.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(6),
         ),
       );

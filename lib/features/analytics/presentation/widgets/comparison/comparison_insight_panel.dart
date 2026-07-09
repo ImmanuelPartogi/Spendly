@@ -78,10 +78,10 @@ class ComparisonInsightPanel extends StatelessWidget {
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: txtPrim,
-                letterSpacing: -0.3)),
+                letterSpacing: -0.3,),),
         const SizedBox(height: 3),
         Text('Gambaran kondisi finansial kamu saat ini',
-            style: TextStyle(fontSize: 11, color: txtSec)),
+            style: TextStyle(fontSize: 11, color: txtSec),),
         const SizedBox(height: 16),
 
         // Health row
@@ -97,9 +97,9 @@ class ComparisonInsightPanel extends StatelessWidget {
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: status.color,
-                        letterSpacing: -0.2)),
+                        letterSpacing: -0.2,),),
                 Text(status.subtitle,
-                    style: TextStyle(fontSize: 11, color: txtSec)),
+                    style: TextStyle(fontSize: 11, color: txtSec),),
               ],
             ),
           ),
@@ -107,7 +107,7 @@ class ComparisonInsightPanel extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: status.color.withOpacity(0.10),
+              color: status.color.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -115,10 +115,10 @@ class ComparisonInsightPanel extends StatelessWidget {
               style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
-                  color: status.color),
+                  color: status.color,),
             ),
           ),
-        ]),
+        ],),
 
         const SizedBox(height: 14),
         Container(height: 0.5, color: div),
@@ -145,7 +145,7 @@ class ComparisonInsightPanel extends StatelessWidget {
               isDark: isDark,
             ),
           ),
-        ]),
+        ],),
 
         if (trendText != null) ...[
           const SizedBox(height: 14),
@@ -155,7 +155,7 @@ class ComparisonInsightPanel extends StatelessWidget {
             Container(
               width: 6, height: 6,
               decoration: BoxDecoration(
-                  color: trendColor, shape: BoxShape.circle),
+                  color: trendColor, shape: BoxShape.circle,),
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -163,11 +163,11 @@ class ComparisonInsightPanel extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 11.5,
                       color: trendColor,
-                      fontWeight: FontWeight.w600)),
+                      fontWeight: FontWeight.w600,),),
             ),
-          ]),
+          ],),
         ],
-      ]),
+      ],),
     );
   }
 }
@@ -215,7 +215,7 @@ class _HealthBadge extends StatelessWidget {
     return Container(
       width: 44, height: 44,
       decoration: BoxDecoration(
-        color: status.color.withOpacity(0.12),
+        color: status.color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(13),
       ),
       child: Icon(status.icon, color: status.color, size: 22),
@@ -239,7 +239,6 @@ class _StatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final surf = isDark ? AppColors.surfaceDark : AppColors.surface;
     final bdr = isDark ? AppColors.borderDark : AppColors.border;
-    final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
@@ -254,7 +253,7 @@ class _StatItem extends StatelessWidget {
         Container(
           width: 28, height: 28,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.12),
+            color: color.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: color, size: 13),
@@ -269,13 +268,13 @@ class _StatItem extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                       color: color,
-                      letterSpacing: -0.3)),
+                      letterSpacing: -0.3,),),
               Text(label,
-                  style: TextStyle(fontSize: 9.5, color: txtSec)),
+                  style: TextStyle(fontSize: 9.5, color: txtSec),),
             ],
           ),
         ),
-      ]),
+      ],),
     );
   }
 }

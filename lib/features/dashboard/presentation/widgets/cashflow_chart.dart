@@ -117,11 +117,11 @@ class _CashflowChartState extends ConsumerState<CashflowChart> {
                   ),
                 ),
                 leftTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
                 topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
                 rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
               ),
               borderData: FlBorderData(show: false),
               minX: 0,
@@ -146,10 +146,10 @@ class _CashflowChartState extends ConsumerState<CashflowChart> {
         const SizedBox(height: 12),
 
         // ── Legend ────────────────────────────────────────────────────────
-        Row(
+        const Row(
           children: [
             _LegendDot(color: AppColors.income, label: 'Pemasukan'),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             _LegendDot(color: AppColors.expense, label: 'Pengeluaran'),
           ],
         ),
@@ -182,7 +182,7 @@ class _CashflowChartState extends ConsumerState<CashflowChart> {
       ),
       belowBarData: BarAreaData(
         show: true,
-        color: color.withOpacity(0.06),
+        color: color.withValues(alpha: 0.06),
       ),
     );
   }
@@ -212,16 +212,16 @@ class _TooltipBadge extends StatelessWidget {
       padding:
           const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
               style: TextStyle(
-                  fontSize: 10, color: color, fontWeight: FontWeight.w500)),
+                  fontSize: 10, color: color, fontWeight: FontWeight.w500,),),
           Text(
             CurrencyFormatter.formatCompact(value),
             style: TextStyle(
@@ -256,7 +256,7 @@ class _LegendDot extends StatelessWidget {
             style: const TextStyle(
                 fontSize: 11,
                 color: AppColors.textSecondary,
-                fontWeight: FontWeight.w500)),
+                fontWeight: FontWeight.w500,),),
       ],
     );
   }

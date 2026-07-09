@@ -38,7 +38,7 @@ class InsightEngine {
         type: 'category_spend',
         emoji: _categoryEmoji(top.key),
         message: '$pct% pengeluaran bulan ini berasal dari kategori ${top.key}',
-      ));
+      ),);
     }
 
     // Hari dengan pengeluaran tertinggi
@@ -50,7 +50,7 @@ class InsightEngine {
         type: 'highest_day',
         emoji: '📅',
         message: 'Kamu paling banyak belanja di hari ${_weekdayName(maxEntry.key)} bulan ini',
-      ));
+      ),);
     }
 
     // Perbandingan dengan bulan lalu
@@ -66,13 +66,13 @@ class InsightEngine {
           emoji: '📈',
           message: 'Pengeluaran naik ${pct.abs().toStringAsFixed(0)}% dibanding bulan lalu',
           isWarning: pct > 20,
-        ));
+        ),);
       } else if (pct < 0) {
         insights.add(InsightData(
           type: 'spend_trend',
           emoji: '📉',
           message: 'Pengeluaran turun ${pct.abs().toStringAsFixed(0)}% dibanding bulan lalu, pertahankan!',
-        ));
+        ),);
       }
     }
 
@@ -90,7 +90,7 @@ class InsightEngine {
               'Anggaran ${budget.category} sudah terlampaui! '
               '${CurrencyFormatter.formatCompact(spent)} / '
               '${CurrencyFormatter.formatCompact(budget.limitAmount)}',
-        ));
+        ),);
       } else if (pct >= 0.8) {
         insights.add(InsightData(
           type: 'budget_warning',
@@ -99,7 +99,7 @@ class InsightEngine {
           message:
               'Anggaran ${budget.category} sudah terpakai 80%. '
               'Sisa ${CurrencyFormatter.formatCompact(budget.limitAmount - spent)}',
-        ));
+        ),);
       }
     }
 
@@ -113,14 +113,14 @@ class InsightEngine {
           type: 'savings',
           emoji: '🏦',
           message: 'Kamu berhasil menabung ${CurrencyFormatter.formatCompact(saved)} bulan ini!',
-        ));
+        ),);
       } else {
         insights.add(InsightData(
           type: 'balance_warning',
           emoji: '💸',
           isWarning: ratio > 1.0,
           message: 'Kamu sudah menggunakan ${(ratio * 100).round()}% dari pemasukan bulan ini',
-        ));
+        ),);
       }
     }
 

@@ -25,11 +25,6 @@ class BudgetSummaryCard extends StatelessWidget {
         totalLimit > 0 ? (totalSpent / totalLimit).clamp(0.0, 1.0) : 0.0;
     final diff = totalLimit - totalSpent;
     final isOver = diff < 0;
-    final progressColor = isOver
-        ? AppColors.error
-        : overallPct >= 0.8
-            ? AppColors.warning
-            : AppColors.income;
 
     return SpendlyCard(
       gradient: AppColors.primaryGradient,
@@ -70,7 +65,7 @@ class BudgetSummaryCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.18),
+                  color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -93,7 +88,7 @@ class BudgetSummaryCard extends StatelessWidget {
               curve: Curves.easeOutQuart,
               builder: (_, val, __) => LinearProgressIndicator(
                 value: val.clamp(0.0, 1.0),
-                backgroundColor: Colors.white.withOpacity(0.20),
+                backgroundColor: Colors.white.withValues(alpha: 0.20),
                 valueColor: AlwaysStoppedAnimation<Color>(
                   isOver ? AppColors.error : Colors.white,
                 ),
@@ -164,14 +159,14 @@ class _SummaryChip extends StatelessWidget {
                 style: const TextStyle(
                     color: Colors.white60,
                     fontSize: 10,
-                    fontWeight: FontWeight.w500)),
+                    fontWeight: FontWeight.w500,),),
             Text(value,
                 style: TextStyle(
                   color: valueColor,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.2,
-                )),
+                ),),
           ],
         ),
         if (alignRight) ...[

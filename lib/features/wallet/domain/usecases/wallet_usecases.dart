@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/database/app_database.dart';
 import '../../../../core/database/daos/wallet_dao.dart';
@@ -68,7 +69,7 @@ class AddWalletUseCase {
         name: entity.name,
         balance: Value(entity.balance),
         type: Value(entity.type.name),
-        colorValue: Value(entity.color.value),
+        colorValue: Value(entity.color.toARGB32()),
         isDefault: Value(entity.isDefault),
         synced: const Value(false),
       ),
@@ -91,11 +92,13 @@ class AddWalletUseCase {
       await _txDao.insertTransaction(TransactionModel.toCompanion(openingTx));
 
       // Sync opening balance transaction ke Firebase
-      SyncService.uploadTransaction(
-        TransactionModel.toJson(openingTx),
-      ).catchError((e) {
-        debugPrint('[Wallet] Opening balance tx sync failed: $e');
-      });
+      unawaited(
+        SyncService.uploadTransaction(
+          TransactionModel.toJson(openingTx),
+        ).catchError((e) {
+          debugPrint('[Wallet] Opening balance tx sync failed: $e');
+        }),
+      );
 
       debugPrint('[Wallet] Opening balance tx created: ${entity.balance}');
     }
@@ -112,7 +115,7 @@ class AddWalletUseCase {
       'name': entity.name,
       'balance': entity.balance,
       'type': entity.type.name,
-      'colorValue': entity.color.value,
+      'colorValue': entity.color.toARGB32(),
       'isDefault': entity.isDefault,
     }).then((_) {
       debugPrint('[Wallet] Synced to Firebase: $id');
@@ -134,23 +137,25 @@ class UpdateWalletUseCase {
         name: Value(entity.name),
         balance: Value(entity.balance),
         type: Value(entity.type.name),
-        colorValue: Value(entity.color.value),
+        colorValue: Value(entity.color.toARGB32()),
         isDefault: Value(entity.isDefault),
         synced: const Value(false),
       ),
     );
 
     // 2. ✅ Upload ke Firebase
-    SyncService.uploadWallet({
-      'id': entity.id,
-      'name': entity.name,
-      'balance': entity.balance,
-      'type': entity.type.name,
-      'colorValue': entity.color.value,
-      'isDefault': entity.isDefault,
-    }).catchError((e) {
-      debugPrint('[Wallet] Update sync failed: $e');
-    });
+    unawaited(
+      SyncService.uploadWallet({
+        'id': entity.id,
+        'name': entity.name,
+        'balance': entity.balance,
+        'type': entity.type.name,
+        'colorValue': entity.color.toARGB32(),
+        'isDefault': entity.isDefault,
+      }).catchError((e) {
+        debugPrint('[Wallet] Update sync failed: $e');
+      }),
+    );
   }
 }
 
@@ -163,9 +168,11 @@ class DeleteWalletUseCase {
     await _dao.deleteWallet(id);
 
     // 2. ✅ Tandai deleted di Firebase
-    SyncService.deleteWallet(id).catchError((e) {
-      debugPrint('[Wallet] Delete sync failed: $e');
-    });
+    unawaited(
+      SyncService.deleteWallet(id).catchError((e) {
+        debugPrint('[Wallet] Delete sync failed: $e');
+      }),
+    );
   }
 }
 
@@ -184,16 +191,18 @@ class TransferFundsUseCase {
     // 2. ✅ Sync kedua wallet ke Firebase setelah transfer
     final wallets = await _dao.getAllWallets();
     for (final w in wallets.where((w) => w.id == fromId || w.id == toId)) {
-      SyncService.uploadWallet({
-        'id': w.id,
-        'name': w.name,
-        'balance': w.balance,
-        'type': w.type,
-        'colorValue': w.colorValue,
-        'isDefault': w.isDefault,
-      }).catchError((e) {
-        debugPrint('[Wallet] Transfer sync failed for ${w.id}: $e');
-      });
+      unawaited(
+        SyncService.uploadWallet({
+          'id': w.id,
+          'name': w.name,
+          'balance': w.balance,
+          'type': w.type,
+          'colorValue': w.colorValue,
+          'isDefault': w.isDefault,
+        }).catchError((e) {
+          debugPrint('[Wallet] Transfer sync failed for ${w.id}: $e');
+        }),
+      );
     }
   }
 }

@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spendly/features/dashboard/presentation/widgets/insight_card.dart';
-import 'package:spendly/features/profile/presentation/screens/profile_screen.dart';
-import 'package:spendly/features/transactions/presentation/screens/add_transaction_screen.dart';
+import '../widgets/insight_card.dart';
+import '../../../profile/presentation/screens/profile_screen.dart';
+import '../../../transactions/presentation/screens/add_transaction_screen.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/haptic_utils.dart';
+import '../../../../shared/widgets/spendly_motion.dart';
 import '../../../../shared/widgets/spendly_shimmer.dart';
 import '../../../../shared/widgets/transaction_tile.dart';
 import '../widgets/balance_card.dart';
 import '../widgets/mini_expense_chart.dart';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// DashboardScreen — Redesigned layout
-//
-// Perubahan dari versi lama:
-// - Header lebih personal: greeting + avatar
-// - Section header dengan chip count + "Lihat Semua" tombol
-// - Quick Action bar 2×2 grid (ringkas, tidak boros ruang)
-// - Chart card dengan header label dan periode
-// - Budget progress inline
-// - Pull-to-refresh dengan cupertino-style
-// - FAB tetap, tapi dengan hero animation
-// ─────────────────────────────────────────────────────────────────────────────
-
+/// Dashboard screen with balance card, insights, spending chart,
+/// budget overview, and recent transactions.
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
@@ -50,7 +39,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         setState(() => _headerCollapsed = false);
       }
 
-      // 👇 Tambah ini: force reset kalau udah hampir di atas
       if (current <= 10 && _headerCollapsed) {
         setState(() => _headerCollapsed = false);
       }
@@ -103,7 +91,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             parent: BouncingScrollPhysics(),
           ),
           slivers: [
-            // ── App bar / Header ────────────────────────────────────────────
             SliverPersistentHeader(
               pinned: true,
               delegate: _StickyHeaderDelegate(
@@ -116,43 +103,46 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
             ),
 
-            // ── Balance card ─────────────────────────────────────────────────
-            const SliverPadding(
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-              sliver: SliverToBoxAdapter(child: BalanceCard()),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              sliver: SliverToBoxAdapter(
+                child: SpendlyStaggeredItem(
+                  index: 0,
+                  child: const BalanceCard(),
+                ),
+              ),
             ),
 
-            // ── Quick actions ─────────────────────────────────────────────────
-            // SliverPadding(
-            //   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            //   sliver: SliverToBoxAdapter(
-            //     child: _QuickActions(isDark: isDark, onAdd: _openAddSheet),
-            //   ),
-            // ),
-
-            // ── Insights carousel ─────────────────────────────────────────────
-            const SliverPadding(
-              padding: EdgeInsets.only(top: 20),
-              sliver: SliverToBoxAdapter(child: InsightCarousel()),
+            SliverPadding(
+              padding: const EdgeInsets.only(top: 20),
+              sliver: SliverToBoxAdapter(
+                child: SpendlyStaggeredItem(
+                  index: 1,
+                  child: const InsightCarousel(),
+                ),
+              ),
             ),
 
-            // ── Spending chart card ───────────────────────────────────────────
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
               sliver: SliverToBoxAdapter(
-                child: _SpendingChartCard(isDark: isDark),
+                child: SpendlyStaggeredItem(
+                  index: 2,
+                  child: _SpendingChartCard(isDark: isDark),
+                ),
               ),
             ),
 
-            // ── Budget overview ───────────────────────────────────────────────
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               sliver: SliverToBoxAdapter(
-                child: _BudgetOverviewCard(isDark: isDark),
+                child: SpendlyStaggeredItem(
+                  index: 3,
+                  child: _BudgetOverviewCard(isDark: isDark),
+                ),
               ),
             ),
 
-            // ── Recent transactions ───────────────────────────────────────────
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
               sliver: SliverToBoxAdapter(
@@ -160,7 +150,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   label: 'Transaksi Terbaru',
                   isDark: isDark,
                   onSeeAll: () {
-                    // Navigate to transactions tab
                     ref.read(bottomNavIndexProvider.notifier).state = 1;
                   },
                 ),
@@ -170,16 +159,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             const SliverToBoxAdapter(child: SizedBox(height: 10)),
             _RecentTransactionsList(isDark: isDark),
 
-            // ── Bottom padding ────────────────────────────────────────────────
-SliverToBoxAdapter(
-  child: SizedBox(
-    height: _listBottomPad + MediaQuery.of(context).padding.bottom,
-  ),
-),          ],
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: _listBottomPad + MediaQuery.of(context).padding.bottom,
+              ),
+            ),
+          ],
         ),
       ),
 
-      // ── FAB ──────────────────────────────────────────────────────────────────
       floatingActionButton: Padding(
         padding: EdgeInsets.only(
           bottom: _fabBottomOffset + MediaQuery.of(context).padding.bottom,
@@ -232,7 +220,7 @@ class _DashboardHeader extends ConsumerWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _AvatarButton(isDark: isDark),
+          const _AvatarButton(),
           const SizedBox(width: 12),
           Expanded(
             child: AnimatedSwitcher(
@@ -258,8 +246,10 @@ class _DashboardHeader extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(_greeting,
-                              style: TextStyle(fontSize: 13, color: textSec)),
+                          Text(
+                            _greeting,
+                            style: TextStyle(fontSize: 13, color: textSec),
+                          ),
                           const SizedBox(height: 2),
                           Text(
                             userName,
@@ -282,59 +272,8 @@ class _DashboardHeader extends ConsumerWidget {
   }
 }
 
-class _HeaderIconButton extends StatelessWidget {
-  final IconData icon;
-  final bool isDark;
-  final bool badge;
-  const _HeaderIconButton({
-    required this.icon,
-    required this.isDark,
-    this.badge = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: isDark ? AppColors.surfaceDark : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isDark ? AppColors.borderDark : AppColors.border,
-              width: 0.5,
-            ),
-          ),
-          child: Icon(
-            icon,
-            size: 20,
-            color:
-                isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
-          ),
-        ),
-        if (badge)
-          Positioned(
-            right: 8,
-            top: 8,
-            child: Container(
-              width: 7,
-              height: 7,
-              decoration: const BoxDecoration(
-                color: AppColors.expense,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
 class _AvatarButton extends StatelessWidget {
-  final bool isDark;
-  const _AvatarButton({required this.isDark});
+  const _AvatarButton();
 
   @override
   Widget build(BuildContext context) {
@@ -359,119 +298,6 @@ class _AvatarButton extends StatelessWidget {
   }
 }
 
-// ─── Quick actions ────────────────────────────────────────────────────────────
-
-// class _QuickActions extends ConsumerWidget {
-//   final bool isDark;
-//   final VoidCallback onAdd;
-//   const _QuickActions({required this.isDark, required this.onAdd});
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final actions = [
-//       _QuickAction(
-//         label: 'Tambah',
-//         icon: Icons.add_rounded,
-//         color: AppColors.primary,
-//         onTap: onAdd,
-//       ),
-//       _QuickAction(
-//         label: 'Transfer',
-//         icon: Icons.swap_horiz_rounded,
-//         color: AppColors.accentPurple,
-//         onTap: () {},
-//       ),
-//       _QuickAction(
-//         label: 'Laporan',
-//         icon: Icons.analytics_outlined,
-//         color: AppColors.accentOrange,
-//         onTap: () => ref.read(bottomNavIndexProvider.notifier).state = 2,
-//       ),
-//       _QuickAction(
-//         label: 'Budget',
-//         icon: Icons.pie_chart_rounded,
-//         color: AppColors.accentTeal,
-//         onTap: () => ref.read(bottomNavIndexProvider.notifier).state = 3,
-//       ),
-//     ];
-
-//     return Row(
-//       children: actions
-//           .map(
-//             (a) => Expanded(
-//               child: Padding(
-//                 padding: EdgeInsets.only(right: actions.last == a ? 0 : 10),
-//                 child: _QuickActionTile(action: a, isDark: isDark),
-//               ),
-//             ),
-//           )
-//           .toList(),
-//     );
-//   }
-// }
-
-class _QuickAction {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-  const _QuickAction({
-    required this.label,
-    required this.icon,
-    required this.color,
-    required this.onTap,
-  });
-}
-
-class _QuickActionTile extends StatelessWidget {
-  final _QuickAction action;
-  final bool isDark;
-  const _QuickActionTile({required this.action, required this.isDark});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: action.onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.cardDark : AppColors.card,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isDark ? AppColors.borderDark : AppColors.border,
-            width: 0.5,
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: action.color.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(action.icon, color: action.color, size: 18),
-            ),
-            const SizedBox(height: 7),
-            Text(
-              action.label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: isDark
-                    ? AppColors.textSecondaryDark
-                    : AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 // ─── Spending chart card ──────────────────────────────────────────────────────
 
 class _SpendingChartCard extends ConsumerWidget {
@@ -480,7 +306,7 @@ class _SpendingChartCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final expense = ref.watch(monthlyExpenseProvider);
+    ref.watch(monthlyExpenseProvider);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
@@ -495,7 +321,6 @@ class _SpendingChartCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Header ─────────────────────────────────────────────────────
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -524,29 +349,21 @@ class _SpendingChartCard extends ConsumerWidget {
                   ),
                 ],
               ),
-              // Total expense badge
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: AppColors.expense.withOpacity(0.10),
+                  color: AppColors.expense.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      width: 5,
-                      height: 5,
-                      decoration: const BoxDecoration(
-                        color: AppColors.expense,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
+                    _ExpenseDot(),
+                    SizedBox(width: 5),
                     Text(
                       'Bulan ini',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         color: AppColors.expense,
@@ -558,10 +375,24 @@ class _SpendingChartCard extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 16),
-
-          // ── Chart ──────────────────────────────────────────────────────
           const MiniExpenseChart(),
         ],
+      ),
+    );
+  }
+}
+
+class _ExpenseDot extends StatelessWidget {
+  const _ExpenseDot();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 5,
+      height: 5,
+      decoration: const BoxDecoration(
+        color: AppColors.expense,
+        shape: BoxShape.circle,
       ),
     );
   }
@@ -579,7 +410,6 @@ class _BudgetOverviewCard extends ConsumerWidget {
 
     if (budgets.isEmpty) return const SizedBox.shrink();
 
-    // Tampilkan maks 3 budget teratas
     final shown = budgets.take(3).toList();
 
     return Container(
@@ -726,7 +556,7 @@ class _RecentTransactionsList extends ConsumerWidget {
       loading: () => SliverToBoxAdapter(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Container(
+          child: DecoratedBox(
             decoration: BoxDecoration(
               color: isDark ? AppColors.cardDark : AppColors.card,
               borderRadius: BorderRadius.circular(20),
@@ -750,10 +580,12 @@ class _RecentTransactionsList extends ConsumerWidget {
           );
         }
 
+        final displayTxs = txs.take(6).toList();
+
         return SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
-            child: Container(
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 color: isDark ? AppColors.cardDark : AppColors.card,
                 borderRadius: BorderRadius.circular(20),
@@ -765,9 +597,9 @@ class _RecentTransactionsList extends ConsumerWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Column(
-                  children: txs.take(6).toList().asMap().entries.map((e) {
+                  children: displayTxs.asMap().entries.map((e) {
                     final tx = e.value;
-                    final isLast = e.key == txs.take(6).length - 1;
+                    final isLast = e.key == displayTxs.length - 1;
                     return Column(
                       children: [
                         TransactionTile(
@@ -822,7 +654,7 @@ class _EmptyTransactions extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.10),
+                color: AppColors.primary.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: const Icon(
@@ -892,7 +724,7 @@ class _SectionHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.10),
+              color: AppColors.primary.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
@@ -909,7 +741,7 @@ class _SectionHeader extends StatelessWidget {
         if (onSeeAll != null)
           GestureDetector(
             onTap: onSeeAll,
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
@@ -920,8 +752,8 @@ class _SectionHeader extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                 ),
-                const SizedBox(width: 2),
-                const Icon(
+                SizedBox(width: 2),
+                Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 10,
                   color: AppColors.primary,
@@ -993,7 +825,7 @@ class _SpendlyFABState extends State<_SpendlyFAB>
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.35),
+                color: AppColors.primary.withValues(alpha: 0.35),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
                 spreadRadius: -4,
@@ -1025,7 +857,10 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return child;
   }
 

@@ -108,7 +108,7 @@ class _IncomeExpenseComparisonScreenState
               label: _periodLabel(e.key),
               income: e.value['income'] ?? 0,
               expense: e.value['expense'] ?? 0,
-            ))
+            ),)
         .toList();
   }
 
@@ -147,7 +147,7 @@ class _IncomeExpenseComparisonScreenState
   }
 
   Map<String, double> _categoryTotals(
-      List<TransactionEntity> all, bool isExpense) {
+      List<TransactionEntity> all, bool isExpense,) {
     final cats = isExpense
         ? (_selExpense.isEmpty ? null : _selExpense)
         : (_selIncome.isEmpty ? null : _selIncome);
@@ -303,7 +303,7 @@ class _ComparisonAppBar extends StatelessWidget {
     final bdrColor  = isDark ? AppColors.borderDark : AppColors.border;
 
     // Back button widget — dipakai ulang di kedua state
-    Widget backButton = GestureDetector(
+    final Widget backButton = GestureDetector(
       onTap: onBack,
       child: Container(
         width: 36,
@@ -409,8 +409,8 @@ class _ComparisonAppBar extends StatelessWidget {
               ),
             ),
           ),
-        ]);
-      }),
+        ],);
+      },),
     );
   }
 }

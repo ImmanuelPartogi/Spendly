@@ -58,7 +58,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   Future<void> _openFilter() async {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    await showModalBottomSheet<void>(
+    await showModalBottomSheet(
       context: context,
       backgroundColor: isDark ? AppColors.surfaceDark : Colors.white,
       shape: const RoundedRectangleBorder(
@@ -139,7 +139,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             ),
             SliverPadding(
               padding: EdgeInsets.fromLTRB(
-                  16, 4, 16, _kBottomPad + safeBottom),
+                  16, 4, 16, _kBottomPad + safeBottom,),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   AnalyticsDateHeader(
@@ -151,7 +151,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   ),
                   const SizedBox(height: 16),
                   AnalyticsSummaryRow(
-                      expense: expense, income: income, isDark: isDark),
+                      expense: expense, income: income, isDark: isDark,),
                   const SizedBox(height: 16),
                   AnalyticsDailyCard(daily: daily, isDark: isDark),
                   const SizedBox(height: 16),
@@ -229,14 +229,14 @@ class _AnalyticsAppBar extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: txtSec)),
+                              color: txtSec,),),
                       Text('Analytics',
                           style: TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.w800,
                               color: txtPrim,
                               letterSpacing: -0.8,
-                              height: 1.1)),
+                              height: 1.1,),),
                     ],
                   ),
                 ),
@@ -256,7 +256,7 @@ class _AnalyticsAppBar extends StatelessWidget {
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: txtPrim,
-                        letterSpacing: -0.6)),
+                        letterSpacing: -0.6,),),
               ),
             ),
           ),
@@ -271,12 +271,12 @@ class _AnalyticsAppBar extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   color: isFiltered
-                      ? AppColors.primary.withOpacity(0.12)
+                      ? AppColors.primary.withValues(alpha: 0.12)
                       : (isDark ? AppColors.surfaceDark : AppColors.surface),
                   borderRadius: BorderRadius.circular(11),
                   border: Border.all(
                     color: isFiltered
-                        ? AppColors.primary.withOpacity(0.40)
+                        ? AppColors.primary.withValues(alpha: 0.40)
                         : (isDark ? AppColors.borderDark : AppColors.border),
                     width: 0.5,
                   ),
@@ -287,12 +287,12 @@ class _AnalyticsAppBar extends StatelessWidget {
                         ? AppColors.primary
                         : (isDark
                             ? AppColors.textSecondaryDark
-                            : AppColors.textSecondary)),
+                            : AppColors.textSecondary),),
               ),
             ),
           ),
-        ]);
-      }),
+        ],);
+      },),
     );
   }
 }
@@ -341,10 +341,10 @@ class _FilterSheet extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: txtPrim,
-                    letterSpacing: -0.4)),
+                    letterSpacing: -0.4,),),
             const SizedBox(height: 4),
             Text('Pilih rentang waktu yang ingin ditampilkan',
-                style: TextStyle(fontSize: 12, color: txtSec)),
+                style: TextStyle(fontSize: 12, color: txtSec),),
             const SizedBox(height: 16),
             _SheetOption(
               label: 'Minggu Ini',
@@ -413,7 +413,7 @@ class _SheetOption extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.10),
+              color: AppColors.primary.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: AppColors.primary, size: 18),
@@ -427,14 +427,14 @@ class _SheetOption extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: txtPrim)),
+                        color: txtPrim,),),
                 Text(subtitle,
-                    style: TextStyle(fontSize: 11, color: txtSec)),
+                    style: TextStyle(fontSize: 11, color: txtSec),),
               ],
             ),
           ),
           Icon(Icons.chevron_right_rounded, color: txtSec, size: 18),
-        ]),
+        ],),
       ),
     );
   }

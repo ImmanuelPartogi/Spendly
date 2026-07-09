@@ -147,7 +147,7 @@ class SyncService {
   // ── PENDING SYNC ──────────────────────────────────────────────────────────
 
   static Future<void> syncPendingTransactions(
-      List<Map<String, dynamic>> pending) async {
+      List<Map<String, dynamic>> pending,) async {
     if (!await isOnline) return;
     if (pending.isEmpty) return;
     debugPrint('[Sync] Syncing ${pending.length} pending transactions...');
@@ -175,9 +175,9 @@ class SyncService {
         downloadAllBudgets(),
       ]);
       return SyncDownloadResult(
-        transactions: results[0] as List<Map<String, dynamic>>,
-        wallets:      results[1] as List<Map<String, dynamic>>,
-        budgets:      results[2] as List<Map<String, dynamic>>,
+        transactions: results[0],
+        wallets:      results[1],
+        budgets:      results[2],
       );
     } catch (e) {
       debugPrint('[Sync] Download all error: $e');

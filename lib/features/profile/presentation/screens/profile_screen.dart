@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +17,7 @@ import 'edit_profile_screen.dart';
 
 final profileProvider =
     StateNotifierProvider<_ProfileNotifier, _ProfileState>(
-        (_) => _ProfileNotifier());
+        (_) => _ProfileNotifier(),);
 
 class _ProfileState {
   final String name;
@@ -88,7 +87,7 @@ class ProfileScreen extends ConsumerWidget {
           _ProfileAppBar(
             isDark: isDark, safeTop: safeTop,
             onEdit: () => Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const EditProfileScreen())),
+                MaterialPageRoute(builder: (_) => const EditProfileScreen()),),
           ),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
@@ -109,12 +108,12 @@ class ProfileScreen extends ConsumerWidget {
                 Row(children: [
                   Expanded(child: _MonthlyStatCard(
                     label: 'Pemasukan', value: monthlyIncome,
-                    color: AppColors.income, icon: Icons.arrow_downward_rounded, isDark: isDark)),
+                    color: AppColors.income, icon: Icons.arrow_downward_rounded, isDark: isDark,),),
                   const SizedBox(width: 10),
                   Expanded(child: _MonthlyStatCard(
                     label: 'Pengeluaran', value: monthlyExpense,
-                    color: AppColors.expense, icon: Icons.arrow_upward_rounded, isDark: isDark)),
-                ]),
+                    color: AppColors.expense, icon: Icons.arrow_upward_rounded, isDark: isDark,),),
+                ],),
                 const SizedBox(height: 24),
 
                 // ── Akun ──────────────────────────────────────────────────────
@@ -140,8 +139,8 @@ class ProfileScreen extends ConsumerWidget {
                         trailing: Text(userEmail ?? '-',
                           style: TextStyle(fontSize: 12.5,
                             color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
-                            fontWeight: FontWeight.w500),
-                          overflow: TextOverflow.ellipsis),
+                            fontWeight: FontWeight.w500,),
+                          overflow: TextOverflow.ellipsis,),
                       ),
                   ],
                 ),
@@ -166,7 +165,7 @@ class ProfileScreen extends ConsumerWidget {
                       trailing: Text('IDR', style: TextStyle(
                         fontSize: 13,
                         color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
-                        fontWeight: FontWeight.w600)),
+                        fontWeight: FontWeight.w600,),),
                     ),
                     _GroupItem(
                       icon: themeIcon, iconColor: themeIconColor,
@@ -174,11 +173,11 @@ class ProfileScreen extends ConsumerWidget {
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text(themeLabel, style: TextStyle(fontSize: 13,
                           color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
-                          fontWeight: FontWeight.w500)),
+                          fontWeight: FontWeight.w500,),),
                         const SizedBox(width: 4),
                         Icon(Icons.chevron_right_rounded, size: 16,
-                          color: isDark ? AppColors.textHintDark : AppColors.textHint),
-                      ]),
+                          color: isDark ? AppColors.textHintDark : AppColors.textHint,),
+                      ],),
                       onTap: () => _showThemeSheet(context, ref, themeMode, isDark),
                     ),
                     _GroupItem(
@@ -193,7 +192,7 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                         child: Text('v1.0.0', style: TextStyle(fontSize: 11.5,
                           color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
-                          fontWeight: FontWeight.w600)),
+                          fontWeight: FontWeight.w600,),),
                       ),
                     ),
                   ],
@@ -213,7 +212,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   void _showThemeSheet(BuildContext context, WidgetRef ref,
-      ThemeMode current, bool isDark) {
+      ThemeMode current, bool isDark,) {
     final cardColor = isDark ? AppColors.cardDark     : AppColors.card;
     final txtPrim   = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
 
@@ -221,7 +220,7 @@ class ProfileScreen extends ConsumerWidget {
       context: context,
       backgroundColor: cardColor,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),),
       builder: (_) {
         final options = [
           (ThemeMode.light,  Icons.light_mode_rounded,      AppColors.warning,      'Terang'),
@@ -235,7 +234,7 @@ class ProfileScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Pilih Tema', style: TextStyle(fontSize: 17,
-                  fontWeight: FontWeight.w800, color: txtPrim, letterSpacing: -0.3)),
+                  fontWeight: FontWeight.w800, color: txtPrim, letterSpacing: -0.3,),),
               const SizedBox(height: 16),
               ...options.map((opt) {
                 final (mode, icon, color, label) = opt;
@@ -251,11 +250,11 @@ class ProfileScreen extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? color.withOpacity(isDark ? 0.15 : 0.08)
+                          ? color.withValues(alpha: isDark ? 0.15 : 0.08)
                           : (isDark ? AppColors.surfaceDark : AppColors.surface),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: isSelected ? color.withOpacity(0.5)
+                        color: isSelected ? color.withValues(alpha: 0.5)
                             : (isDark ? AppColors.borderDark : AppColors.border),
                         width: isSelected ? 1.5 : 1,
                       ),
@@ -264,7 +263,7 @@ class ProfileScreen extends ConsumerWidget {
                       Container(
                         width: 36, height: 36,
                         decoration: BoxDecoration(
-                          color: color.withOpacity(isDark ? 0.18 : 0.12),
+                          color: color.withValues(alpha: isDark ? 0.18 : 0.12),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(child: Icon(icon, color: color, size: 18)),
@@ -272,7 +271,7 @@ class ProfileScreen extends ConsumerWidget {
                       const SizedBox(width: 14),
                       Text(label, style: TextStyle(fontSize: 14.5,
                           fontWeight: FontWeight.w600,
-                          color: isSelected ? color : txtPrim)),
+                          color: isSelected ? color : txtPrim,),),
                       const Spacer(),
                       if (isSelected)
                         Container(
@@ -280,7 +279,7 @@ class ProfileScreen extends ConsumerWidget {
                           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
                           child: const Icon(Icons.check_rounded, color: Colors.white, size: 13),
                         ),
-                    ]),
+                    ],),
                   ),
                 );
               }),
@@ -303,14 +302,14 @@ class ProfileScreen extends ConsumerWidget {
         backgroundColor: cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text('Keluar?', style: TextStyle(
-            color: txtPrim, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+            color: txtPrim, fontWeight: FontWeight.w700, letterSpacing: -0.3,),),
         content: Text(
           'Kamu akan keluar dari akun ini. Data lokal tetap tersimpan di perangkat.',
-          style: TextStyle(color: txtSec, fontSize: 13.5, height: 1.5)),
+          style: TextStyle(color: txtSec, fontSize: 13.5, height: 1.5),),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal', style: TextStyle(color: txtSec))),
+            child: Text('Batal', style: TextStyle(color: txtSec)),),
           Container(
             margin: const EdgeInsets.only(right: 4, bottom: 4),
             child: ElevatedButton(
@@ -324,7 +323,7 @@ class ProfileScreen extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
               child: const Text('Keluar',
-                  style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white)),
+                  style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),),
             ),
           ),
         ],
@@ -364,7 +363,7 @@ class _PinSectionState extends State<_PinSection> {
       backgroundColor: success ? AppColors.income : AppColors.expense,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ));
+    ),);
   }
 
   Future<void> _enablePin() async {
@@ -374,7 +373,7 @@ class _PinSectionState extends State<_PinSection> {
         mode: PinScreenMode.setup,
         onSuccess: () => Navigator.pop(context, true),
         onCancel:  () => Navigator.pop(context, false),
-      )),
+      ),),
     );
     if (result == true && mounted) {
       setState(() => _pinEnabled = true);
@@ -390,7 +389,7 @@ class _PinSectionState extends State<_PinSection> {
         mode: PinScreenMode.verify,
         onSuccess: () => Navigator.pop(context, true),
         onCancel:  () => Navigator.pop(context, false),
-      )),
+      ),),
     );
     if (verified != true || !mounted) return;
 
@@ -409,7 +408,7 @@ class _PinSectionState extends State<_PinSection> {
         mode: PinScreenMode.verify,
         onSuccess: () => Navigator.pop(context, true),
         onCancel:  () => Navigator.pop(context, false),
-      )),
+      ),),
     );
     if (verified != true || !mounted) return;
 
@@ -420,7 +419,7 @@ class _PinSectionState extends State<_PinSection> {
         mode: PinScreenMode.setup,
         onSuccess: () => Navigator.pop(context),
         onCancel:  () => Navigator.pop(context),
-      )),
+      ),),
     );
     if (mounted) _showSnack('PIN berhasil diperbarui');
   }
@@ -444,11 +443,11 @@ class _PinSectionState extends State<_PinSection> {
         child: const Center(child: SizedBox(
           width: 18, height: 18,
           child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
-        )),
+        ),),
       );
     }
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cardColor, borderRadius: BorderRadius.circular(20),
         border: Border.all(color: bdrColor),
@@ -463,25 +462,25 @@ class _PinSectionState extends State<_PinSection> {
                 width: 32, height: 32,
                 decoration: BoxDecoration(
                   color: (_pinEnabled ? AppColors.income : AppColors.textSecondary)
-                      .withOpacity(isDark ? 0.15 : 0.10),
+                      .withValues(alpha: isDark ? 0.15 : 0.10),
                   borderRadius: BorderRadius.circular(9),
                 ),
                 child: Center(child: Icon(
                   _pinEnabled ? Icons.lock_rounded : Icons.lock_open_rounded,
                   size: 15,
                   color: _pinEnabled ? AppColors.income : AppColors.textSecondary,
-                )),
+                ),),
               ),
               const SizedBox(width: 12),
               Expanded(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('PIN Keamanan', style: TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w600, color: txtPrim)),
+                    fontSize: 14, fontWeight: FontWeight.w600, color: txtPrim,),),
                   Text(_pinEnabled ? 'Aktif' : 'Tidak aktif',
-                    style: TextStyle(fontSize: 11.5, color: txtSec)),
+                    style: TextStyle(fontSize: 11.5, color: txtSec),),
                 ],
-              )),
+              ),),
               // Toggle enable / disable
               GestureDetector(
                 onTap: _pinEnabled ? _disablePin : _enablePin,
@@ -490,13 +489,13 @@ class _PinSectionState extends State<_PinSection> {
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: _pinEnabled
-                        ? AppColors.expense.withOpacity(isDark ? 0.12 : 0.08)
-                        : AppColors.income.withOpacity(isDark ? 0.12 : 0.08),
+                        ? AppColors.expense.withValues(alpha: isDark ? 0.12 : 0.08)
+                        : AppColors.income.withValues(alpha: isDark ? 0.12 : 0.08),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: _pinEnabled
-                          ? AppColors.expense.withOpacity(0.35)
-                          : AppColors.income.withOpacity(0.35),
+                          ? AppColors.expense.withValues(alpha: 0.35)
+                          : AppColors.income.withValues(alpha: 0.35),
                     ),
                   ),
                   child: Text(
@@ -508,7 +507,7 @@ class _PinSectionState extends State<_PinSection> {
                   ),
                 ),
               ),
-            ]),
+            ],),
           ),
 
           // Baris "Ubah PIN" — hanya tampil jika PIN aktif
@@ -526,18 +525,18 @@ class _PinSectionState extends State<_PinSection> {
                   Container(
                     width: 32, height: 32,
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(isDark ? 0.15 : 0.10),
+                      color: AppColors.primary.withValues(alpha: isDark ? 0.15 : 0.10),
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: const Center(child: Icon(Icons.edit_rounded,
-                        size: 15, color: AppColors.primary)),
+                        size: 15, color: AppColors.primary,),),
                   ),
                   const SizedBox(width: 12),
                   Expanded(child: Text('Ubah PIN', style: TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w600, color: txtPrim))),
+                    fontSize: 14, fontWeight: FontWeight.w600, color: txtPrim,),),),
                   Icon(Icons.chevron_right_rounded, size: 16,
-                      color: isDark ? AppColors.textHintDark : AppColors.textHint),
-                ]),
+                      color: isDark ? AppColors.textHintDark : AppColors.textHint,),
+                ],),
               ),
             ),
           ],
@@ -580,13 +579,13 @@ class _ProfileAppBar extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text('Akun &', style: TextStyle(fontSize: 13,
-                          fontWeight: FontWeight.w500, color: txtSec)),
+                          fontWeight: FontWeight.w500, color: txtSec,),),
                       Text('Profil', style: TextStyle(fontSize: 26,
                           fontWeight: FontWeight.w800, color: txtPrim,
-                          letterSpacing: -0.8, height: 1.1)),
-                    ]),
+                          letterSpacing: -0.8, height: 1.1,),),
+                    ],),
                 ),
-              )),
+              ),),
           ),
           AnimatedOpacity(
             opacity: isCollapsed ? 1.0 : 0.0,
@@ -595,8 +594,8 @@ class _ProfileAppBar extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
                 child: Text('Profil', style: TextStyle(fontSize: 22,
-                    fontWeight: FontWeight.w800, color: txtPrim, letterSpacing: -0.6)),
-              )),
+                    fontWeight: FontWeight.w800, color: txtPrim, letterSpacing: -0.6,),),
+              ),),
           ),
           Positioned(right: 16, bottom: 10,
             child: GestureDetector(
@@ -604,16 +603,16 @@ class _ProfileAppBar extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.10),
+                  color: AppColors.primary.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.primary.withOpacity(0.20), width: 0.5),
+                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.20), width: 0.5),
                 ),
                 child: const Text('Edit', style: TextStyle(
-                    color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w700)),
+                    color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w700,),),
               ),
-            )),
-        ]);
-      }),
+            ),),
+        ],);
+      },),
     );
   }
 }
@@ -626,43 +625,43 @@ class _UpgradeBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.push(context,
-          MaterialPageRoute(builder: (_) => const LoginScreen())),
+          MaterialPageRoute(builder: (_) => const LoginScreen()),),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
         decoration: BoxDecoration(
-          color: AppColors.warning.withOpacity(isDark ? 0.10 : 0.07),
+          color: AppColors.warning.withValues(alpha: isDark ? 0.10 : 0.07),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.warning.withOpacity(0.35)),
+          border: Border.all(color: AppColors.warning.withValues(alpha: 0.35)),
         ),
         child: Row(children: [
           Container(
             width: 38, height: 38,
             decoration: BoxDecoration(
-              color: AppColors.warning.withOpacity(0.15),
+              color: AppColors.warning.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Center(child: Icon(Icons.cloud_upload_outlined,
-                color: AppColors.warning, size: 18)),
+                color: AppColors.warning, size: 18,),),
           ),
           const SizedBox(width: 12),
           const Expanded(child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Backup data ke cloud', style: TextStyle(
-                  fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.warning)),
+                  fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.warning,),),
               SizedBox(height: 2),
               Text('Daftar atau masuk untuk menyimpan data', style: TextStyle(
-                  fontSize: 11.5, color: AppColors.warning, fontWeight: FontWeight.w400)),
+                  fontSize: 11.5, color: AppColors.warning, fontWeight: FontWeight.w400,),),
             ],
-          )),
+          ),),
           const SizedBox(width: 8),
           Container(
             width: 26, height: 26,
             decoration: BoxDecoration(
-                color: AppColors.warning.withOpacity(0.15), shape: BoxShape.circle),
+                color: AppColors.warning.withValues(alpha: 0.15), shape: BoxShape.circle,),
             child: const Icon(Icons.arrow_forward_rounded, color: AppColors.warning, size: 13),
           ),
-        ]),
+        ],),
       ),
     );
   }
@@ -675,7 +674,7 @@ class _MonthlyStatCard extends StatelessWidget {
   final IconData icon;
   final bool isDark;
   const _MonthlyStatCard({required this.label, required this.value,
-      required this.color, required this.icon, required this.isDark});
+      required this.color, required this.icon, required this.isDark,});
 
   @override
   Widget build(BuildContext context) {
@@ -685,17 +684,17 @@ class _MonthlyStatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(color: cardColor,
-          borderRadius: BorderRadius.circular(16), border: Border.all(color: bdrColor)),
+          borderRadius: BorderRadius.circular(16), border: Border.all(color: bdrColor),),
       child: Row(children: [
         Container(
           width: 38, height: 38,
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: [
-              color.withOpacity(isDark ? 0.20 : 0.14),
-              color.withOpacity(isDark ? 0.10 : 0.07),
-            ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              color.withValues(alpha: isDark ? 0.20 : 0.14),
+              color.withValues(alpha: isDark ? 0.10 : 0.07),
+            ], begin: Alignment.topLeft, end: Alignment.bottomRight,),
             borderRadius: BorderRadius.circular(11),
-            border: Border.all(color: color.withOpacity(isDark ? 0.18 : 0.12)),
+            border: Border.all(color: color.withValues(alpha: isDark ? 0.18 : 0.12)),
           ),
           child: Center(child: Icon(icon, color: color, size: 17)),
         ),
@@ -710,10 +709,10 @@ class _MonthlyStatCard extends StatelessWidget {
             curve: Curves.easeOutQuart,
             builder: (_, val, __) => Text(CurrencyFormatter.formatCompact(val),
               style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800,
-                  color: color, letterSpacing: -0.4)),
+                  color: color, letterSpacing: -0.4,),),
           ),
-        ])),
-      ]),
+        ],),),
+      ],),
     );
   }
 }
@@ -727,11 +726,11 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(children: [
       Container(width: 3, height: 14, decoration: BoxDecoration(
-          color: AppColors.primary, borderRadius: BorderRadius.circular(2))),
+          color: AppColors.primary, borderRadius: BorderRadius.circular(2),),),
       const SizedBox(width: 8),
       Text(label, style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700,
-          color: txtPrim, letterSpacing: -0.2)),
-    ]);
+          color: txtPrim, letterSpacing: -0.2,),),
+    ],);
   }
 }
 
@@ -759,17 +758,17 @@ class _SettingsGroup extends StatelessWidget {
     final divColor  = isDark ? AppColors.dividerDark : AppColors.divider;
     final txtPrim   = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(color: cardColor,
-          borderRadius: BorderRadius.circular(20), border: Border.all(color: bdrColor)),
+          borderRadius: BorderRadius.circular(20), border: Border.all(color: bdrColor),),
       child: Column(children: [
         for (int i = 0; i < items.length; i++) ...[
           _SettingsRow(item: items[i], isDark: isDark, txtPrim: txtPrim),
           if (i < items.length - 1)
             Padding(padding: const EdgeInsets.only(left: 60),
-                child: Divider(height: 1, color: divColor)),
+                child: Divider(height: 1, color: divColor),),
         ],
-      ]),
+      ],),
     );
   }
 }
@@ -788,7 +787,7 @@ class _SettingsRow extends StatelessWidget {
         Container(
           width: 32, height: 32,
           decoration: BoxDecoration(
-            color: item.iconColor.withOpacity(isDark ? 0.15 : 0.10),
+            color: item.iconColor.withValues(alpha: isDark ? 0.15 : 0.10),
             borderRadius: BorderRadius.circular(9),
           ),
           child: Center(child: Icon(item.icon, size: 15, color: item.iconColor)),
@@ -796,13 +795,13 @@ class _SettingsRow extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(child: Text(item.label, style: TextStyle(
             fontSize: 14, fontWeight: FontWeight.w600,
-            color: txtPrim, letterSpacing: -0.1))),
+            color: txtPrim, letterSpacing: -0.1,),),),
         item.trailing,
-      ]),
+      ],),
     );
     if (item.onTap != null) {
       return InkWell(onTap: item.onTap,
-          borderRadius: BorderRadius.circular(20), child: content);
+          borderRadius: BorderRadius.circular(20), child: content,);
     }
     return content;
   }
@@ -819,16 +818,16 @@ class _StatusPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(isDark ? 0.15 : 0.10),
+        color: color.withValues(alpha: isDark ? 0.15 : 0.10),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.30)),
+        border: Border.all(color: color.withValues(alpha: 0.30)),
       ),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Container(width: 5, height: 5,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: color)),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: color),),
         const SizedBox(width: 5),
         Text(label, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: color)),
-      ]),
+      ],),
     );
   }
 }
@@ -858,17 +857,17 @@ class _LogoutButtonState extends State<_LogoutButton> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 15),
           decoration: BoxDecoration(
-            color: AppColors.expense.withOpacity(widget.isDark ? 0.08 : 0.05),
+            color: AppColors.expense.withValues(alpha: widget.isDark ? 0.08 : 0.05),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.expense.withOpacity(0.30)),
+            border: Border.all(color: AppColors.expense.withValues(alpha: 0.30)),
           ),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             const Icon(Icons.logout_rounded, size: 17, color: AppColors.expense),
             const SizedBox(width: 8),
             Text(widget.isAnon ? 'Keluar (data lokal)' : 'Keluar',
               style: const TextStyle(color: AppColors.expense,
-                  fontSize: 14.5, fontWeight: FontWeight.w700)),
-          ]),
+                  fontSize: 14.5, fontWeight: FontWeight.w700,),),
+          ],),
         ),
       ),
     );

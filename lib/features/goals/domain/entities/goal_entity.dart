@@ -81,7 +81,7 @@ class GoalEntity {
         'targetAmount':  targetAmount,
         'currentAmount': currentAmount,
         'deadline':      deadline.toIso8601String(),
-        'color':         color.value,
+        'color':         color.toARGB32(),
         'isCompleted':   isCompleted,
         'createdAt':     createdAt.toIso8601String(),
       };

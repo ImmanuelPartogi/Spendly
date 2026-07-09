@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../domain/entities/budget_entity.dart';
 import '../widgets/budget_card.dart';
@@ -39,7 +38,7 @@ class BudgetScreen extends ConsumerWidget {
           ),
           SliverPadding(
             padding: EdgeInsets.fromLTRB(
-                16, 4, 16, _kBottomPad + safeBottom),
+                16, 4, 16, _kBottomPad + safeBottom,),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 if (budgets.isNotEmpty) ...[
@@ -87,7 +86,7 @@ class BudgetScreen extends ConsumerWidget {
                             }
                           },
                         ),
-                      )),
+                      ),),
                 ],
               ]),
             ),
@@ -98,7 +97,7 @@ class BudgetScreen extends ConsumerWidget {
   }
 
   void _openSetBudget(
-      BuildContext ctx, WidgetRef ref, BudgetEntity? existing) {
+      BuildContext ctx, WidgetRef ref, BudgetEntity? existing,) {
     showModalBottomSheet(
       context: ctx,
       isScrollControlled: true,
@@ -160,7 +159,7 @@ class _BudgetAppBar extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            color: txtSec),
+                            color: txtSec,),
                       ),
                       Text(
                         'Anggaran',
@@ -169,7 +168,7 @@ class _BudgetAppBar extends StatelessWidget {
                             fontWeight: FontWeight.w800,
                             color: txtPrim,
                             letterSpacing: -0.8,
-                            height: 1.1),
+                            height: 1.1,),
                       ),
                     ],
                   ),
@@ -192,7 +191,7 @@ class _BudgetAppBar extends StatelessWidget {
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
                       color: txtPrim,
-                      letterSpacing: -0.6),
+                      letterSpacing: -0.6,),
                 ),
               ),
             ),
@@ -211,19 +210,19 @@ class _BudgetAppBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(11),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.30),
+                      color: AppColors.primary.withValues(alpha: 0.30),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
                   ],
                 ),
                 child: const Icon(Icons.add_rounded,
-                    color: Colors.white, size: 18),
+                    color: Colors.white, size: 18,),
               ),
             ),
           ),
-        ]);
-      }),
+        ],);
+      },),
     );
   }
 }
@@ -262,7 +261,7 @@ class _BudgetListHeader extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(
             color: AppColors.primary
-                .withOpacity(isDark ? 0.18 : 0.10),
+                .withValues(alpha: isDark ? 0.18 : 0.10),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
@@ -280,12 +279,12 @@ class _BudgetListHeader extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
-              color: AppColors.error.withOpacity(0.10),
+              color: AppColors.error.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(children: [
               const Icon(Icons.warning_amber_rounded,
-                  color: AppColors.error, size: 11),
+                  color: AppColors.error, size: 11,),
               const SizedBox(width: 3),
               Text(
                 '$exceededCount terlampaui',
@@ -295,7 +294,7 @@ class _BudgetListHeader extends StatelessWidget {
                   color: AppColors.error,
                 ),
               ),
-            ]),
+            ],),
           ),
       ],
     );

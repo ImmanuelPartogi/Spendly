@@ -100,13 +100,13 @@ class _SpendlyCardState extends State<SpendlyCard>
       // Hero card dengan custom glow
       shadows = [
         BoxShadow(
-          color: widget.glowColor!.withOpacity(isDark ? 0.28 : 0.18),
+          color: widget.glowColor!.withValues(alpha: isDark ? 0.28 : 0.18),
           blurRadius: 28,
           offset: const Offset(0, 8),
           spreadRadius: -4,
         ),
         BoxShadow(
-          color: widget.glowColor!.withOpacity(isDark ? 0.10 : 0.07),
+          color: widget.glowColor!.withValues(alpha: isDark ? 0.10 : 0.07),
           blurRadius: 56,
           offset: const Offset(0, 16),
           spreadRadius: -8,
@@ -116,15 +116,15 @@ class _SpendlyCardState extends State<SpendlyCard>
       shadows = [
         BoxShadow(
           color: isDark
-              ? Colors.black.withOpacity(0.45)
-              : AppColors.primary.withOpacity(0.10),
+              ? Colors.black.withValues(alpha: 0.45)
+              : AppColors.primary.withValues(alpha: 0.10),
           blurRadius: 24,
           offset: const Offset(0, 8),
           spreadRadius: -2,
         ),
         if (!isDark)
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.04),
+            color: AppColors.primary.withValues(alpha: 0.04),
             blurRadius: 48,
             offset: const Offset(0, 16),
             spreadRadius: -4,
@@ -133,7 +133,7 @@ class _SpendlyCardState extends State<SpendlyCard>
     } else if (!isDark) {
       shadows = [
         BoxShadow(
-          color: const Color(0xFF4F6EF7).withOpacity(0.06),
+          color: const Color(0xFF4F6EF7).withValues(alpha: 0.06),
           blurRadius: 14,
           offset: const Offset(0, 4),
           spreadRadius: -2,
@@ -184,9 +184,9 @@ class _SpendlyCardState extends State<SpendlyCard>
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              Colors.white.withOpacity(0),
-                              Colors.white.withOpacity(0.8),
-                              Colors.white.withOpacity(0),
+                              Colors.white.withValues(alpha: 0),
+                              Colors.white.withValues(alpha: 0.8),
+                              Colors.white.withValues(alpha: 0),
                             ],
                           ),
                         ),
@@ -261,15 +261,15 @@ class SpendlyStatCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      color.withOpacity(isDark ? 0.22 : 0.15),
-                      color.withOpacity(isDark ? 0.10 : 0.07),
+                      color.withValues(alpha: isDark ? 0.22 : 0.15),
+                      color.withValues(alpha: isDark ? 0.10 : 0.07),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: color.withOpacity(isDark ? 0.18 : 0.12),
+                    color: color.withValues(alpha: isDark ? 0.18 : 0.12),
                   ),
                 ),
                 child: Center(
@@ -355,10 +355,10 @@ class _StatBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(isDark ? 0.14 : 0.09),
+        color: color.withValues(alpha: isDark ? 0.14 : 0.09),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: color.withOpacity(isDark ? 0.18 : 0.12),
+          color: color.withValues(alpha: isDark ? 0.18 : 0.12),
         ),
       ),
       child: Row(
@@ -437,7 +437,7 @@ class SpendlyBalanceCard extends StatelessWidget {
               height: 130,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.06),
+                color: Colors.white.withValues(alpha: 0.06),
               ),
             ),
           ),
@@ -449,7 +449,7 @@ class SpendlyBalanceCard extends StatelessWidget {
               height: 100,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.04),
+                color: Colors.white.withValues(alpha: 0.04),
               ),
             ),
           ),
@@ -467,7 +467,7 @@ class SpendlyBalanceCard extends StatelessWidget {
                       walletName ?? 'Total Saldo',
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.white.withOpacity(0.75),
+                        color: Colors.white.withValues(alpha: 0.75),
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.2,
                       ),
@@ -475,16 +475,16 @@ class SpendlyBalanceCard extends StatelessWidget {
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 9, vertical: 4),
+                          horizontal: 9, vertical: 4,),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.14),
+                        color: Colors.white.withValues(alpha: 0.14),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         'Aktif',
                         style: TextStyle(
                           fontSize: 10.5,
-                          color: Colors.white.withOpacity(0.90),
+                          color: Colors.white.withValues(alpha: 0.90),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -517,7 +517,7 @@ class SpendlyBalanceCard extends StatelessWidget {
                 // Divider
                 Container(
                   height: 1,
-                  color: Colors.white.withOpacity(0.15),
+                  color: Colors.white.withValues(alpha: 0.15),
                 ),
                 const SizedBox(height: 16),
 
@@ -535,7 +535,7 @@ class SpendlyBalanceCard extends StatelessWidget {
                     Container(
                       width: 1,
                       height: 36,
-                      color: Colors.white.withOpacity(0.15),
+                      color: Colors.white.withValues(alpha: 0.15),
                     ),
                     Expanded(
                       child: _BalanceChip(
@@ -590,7 +590,7 @@ class _BalanceChip extends StatelessWidget {
             width: 28,
             height: 28,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.18),
+              color: color.withValues(alpha: 0.18),
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -605,7 +605,7 @@ class _BalanceChip extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: 10.5,
-                  color: Colors.white.withOpacity(0.65),
+                  color: Colors.white.withValues(alpha: 0.65),
                   fontWeight: FontWeight.w400,
                 ),
               ),

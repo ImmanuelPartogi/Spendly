@@ -137,7 +137,7 @@
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: cfg.color.withOpacity(0.1),
+                    color: cfg.color.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -176,7 +176,7 @@
                   style: ElevatedButton.styleFrom(
                     backgroundColor: cfg.color,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 28, vertical: 12),
+                        horizontal: 28, vertical: 12,),
                   ),
                   child: Text(widget.actionLabel!),
                 ),

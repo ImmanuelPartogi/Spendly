@@ -47,7 +47,7 @@ class FirebaseAuthService {
   }
 
   static Future<User?> upgradeAnonymousToEmail(
-      String email, String password) async {
+      String email, String password,) async {
     try {
       final user = _auth.currentUser;
       if (user == null || !user.isAnonymous) return null;

@@ -48,7 +48,7 @@ class BudgetSuggestionService {
         avg3Month: avg,
         suggested: suggested,
         currentBudget: currentBudgets[category],
-      ));
+      ),);
     });
 
     // Sort by avg spending desc — kategori terbesar tampil dulu
@@ -124,11 +124,11 @@ class _SmartBudgetSuggestionSheetState
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(Icons.auto_awesome_rounded,
-                      color: AppColors.primary, size: 20),
+                      color: AppColors.primary, size: 20,),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -136,11 +136,11 @@ class _SmartBudgetSuggestionSheetState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Budget Cerdas',
-                          style: Theme.of(context).textTheme.titleLarge),
+                          style: Theme.of(context).textTheme.titleLarge,),
                       const Text(
                         'Berdasarkan rata-rata 3 bulan terakhir',
                         style: TextStyle(
-                            fontSize: 12, color: AppColors.textSecondary),
+                            fontSize: 12, color: AppColors.textSecondary,),
                       ),
                     ],
                   ),
@@ -158,19 +158,19 @@ class _SmartBudgetSuggestionSheetState
           Expanded(
             child: spendingAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(
+              error: (e, _) => const Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.bar_chart_rounded,
-                        size: 48, color: AppColors.border),
-                    const SizedBox(height: 12),
-                    const Text('Belum ada data pengeluaran',
-                        style: TextStyle(color: AppColors.textSecondary)),
-                    const SizedBox(height: 4),
+                    Icon(Icons.bar_chart_rounded,
+                        size: 48, color: AppColors.border,),
+                    SizedBox(height: 12),
+                    Text('Belum ada data pengeluaran',
+                        style: TextStyle(color: AppColors.textSecondary),),
+                    SizedBox(height: 4),
                     Text('Tambah beberapa transaksi dulu',
-                        style: const TextStyle(
-                            fontSize: 12, color: AppColors.textSecondary)),
+                        style: TextStyle(
+                            fontSize: 12, color: AppColors.textSecondary,),),
                   ],
                 ),
               ),
@@ -199,7 +199,7 @@ class _SmartBudgetSuggestionSheetState
                         Text(
                           'Butuh minimal 1 bulan riwayat transaksi',
                           style: TextStyle(
-                              fontSize: 12, color: AppColors.textSecondary),
+                              fontSize: 12, color: AppColors.textSecondary,),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -264,11 +264,11 @@ class _SuggestionCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isApplied ? AppColors.income.withOpacity(0.06) : AppColors.card,
+        color: isApplied ? AppColors.income.withValues(alpha: 0.06) : AppColors.card,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color:
-              isApplied ? AppColors.income.withOpacity(0.3) : AppColors.border,
+              isApplied ? AppColors.income.withValues(alpha: 0.3) : AppColors.border,
         ),
       ),
       child: Row(
@@ -280,13 +280,13 @@ class _SuggestionCard extends StatelessWidget {
                 Text(
                   suggestion.category,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 14),
+                      fontWeight: FontWeight.w700, fontSize: 14,),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'Rata-rata: ${CurrencyFormatter.formatCompact(suggestion.avg3Month)}',
                   style: const TextStyle(
-                      fontSize: 11, color: AppColors.textSecondary),
+                      fontSize: 11, color: AppColors.textSecondary,),
                 ),
                 const SizedBox(height: 2),
                 RichText(
@@ -299,7 +299,7 @@ class _SuggestionCard extends StatelessWidget {
                       ),
                       TextSpan(
                         text: CurrencyFormatter.formatCompact(
-                            suggestion.suggested),
+                            suggestion.suggested,),
                         style: const TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w700,
@@ -310,7 +310,7 @@ class _SuggestionCard extends StatelessWidget {
                           text:
                               ' (sekarang: ${CurrencyFormatter.formatCompact(suggestion.currentBudget!)})',
                           style: const TextStyle(
-                              color: AppColors.textSecondary, fontSize: 11),
+                              color: AppColors.textSecondary, fontSize: 11,),
                         ),
                     ],
                   ),

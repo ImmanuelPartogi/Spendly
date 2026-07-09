@@ -1,10 +1,9 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spendly/core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/auth_service_firebase.dart';
 
 enum _AuthStep { email, passwordFallback, register }
@@ -47,28 +46,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     super.initState();
 
     _entranceCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 900));
+        vsync: this, duration: const Duration(milliseconds: 900),);
     _entranceFade = CurvedAnimation(
         parent: _entranceCtrl,
-        curve: const Interval(0.0, 0.7, curve: Curves.easeOut));
+        curve: const Interval(0.0, 0.7, curve: Curves.easeOut),);
     _entranceSlide =
         Tween<Offset>(begin: const Offset(0, 0.05), end: Offset.zero).animate(
             CurvedAnimation(
                 parent: _entranceCtrl,
-                curve: const Interval(0.0, 0.7, curve: Curves.easeOutCubic)));
+                curve: const Interval(0.0, 0.7, curve: Curves.easeOutCubic),),);
 
     _logoCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 600));
+        vsync: this, duration: const Duration(milliseconds: 600),);
     _logoScale = Tween<double>(begin: 0.7, end: 1.0).animate(
-        CurvedAnimation(parent: _logoCtrl, curve: Curves.easeOutBack));
+        CurvedAnimation(parent: _logoCtrl, curve: Curves.easeOutBack),);
     _logoFade = CurvedAnimation(parent: _logoCtrl, curve: Curves.easeOut);
 
     _stepCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 280));
+        vsync: this, duration: const Duration(milliseconds: 280),);
     _stepFade  = CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOut);
     _stepSlide = Tween<Offset>(begin: const Offset(0.03, 0), end: Offset.zero)
         .animate(CurvedAnimation(
-            parent: _stepCtrl, curve: Curves.easeOutCubic));
+            parent: _stepCtrl, curve: Curves.easeOutCubic,),);
 
     _logoCtrl.forward();
     _entranceCtrl.forward();
@@ -95,7 +94,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       _step     = step;
       _errorMsg = null;
     });
-    _stepCtrl.forward();
+    unawaited(_stepCtrl.forward());
   }
 
   // ── Email: cek eksistensi akun ────────────────────────────────────────────
@@ -103,13 +102,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   Future<bool> _emailExists(String email) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email, password: '___spendly_check___');
+          email: email, password: '___spendly_check___',);
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') return false;
       if (e.code == 'wrong-password' ||
           e.code == 'invalid-credential' ||
-          e.code == 'invalid-login-credentials') return true;
+          e.code == 'invalid-login-credentials') {
+        return true;
+      }
       rethrow;
     }
   }
@@ -133,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
       if (!exists) {
         setState(() =>
-            _errorMsg = 'Akun tidak ditemukan. Silakan daftar terlebih dahulu.');
+            _errorMsg = 'Akun tidak ditemukan. Silakan daftar terlebih dahulu.',);
         return;
       }
 
@@ -144,7 +145,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     } catch (_) {
       if (mounted) {
         setState(() =>
-            _errorMsg = 'Terjadi kesalahan. Periksa koneksi internet.');
+            _errorMsg = 'Terjadi kesalahan. Periksa koneksi internet.',);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -207,23 +208,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             Container(
               width: 24, height: 24,
               decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  shape: BoxShape.circle),
+                  color: Colors.white.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,),
               child: const Icon(Icons.check_rounded,
-                  color: Colors.white, size: 14),
+                  color: Colors.white, size: 14,),
             ),
             const SizedBox(width: 10),
             Text('Link reset dikirim ke $email',
                 style: const TextStyle(
-                    fontSize: 13, fontWeight: FontWeight.w500)),
-          ]),
+                    fontSize: 13, fontWeight: FontWeight.w500,),),
+          ],),
           backgroundColor: AppColors.income,
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           elevation: 0,
-        ));
+        ),);
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) setState(() => _errorMsg = _friendlyError(e.code));
@@ -298,7 +299,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                       ),
                                     )
                                   : const SizedBox.shrink(
-                                      key: ValueKey('empty')),
+                                      key: ValueKey('empty'),),
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -342,7 +343,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             ),
           ),
         ),
-      ]),
+      ],),
     );
   }
 
@@ -383,7 +384,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         icon: Icons.arrow_forward_rounded,
         onTap: _isLoading ? null : _continueWithEmail,
       ),
-    ]);
+    ],);
   }
 
   Widget _buildPasswordStep({required bool isDark}) {
@@ -411,8 +412,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           alignment: Alignment.centerRight,
           child: GestureDetector(
             onTap: _isLoading ? null : _forgotPassword,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 2),
               child: Text(
                 'Lupa password?',
                 style: TextStyle(
@@ -503,7 +504,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         text: 'Setelah mendaftar, kamu akan membuat PIN keamanan',
         isDark: isDark,
       ),
-    ]);
+    ],);
   }
 
   Widget _buildFooter(bool isDark) {
@@ -514,14 +515,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text('Belum punya akun?  ',
             style: TextStyle(
-                fontSize: 14, color: txtSec, fontWeight: FontWeight.w400)),
+                fontSize: 14, color: txtSec, fontWeight: FontWeight.w400,),),
         GestureDetector(
           onTap: () {
             _passCtrl.clear();
             _confirmCtrl.clear();
             _transitionTo(_AuthStep.register);
           },
-          child: Text(
+          child: const Text(
             'Daftar sekarang',
             style: TextStyle(
               fontSize: 14,
@@ -531,7 +532,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             ),
           ),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -559,7 +560,7 @@ class _BrandLogo extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.30),
+              color: AppColors.primary.withValues(alpha: 0.30),
               blurRadius: 16, offset: const Offset(0, 6), spreadRadius: -2,
             ),
           ],
@@ -573,15 +574,15 @@ class _BrandLogo extends StatelessWidget {
               fontSize: 20, fontWeight: FontWeight.w800,
               color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
               letterSpacing: -0.5,
-            )),
+            ),),
         Text('Kelola keuanganmu',
             style: TextStyle(
               fontSize: 12,
               color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
               fontWeight: FontWeight.w400,
-            )),
-      ]),
-    ]);
+            ),),
+      ],),
+    ],);
   }
 }
 
@@ -614,7 +615,7 @@ class _TitleBlock extends StatelessWidget {
           opacity: anim,
           child: SlideTransition(
             position: Tween<Offset>(
-                    begin: const Offset(0, 0.06), end: Offset.zero)
+                    begin: const Offset(0, 0.06), end: Offset.zero,)
                 .animate(anim),
             child: child,
           ),
@@ -624,7 +625,7 @@ class _TitleBlock extends StatelessWidget {
             style: TextStyle(
               fontSize: 32, fontWeight: FontWeight.w800,
               color: txtPrim, letterSpacing: -1.2, height: 1.1,
-            )),
+            ),),
       ),
       const SizedBox(height: 8),
       AnimatedSwitcher(
@@ -633,9 +634,9 @@ class _TitleBlock extends StatelessWidget {
             key: ValueKey('sub_$step'),
             style: TextStyle(
               fontSize: 14.5, color: txtSec, height: 1.5, fontWeight: FontWeight.w400,
-            )),
+            ),),
       ),
-    ]);
+    ],);
   }
 }
 
@@ -657,8 +658,8 @@ class _FormCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.30)
-                : AppColors.primary.withOpacity(0.06),
+                ? Colors.black.withValues(alpha: 0.30)
+                : AppColors.primary.withValues(alpha: 0.06),
             blurRadius: 40, offset: const Offset(0, 12), spreadRadius: -4,
           ),
         ],
@@ -681,20 +682,20 @@ class _EmailChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.primary.withOpacity(0.10)
-            : AppColors.primary.withOpacity(0.06),
+            ? AppColors.primary.withValues(alpha: 0.10)
+            : AppColors.primary.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withOpacity(0.18)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.18)),
       ),
       child: Row(children: [
         Container(
           width: 32, height: 32,
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.12),
+            color: AppColors.primary.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(Icons.alternate_email_rounded,
-              size: 15, color: AppColors.primary),
+          child: const Icon(Icons.alternate_email_rounded,
+              size: 15, color: AppColors.primary,),
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -702,18 +703,18 @@ class _EmailChip extends StatelessWidget {
             Text('Masuk sebagai',
                 style: TextStyle(
                   fontSize: 10.5,
-                  color: AppColors.primary.withOpacity(0.7),
+                  color: AppColors.primary.withValues(alpha: 0.7),
                   fontWeight: FontWeight.w500, letterSpacing: 0.2,
-                )),
+                ),),
             const SizedBox(height: 1),
             Text(email,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 13.5, fontWeight: FontWeight.w700,
                   color: AppColors.primary, letterSpacing: -0.2,
-                )),
-          ]),
+                ),),
+          ],),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -728,17 +729,17 @@ class _InfoChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(icon, size: 13, color: color.withOpacity(0.6)),
+      Icon(icon, size: 13, color: color.withValues(alpha: 0.6)),
       const SizedBox(width: 6),
       Flexible(
         child: Text(text,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 12, color: color.withOpacity(0.6),
+              fontSize: 12, color: color.withValues(alpha: 0.6),
               height: 1.5, fontWeight: FontWeight.w400,
-            )),
+            ),),
       ),
-    ]);
+    ],);
   }
 }
 
@@ -761,13 +762,13 @@ class _BackBtn extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
               blurRadius: 8, offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Icon(Icons.arrow_back_ios_new_rounded, size: 14,
-            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary),
+            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,),
       ),
     );
   }
@@ -789,9 +790,9 @@ class _BackgroundDecoration extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: RadialGradient(colors: [
-                AppColors.primary.withOpacity(isDark ? 0.13 : 0.10),
+                AppColors.primary.withValues(alpha: isDark ? 0.13 : 0.10),
                 Colors.transparent,
-              ]),
+              ],),
             ),
           ),
         ),
@@ -802,15 +803,15 @@ class _BackgroundDecoration extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: RadialGradient(colors: [
-                AppColors.accentPurple.withOpacity(isDark ? 0.09 : 0.07),
+                AppColors.accentPurple.withValues(alpha: isDark ? 0.09 : 0.07),
                 Colors.transparent,
-              ]),
+              ],),
             ),
           ),
         ),
         if (!isDark)
           Positioned.fill(child: CustomPaint(painter: _DotGridPainter())),
-      ]),
+      ],),
     );
   }
 }
@@ -819,7 +820,7 @@ class _DotGridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.primary.withOpacity(0.04)
+      ..color = AppColors.primary.withValues(alpha: 0.04)
       ..style = PaintingStyle.fill;
     const spacing = 26.0;
     for (double x = 0; x < size.width; x += spacing) {
@@ -880,9 +881,9 @@ class _ProFormFieldState extends State<_ProFormField> {
     final bdrColor  = widget.isDark ? AppColors.borderDark : const Color(0xFFE8ECFF);
 
     final borderColor = isFocused
-        ? AppColors.primary.withOpacity(0.55)
+        ? AppColors.primary.withValues(alpha: 0.55)
         : _hasError
-            ? AppColors.expense.withOpacity(0.55)
+            ? AppColors.expense.withValues(alpha: 0.55)
             : bdrColor;
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -893,7 +894,7 @@ class _ProFormFieldState extends State<_ProFormField> {
               fontSize: 12.5, fontWeight: FontWeight.w600,
               color: isFocused ? AppColors.primary : txtSec,
               letterSpacing: 0.1,
-            )),
+            ),),
       ),
       AnimatedContainer(
         duration: const Duration(milliseconds: 180),
@@ -905,8 +906,8 @@ class _ProFormFieldState extends State<_ProFormField> {
           border: Border.all(color: borderColor, width: isFocused ? 1.5 : 1),
           boxShadow: isFocused
               ? [BoxShadow(
-                  color: AppColors.primary.withOpacity(0.08),
-                  blurRadius: 16, offset: const Offset(0, 4))]
+                  color: AppColors.primary.withValues(alpha: 0.08),
+                  blurRadius: 16, offset: const Offset(0, 4),),]
               : null,
         ),
         child: TextFormField(
@@ -924,7 +925,7 @@ class _ProFormFieldState extends State<_ProFormField> {
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: 4, right: 2),
               child: Icon(widget.icon, size: 17,
-                  color: isFocused ? AppColors.primary : txtSec.withOpacity(0.6)),
+                  color: isFocused ? AppColors.primary : txtSec.withValues(alpha: 0.6),),
             ),
             suffixIcon: widget.onToggleObscure != null
                 ? IconButton(
@@ -933,9 +934,9 @@ class _ProFormFieldState extends State<_ProFormField> {
                       widget.obscureText
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
-                      size: 17, color: txtSec.withOpacity(0.6),
+                      size: 17, color: txtSec.withValues(alpha: 0.6),
                     ),
-                    onPressed: widget.onToggleObscure)
+                    onPressed: widget.onToggleObscure,)
                 : null,
             border:            InputBorder.none,
             enabledBorder:     InputBorder.none,
@@ -957,7 +958,7 @@ class _ProFormFieldState extends State<_ProFormField> {
           },
         ),
       ),
-    ]);
+    ],);
   }
 }
 
@@ -991,7 +992,7 @@ class _PrimaryButtonState extends State<_PrimaryButton>
       reverseDuration: const Duration(milliseconds: 160),
     );
     _scaleAnim = Tween<double>(begin: 1.0, end: 0.975).animate(
-        CurvedAnimation(parent: _pressCtrl, curve: Curves.easeOut));
+        CurvedAnimation(parent: _pressCtrl, curve: Curves.easeOut),);
   }
 
   @override
@@ -1020,13 +1021,13 @@ class _PrimaryButtonState extends State<_PrimaryButton>
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
-            color: widget.isLoading ? AppColors.primary.withOpacity(0.5) : null,
+            color: widget.isLoading ? AppColors.primary.withValues(alpha: 0.5) : null,
             borderRadius: BorderRadius.circular(15),
             boxShadow: widget.isLoading
                 ? null
                 : [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.32),
+                      color: AppColors.primary.withValues(alpha: 0.32),
                       blurRadius: 20, offset: const Offset(0, 8), spreadRadius: -4,
                     ),
                   ],
@@ -1036,16 +1037,16 @@ class _PrimaryButtonState extends State<_PrimaryButton>
                 ? const SizedBox(
                     width: 22, height: 22,
                     child: CircularProgressIndicator(
-                        color: Colors.white, strokeWidth: 2.5))
+                        color: Colors.white, strokeWidth: 2.5,),)
                 : Row(mainAxisSize: MainAxisSize.min, children: [
                     Text(widget.label,
                         style: const TextStyle(
                           color: Colors.white, fontSize: 15,
                           fontWeight: FontWeight.w700, letterSpacing: -0.1,
-                        )),
+                        ),),
                     const SizedBox(width: 8),
-                    Icon(widget.icon, color: Colors.white.withOpacity(0.85), size: 16),
-                  ]),
+                    Icon(widget.icon, color: Colors.white.withValues(alpha: 0.85), size: 16),
+                  ],),
           ),
         ),
       ),
@@ -1065,9 +1066,9 @@ class _ErrorBanner extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.expense.withOpacity(0.06),
+          color: AppColors.expense.withValues(alpha: 0.06),
           borderRadius: BorderRadius.circular(13),
-          border: Border.all(color: AppColors.expense.withOpacity(0.20)),
+          border: Border.all(color: AppColors.expense.withValues(alpha: 0.20)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1077,12 +1078,12 @@ class _ErrorBanner extends StatelessWidget {
               child: Container(
                 width: 20, height: 20,
                 decoration: BoxDecoration(
-                  color: AppColors.expense.withOpacity(0.12),
+                  color: AppColors.expense.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
                   child: Icon(Icons.error_outline_rounded,
-                      color: AppColors.expense, size: 12),
+                      color: AppColors.expense, size: 12,),
                 ),
               ),
             ),
@@ -1092,7 +1093,7 @@ class _ErrorBanner extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 13, color: AppColors.expense,
                     fontWeight: FontWeight.w500, height: 1.4,
-                  )),
+                  ),),
             ),
           ],
         ),

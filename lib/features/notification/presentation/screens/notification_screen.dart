@@ -215,7 +215,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   Text('Tidak ada notifikasi',
                       style: TextStyle(
                           fontSize: 16,
-                          color: AppColors.textSecondary)),
+                          color: AppColors.textSecondary,),),
                 ],
               ),
             )
@@ -261,7 +261,7 @@ class _NotificationTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: n.isRead ? null : n.color.withOpacity(0.04),
+        color: n.isRead ? null : n.color.withValues(alpha: 0.04),
         padding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
@@ -270,7 +270,7 @@ class _NotificationTile extends StatelessWidget {
             Container(
               width: 44, height: 44,
               decoration: BoxDecoration(
-                color: n.color.withOpacity(0.12),
+                color: n.color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(n.icon, color: n.color, size: 20),
@@ -298,7 +298,7 @@ class _NotificationTile extends StatelessWidget {
                       Text(timeAgo,
                           style: const TextStyle(
                               fontSize: 11,
-                              color: AppColors.textHint)),
+                              color: AppColors.textHint,),),
                     ],
                   ),
                   const SizedBox(height: 3),
@@ -306,7 +306,7 @@ class _NotificationTile extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.textSecondary,
-                          height: 1.4)),
+                          height: 1.4,),),
                 ],
               ),
             ),
@@ -316,7 +316,7 @@ class _NotificationTile extends StatelessWidget {
                 child: Container(
                   width: 8, height: 8,
                   decoration: BoxDecoration(
-                      color: n.color, shape: BoxShape.circle),
+                      color: n.color, shape: BoxShape.circle,),
                 ),
               ),
           ],
@@ -355,14 +355,14 @@ class NotificationBadge extends StatelessWidget {
             child: Container(
               width: 16, height: 16,
               decoration: const BoxDecoration(
-                  color: AppColors.expense, shape: BoxShape.circle),
+                  color: AppColors.expense, shape: BoxShape.circle,),
               child: Center(
                 child: Text(
                   count > 9 ? '9+' : count.toString(),
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 9,
-                      fontWeight: FontWeight.w800),
+                      fontWeight: FontWeight.w800,),
                 ),
               ),
             ),

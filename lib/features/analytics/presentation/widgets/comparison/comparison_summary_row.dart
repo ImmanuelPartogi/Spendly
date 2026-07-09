@@ -30,13 +30,13 @@ class ComparisonSummaryRow extends StatelessWidget {
         label: 'Total Masuk', value: income,
         color: AppColors.income, icon: Icons.south_rounded,
         card: card, bdr: bdr, sec: sec,
-      )),
+      ),),
       const SizedBox(width: 10),
       Expanded(child: _Tile(
         label: 'Total Keluar', value: expense,
         color: AppColors.expense, icon: Icons.north_rounded,
         card: card, bdr: bdr, sec: sec,
-      )),
+      ),),
       const SizedBox(width: 10),
       Expanded(child: _Tile(
         label: isDeficit ? 'Defisit' : 'Surplus',
@@ -44,8 +44,8 @@ class ComparisonSummaryRow extends StatelessWidget {
         icon: isDeficit ? Icons.trending_down_rounded : Icons.trending_up_rounded,
         badge: '${rate.toStringAsFixed(0)}%',
         card: card, bdr: bdr, sec: sec,
-      )),
-    ]);
+      ),),
+    ],);
   }
 }
 
@@ -82,7 +82,7 @@ class _Tile extends StatelessWidget {
             Container(
               width: 30, height: 30,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: color, size: 15),
@@ -91,12 +91,12 @@ class _Tile extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.10),
+                  color: color.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(badge!,
                     style: TextStyle(
-                        fontSize: 9, fontWeight: FontWeight.w700, color: color)),
+                        fontSize: 9, fontWeight: FontWeight.w700, color: color,),),
               ),
           ],
         ),
@@ -112,14 +112,14 @@ class _Tile extends StatelessWidget {
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
                 color: color,
-                letterSpacing: -0.4),
+                letterSpacing: -0.4,),
           ),
         ),
         const SizedBox(height: 2),
         Text(label,
             style: TextStyle(
-                fontSize: 10, color: sec, fontWeight: FontWeight.w500)),
-      ]),
+                fontSize: 10, color: sec, fontWeight: FontWeight.w500,),),
+      ],),
     );
   }
 }

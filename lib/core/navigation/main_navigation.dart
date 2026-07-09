@@ -88,8 +88,8 @@ class _FloatingNavBar extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: isDark
-                    ? Colors.black.withOpacity(0.35)
-                    : AppColors.primary.withOpacity(0.10),
+                    ? Colors.black.withValues(alpha: 0.35)
+                    : AppColors.primary.withValues(alpha: 0.10),
                 blurRadius: 24,
                 offset: const Offset(0, 8),
               ),
@@ -154,7 +154,7 @@ class _NavItem extends StatelessWidget {
             height: isSelected ? 34 : 30,
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppColors.primary.withOpacity(0.13)
+                  ? AppColors.primary.withValues(alpha: 0.13)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
             ),
@@ -163,7 +163,7 @@ class _NavItem extends StatelessWidget {
                 duration: kDurationFast,
                 transitionBuilder: (child, anim) => ScaleTransition(
                   scale: Tween<double>(begin: 0.75, end: 1.0).animate(
-                      CurvedAnimation(parent: anim, curve: kCurveSpring)),
+                      CurvedAnimation(parent: anim, curve: kCurveSpring),),
                   child: FadeTransition(opacity: anim, child: child),
                 ),
                 child: Icon(

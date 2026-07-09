@@ -63,7 +63,7 @@ class MonthlyComparisonCard extends ConsumerWidget {
         Row(
           children: [
             const Icon(Icons.compare_arrows_rounded,
-                size: 18, color: AppColors.primary),
+                size: 18, color: AppColors.primary,),
             const SizedBox(width: 8),
             Text(
               'vs Bulan Lalu',
@@ -154,9 +154,9 @@ class _CompareItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.06),
+        color: color.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

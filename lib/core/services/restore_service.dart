@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:spendly/core/database/app_database.dart';
+import '../database/app_database.dart';
 import '../database/daos/transaction_dao.dart';
 import '../database/daos/wallet_dao.dart';
 import '../database/daos/budget_dao.dart';
@@ -46,7 +46,7 @@ class RestoreService {
           colorValue: Value(data['colorValue'] as int? ?? 0xFF00C48C),
           isDefault:  Value(data['isDefault'] as bool? ?? false),
           synced:     const Value(true),
-        ));
+        ),);
       } catch (e) {
         debugPrint('[Restore] Wallet error (${data['id']}): $e');
       }
@@ -66,7 +66,7 @@ class RestoreService {
           createdAt: Value(_parseDate(data['createdAt'])),
           synced:    const Value(true),
           isLocked:  const Value(false),
-        ));
+        ),);
       } catch (e) {
         debugPrint('[Restore] Transaction error (${data['id']}): $e');
       }
@@ -79,7 +79,7 @@ class RestoreService {
           category:    data['category'] as String,
           limitAmount: (data['limitAmount'] as num).toDouble(),
           period:      Value(data['period'] as String? ?? 'monthly'),
-        ));
+        ),);
       } catch (e) {
         debugPrint('[Restore] Budget error (${data['category']}): $e');
       }

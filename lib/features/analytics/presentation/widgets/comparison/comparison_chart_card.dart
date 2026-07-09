@@ -48,18 +48,18 @@ class ComparisonChartCard extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: txtPrim,
-                      letterSpacing: -0.3)),
+                      letterSpacing: -0.3,),),
               const SizedBox(height: 3),
               Text('Tap bar untuk detail periode',
-                  style: TextStyle(fontSize: 11, color: txtSec)),
-            ]),
+                  style: TextStyle(fontSize: 11, color: txtSec),),
+            ],),
           ),
-          Row(children: [
+          const Row(children: [
             _LegendPill(color: AppColors.income, label: 'Masuk'),
-            const SizedBox(width: 6),
+            SizedBox(width: 6),
             _LegendPill(color: AppColors.expense, label: 'Keluar'),
-          ]),
-        ]),
+          ],),
+        ],),
 
         if (touched != null) ...[
           const SizedBox(height: 14),
@@ -77,7 +77,7 @@ class ComparisonChartCard extends StatelessWidget {
                 touchedIndex: touchedIndex,
                 onTouch: onTouch,
               ),
-      ]),
+      ],),
     );
   }
 }
@@ -93,18 +93,18 @@ class _LegendPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.10),
+        color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Container(
             width: 6, height: 6,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),),
         const SizedBox(width: 4),
         Text(label,
             style: TextStyle(
-                fontSize: 10, fontWeight: FontWeight.w600, color: color)),
-      ]),
+                fontSize: 10, fontWeight: FontWeight.w600, color: color,),),
+      ],),
     );
   }
 }
@@ -132,7 +132,7 @@ class _TouchHighlight extends StatelessWidget {
       child: Row(children: [
         Text(data.label,
             style: TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w700, color: txtPrim)),
+                fontSize: 12, fontWeight: FontWeight.w700, color: txtPrim,),),
         const SizedBox(width: 12),
         _Mini(label: 'Masuk', value: data.income, color: AppColors.income),
         const SizedBox(width: 12),
@@ -144,7 +144,7 @@ class _TouchHighlight extends StatelessWidget {
           color: isPos ? AppColors.income : AppColors.expense,
           prefix: isPos ? '+' : '−',
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -170,11 +170,11 @@ class _Mini extends StatelessWidget {
               fontSize: 11,
               fontWeight: FontWeight.w700,
               color: color,
-              letterSpacing: -0.3)),
+              letterSpacing: -0.3,),),
       Text(label,
           style: const TextStyle(
-              fontSize: 9.5, color: AppColors.textSecondary)),
-    ]);
+              fontSize: 9.5, color: AppColors.textSecondary,),),
+    ],);
   }
 }
 
@@ -212,7 +212,7 @@ class _GroupedBarChart extends StatelessWidget {
               }
             },
             touchTooltipData: BarTouchTooltipData(
-                getTooltipItem: (_, __, ___, ____) => null),
+                getTooltipItem: (_, __, ___, ____) => null,),
           ),
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
@@ -229,7 +229,7 @@ class _GroupedBarChart extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 9,
                             fontWeight: isSel ? FontWeight.w700 : FontWeight.w500,
-                            color: isSel ? AppColors.primary : sec)),
+                            color: isSel ? AppColors.primary : sec,),),
                   );
                 },
               ),
@@ -244,8 +244,8 @@ class _GroupedBarChart extends StatelessWidget {
             horizontalInterval: maxVal / 3,
             getDrawingHorizontalLine: (_) => FlLine(
               color: isDark
-                  ? AppColors.borderDark.withOpacity(0.5)
-                  : AppColors.border.withOpacity(0.7),
+                  ? AppColors.borderDark.withValues(alpha: 0.5)
+                  : AppColors.border.withValues(alpha: 0.7),
               strokeWidth: 0.5,
               dashArray: [4, 4],
             ),
@@ -257,17 +257,17 @@ class _GroupedBarChart extends StatelessWidget {
             return BarChartGroupData(x: e.key, barRods: [
               BarChartRodData(
                 toY: e.value.income,
-                color: AppColors.income.withOpacity(dim),
+                color: AppColors.income.withValues(alpha: dim),
                 width: 10,
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
               ),
               BarChartRodData(
                 toY: e.value.expense,
-                color: AppColors.expense.withOpacity(dim),
+                color: AppColors.expense.withValues(alpha: dim),
                 width: 10,
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
               ),
-            ]);
+            ],);
           }).toList(),
         ),
         swapAnimationDuration: const Duration(milliseconds: 300),
@@ -296,7 +296,7 @@ class _Empty extends StatelessWidget {
             ),
             child: Icon(Icons.bar_chart_rounded,
                 color: isDark ? AppColors.textHintDark : AppColors.textHint,
-                size: 22),
+                size: 22,),
           ),
           const SizedBox(height: 10),
           Text('Belum ada data untuk periode ini',
@@ -304,8 +304,8 @@ class _Empty extends StatelessWidget {
                   fontSize: 12,
                   color: isDark
                       ? AppColors.textSecondaryDark
-                      : AppColors.textSecondary)),
-        ]),
+                      : AppColors.textSecondary,),),
+        ],),
       ),
     );
   }

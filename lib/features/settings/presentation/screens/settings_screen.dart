@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spendly/features/auth/domain/services/auth_service.dart';
+import '../../../auth/domain/services/auth_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/presentation/screens/pin_screen.dart';
 
@@ -55,7 +57,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   void _togglePin(bool value) async {
     if (value) {
-      Navigator.push(
+      unawaited(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => PinScreen(
@@ -65,7 +68,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 setState(() => _pinEnabled = true);
               },
             ),
-          ));
+          ),
+        ),
+      );
     } else {
       await AuthService.disablePin();
       setState(() => _pinEnabled = false);
@@ -115,7 +120,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             style: TextStyle(
                 color: txtPrim,
                 fontWeight: FontWeight.w700,
-                letterSpacing: -0.3)),
+                letterSpacing: -0.3,),),
         backgroundColor: bgColor,
       ),
       body: ListView(
@@ -159,7 +164,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 _savePrefs();
               },
             ),
-          ]),
+          ],),
           const SizedBox(height: 20),
 
           // ── Notifikasi ──────────────────────────────────────────────────────
@@ -203,7 +208,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 _savePrefs();
               },
             ),
-          ]),
+          ],),
           const SizedBox(height: 20),
 
           // ── Keamanan ────────────────────────────────────────────────────────
@@ -218,7 +223,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               isDark: isDark,
               onChanged: _togglePin,
             ),
-          ]),
+          ],),
           const SizedBox(height: 20),
 
           // ── Data ────────────────────────────────────────────────────────────
@@ -229,21 +234,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 iconColor: AppColors.income,
                 label: 'Cadangkan Data',
                 isDark: isDark,
-                onTap: () {}),
+                onTap: () {},),
             _Divider(isDark: isDark),
             _ArrowTile(
                 icon: Icons.download_rounded,
                 iconColor: AppColors.accentPurple,
                 label: 'Pulihkan Data',
                 isDark: isDark,
-                onTap: () {}),
+                onTap: () {},),
             _Divider(isDark: isDark),
             _ArrowTile(
                 icon: Icons.ios_share_rounded,
                 iconColor: AppColors.primary,
                 label: 'Ekspor Data',
                 isDark: isDark,
-                onTap: () {}),
+                onTap: () {},),
             _Divider(isDark: isDark),
             _ArrowTile(
               icon: Icons.delete_forever_rounded,
@@ -253,7 +258,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               isDark: isDark,
               onTap: _clearAllData,
             ),
-          ]),
+          ],),
           const SizedBox(height: 20),
 
           // ── Tentang ─────────────────────────────────────────────────────────
@@ -268,15 +273,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     : AppColors.textSecondary,
                 label: 'Kebijakan Privasi',
                 isDark: isDark,
-                onTap: () {}),
+                onTap: () {},),
             _Divider(isDark: isDark),
             _ArrowTile(
                 icon: Icons.star_rounded,
                 iconColor: AppColors.warning,
                 label: 'Beri Rating',
                 isDark: isDark,
-                onTap: () {}),
-          ]),
+                onTap: () {},),
+          ],),
           const SizedBox(height: 32),
         ],
       ),
@@ -300,7 +305,7 @@ class _SectionHeader extends StatelessWidget {
               fontSize: 11,
               fontWeight: FontWeight.w700,
               color: txtSec,
-              letterSpacing: 0.8)),
+              letterSpacing: 0.8,),),
     );
   }
 }
@@ -312,7 +317,7 @@ class _Divider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-        height: 1, color: isDark ? AppColors.dividerDark : AppColors.divider);
+        height: 1, color: isDark ? AppColors.dividerDark : AppColors.divider,);
   }
 }
 
@@ -323,7 +328,7 @@ class _SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: isDark ? AppColors.cardDark : AppColors.card,
         borderRadius: BorderRadius.circular(20),
@@ -368,7 +373,7 @@ class _SwitchTile extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.12),
+              color: iconColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: iconColor, size: 18),
@@ -382,14 +387,14 @@ class _SwitchTile extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: txtPrim)),
+                      color: txtPrim,),),
               Text(subtitle, style: TextStyle(fontSize: 11, color: txtSec)),
             ],
-          )),
+          ),),
           Switch.adaptive(
               value: value,
               onChanged: onChanged,
-              activeColor: AppColors.primary),
+              activeColor: AppColors.primary,),
         ],
       ),
     );
@@ -430,7 +435,7 @@ class _DropdownTile extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: txtPrim))),
+                      color: txtPrim,),),),
           Theme(
             data: Theme.of(context).copyWith(
               canvasColor: isDark ? AppColors.cardDark : AppColors.card,
@@ -439,14 +444,14 @@ class _DropdownTile extends StatelessWidget {
               value: value,
               underline: const SizedBox.shrink(),
               dropdownColor: isDark ? AppColors.cardDark : AppColors.card,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 13,
                   color: AppColors.primary,
-                  fontWeight: FontWeight.w600),
+                  fontWeight: FontWeight.w600,),
               items: options
                   .map((o) => DropdownMenuItem(
                       value: o,
-                      child: Text(o, style: TextStyle(color: txtPrim))))
+                      child: Text(o, style: TextStyle(color: txtPrim)),),)
                   .toList(),
               onChanged: (v) {
                 if (v != null) onChanged(v);
@@ -492,7 +497,7 @@ class _ArrowTile extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.1),
+                color: iconColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, color: iconColor, size: 18),
@@ -503,7 +508,7 @@ class _ArrowTile extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: labelColor ?? txtPrim))),
+                        color: labelColor ?? txtPrim,),),),
             Icon(Icons.chevron_right_rounded, color: txtHint, size: 18),
           ],
         ),
@@ -517,7 +522,7 @@ class _InfoTile extends StatelessWidget {
   final String value;
   final bool isDark;
   const _InfoTile(
-      {required this.label, required this.value, required this.isDark});
+      {required this.label, required this.value, required this.isDark,});
 
   @override
   Widget build(BuildContext context) {
@@ -532,7 +537,7 @@ class _InfoTile extends StatelessWidget {
         children: [
           Text(label,
               style: TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w600, color: txtPrim)),
+                  fontSize: 14, fontWeight: FontWeight.w600, color: txtPrim,),),
           Text(value, style: TextStyle(fontSize: 13, color: txtSec)),
         ],
       ),
