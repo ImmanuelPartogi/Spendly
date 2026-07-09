@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../../../../core/theme/app_colors.dart';
 
 const _kOnboardingDone = 'onboarding_done';
 
@@ -55,7 +54,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       features: [
         'Tambah transaksi instan',
         'Kategori otomatis',
-        'Input nominal cepat'
+        'Input nominal cepat',
       ],
     ),
     _PageData(
@@ -69,7 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       features: [
         'Analisis pola belanja',
         'Rekomendasi hemat',
-        'Laporan mingguan'
+        'Laporan mingguan',
       ],
     ),
     _PageData(
@@ -90,7 +89,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     _btnCtrl = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 80),
-        reverseDuration: const Duration(milliseconds: 160));
+        reverseDuration: const Duration(milliseconds: 160),);
     _btnScale = Tween<double>(begin: 1.0, end: 0.96)
         .animate(CurvedAnimation(parent: _btnCtrl, curve: Curves.easeOut));
   }
@@ -106,7 +105,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     if (_currentPage < _pages.length - 1) {
       _pageCtrl.nextPage(
           duration: const Duration(milliseconds: 400),
-          curve: Curves.easeOutCubic);
+          curve: Curves.easeOutCubic,);
     } else {
       _finish();
     }
@@ -147,7 +146,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             height: 260,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.08),
+              color: Colors.white.withValues(alpha: 0.08),
             ),
           ),
         ),
@@ -159,7 +158,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             height: 180,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.05),
+              color: Colors.white.withValues(alpha: 0.05),
             ),
           ),
         ),
@@ -187,9 +186,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.20),
+                      color: Colors.white.withValues(alpha: 0.20),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white.withOpacity(0.30)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.30)),
                     ),
                     child: const Text(
                       'Lewati',
@@ -246,10 +245,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
+                            color: Colors.black.withValues(alpha: 0.15),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
-                          )
+                          ),
                         ],
                       ),
                       child: Center(
@@ -283,11 +282,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     ),
                   ),
                 ),
-              ]),
+              ],),
             ),
           ),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -317,26 +316,26 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 700));
+        vsync: this, duration: const Duration(milliseconds: 700),);
 
     _emojiScale = Tween<double>(begin: 0.5, end: 1.0).animate(CurvedAnimation(
         parent: _ctrl,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOutBack)));
+        curve: const Interval(0.0, 0.5, curve: Curves.easeOutBack),),);
 
     _titleFade = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: _ctrl, curve: const Interval(0.2, 0.6, curve: Curves.easeOut)));
+        parent: _ctrl, curve: const Interval(0.2, 0.6, curve: Curves.easeOut),),);
 
     _titleSlide = Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero)
         .animate(CurvedAnimation(
             parent: _ctrl,
-            curve: const Interval(0.2, 0.6, curve: Curves.easeOutCubic)));
+            curve: const Interval(0.2, 0.6, curve: Curves.easeOutCubic),),);
 
     _subtitleFade = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: _ctrl, curve: const Interval(0.4, 0.8, curve: Curves.easeOut)));
+        parent: _ctrl, curve: const Interval(0.4, 0.8, curve: Curves.easeOut),),);
 
     _featuresFade = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
         parent: _ctrl,
-        curve: const Interval(0.55, 1.0, curve: Curves.easeOut)));
+        curve: const Interval(0.55, 1.0, curve: Curves.easeOut),),);
 
     _ctrl.forward();
   }
@@ -367,10 +366,10 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
                 width: 110,
                 height: 110,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.18),
+                  color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(32),
                   border: Border.all(
-                      color: Colors.white.withOpacity(0.30), width: 1.5),
+                      color: Colors.white.withValues(alpha: 0.30), width: 1.5,),
                 ),
                 child: Center(
                   child: Text(page.emoji, style: const TextStyle(fontSize: 52)),
@@ -386,9 +385,9 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.20),
+                  color: Colors.white.withValues(alpha: 0.20),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white.withOpacity(0.30)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.30)),
                 ),
                 child: Text(page.badge,
                     style: const TextStyle(
@@ -396,7 +395,7 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                       letterSpacing: 0.5,
-                    )),
+                    ),),
               ),
             ),
             const SizedBox(height: 20),
@@ -427,7 +426,7 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
                 page.subtitle,
                 style: TextStyle(
                   fontSize: 15.5,
-                  color: Colors.white.withOpacity(0.82),
+                  color: Colors.white.withValues(alpha: 0.82),
                   height: 1.6,
                   fontWeight: FontWeight.w400,
                 ),
@@ -448,21 +447,21 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
                               width: 22,
                               height: 22,
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.22),
+                                color: Colors.white.withValues(alpha: 0.22),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(Icons.check_rounded,
-                                  size: 13, color: Colors.white),
+                                  size: 13, color: Colors.white,),
                             ),
                             const SizedBox(width: 10),
                             Text(f,
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: Colors.white.withOpacity(0.90),
-                                )),
-                          ]),
-                        ))
+                                  color: Colors.white.withValues(alpha: 0.90),
+                                ),),
+                          ],),
+                        ),)
                     .toList(),
               ),
             ),

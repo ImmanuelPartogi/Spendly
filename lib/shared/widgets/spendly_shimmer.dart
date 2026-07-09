@@ -145,30 +145,30 @@ class TransactionTileShimmer extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
               // Icon placeholder
               ShimmerBox(width: 44, height: 44, borderRadius: 13),
-              const SizedBox(width: 13),
+              SizedBox(width: 13),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ShimmerBox(width: 108, height: 13, borderRadius: 6),
-                    const SizedBox(height: 7),
+                    SizedBox(height: 7),
                     ShimmerBox(width: 72, height: 10, borderRadius: 5),
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   // Amount pill placeholder
                   ShimmerBox(width: 80, height: 28, borderRadius: 8),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   ShimmerBox(width: 36, height: 10, borderRadius: 5),
                 ],
               ),
@@ -207,9 +207,6 @@ class DashboardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark   = Theme.of(context).brightness == Brightness.dark;
-    final divColor = isDark ? AppColors.dividerDark : AppColors.divider;
-
     return ShimmerScope(
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
@@ -218,7 +215,7 @@ class DashboardSkeleton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Balance hero card
-            ShimmerBox(
+            const ShimmerBox(
               width: double.infinity,
               height: 168,
               borderRadius: 24,
@@ -226,7 +223,7 @@ class DashboardSkeleton extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Section header placeholder
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ShimmerBox(width: 90, height: 14, borderRadius: 6),
@@ -236,7 +233,7 @@ class DashboardSkeleton extends StatelessWidget {
             const SizedBox(height: 14),
 
             // Stat cards row
-            Row(
+            const Row(
               children: [
                 Expanded(
                   child: ShimmerBox(
@@ -245,7 +242,7 @@ class DashboardSkeleton extends StatelessWidget {
                     borderRadius: 16,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: ShimmerBox(
                     width: double.infinity,
@@ -258,7 +255,7 @@ class DashboardSkeleton extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Chart placeholder
-            ShimmerBox(
+            const ShimmerBox(
               width: double.infinity,
               height: 148,
               borderRadius: 20,
@@ -266,7 +263,7 @@ class DashboardSkeleton extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Section header
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ShimmerBox(width: 110, height: 14, borderRadius: 6),
@@ -306,44 +303,44 @@ class AnalyticsSkeleton extends StatelessWidget {
                   height: 32,
                   borderRadius: 20,
                 ),
-              )),
+              ),),
             ),
             const SizedBox(height: 16),
 
             // Stat cards
-            Row(
+            const Row(
               children: [
                 Expanded(
                   child: ShimmerBox(
-                      width: double.infinity, height: 82, borderRadius: 16),
+                      width: double.infinity, height: 82, borderRadius: 16,),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: ShimmerBox(
-                      width: double.infinity, height: 82, borderRadius: 16),
+                      width: double.infinity, height: 82, borderRadius: 16,),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: ShimmerBox(
-                      width: double.infinity, height: 82, borderRadius: 16),
+                      width: double.infinity, height: 82, borderRadius: 16,),
                 ),
               ],
             ),
             const SizedBox(height: 16),
 
             // Main chart
-            ShimmerBox(
-                width: double.infinity, height: 210, borderRadius: 20),
+            const ShimmerBox(
+                width: double.infinity, height: 210, borderRadius: 20,),
             const SizedBox(height: 16),
 
             // Pie chart + legend
-            ShimmerBox(
-                width: double.infinity, height: 270, borderRadius: 20),
+            const ShimmerBox(
+                width: double.infinity, height: 270, borderRadius: 20,),
             const SizedBox(height: 16),
 
             // Weekly bar chart
-            ShimmerBox(
-                width: double.infinity, height: 160, borderRadius: 20),
+            const ShimmerBox(
+                width: double.infinity, height: 160, borderRadius: 20,),
           ],
         ),
       ),
@@ -374,31 +371,31 @@ class BudgetCardShimmer extends StatelessWidget {
                       : AppColors.card,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         ShimmerBox(width: 36, height: 36, borderRadius: 10),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ShimmerBox(
-                                  width: 90, height: 13, borderRadius: 5),
-                              const SizedBox(height: 6),
+                                  width: 90, height: 13, borderRadius: 5,),
+                              SizedBox(height: 6),
                               ShimmerBox(
-                                  width: 60, height: 10, borderRadius: 4),
+                                  width: 60, height: 10, borderRadius: 4,),
                             ],
                           ),
                         ),
                         ShimmerBox(width: 64, height: 13, borderRadius: 5),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
                     ShimmerBox(
-                        width: double.infinity, height: 8, borderRadius: 4),
+                        width: double.infinity, height: 8, borderRadius: 4,),
                   ],
                 ),
               ),
@@ -417,14 +414,13 @@ class GoalCardShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ShimmerScope(
       child: ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: 3,
-        itemBuilder: (_, i) => Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+        itemBuilder: (_, i) => const Padding(
+          padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
           child: ShimmerBox(
             width: double.infinity,
             height: 110,
@@ -449,8 +445,8 @@ class WalletCardShimmer extends StatelessWidget {
         child: Column(
           children: List.generate(
             2,
-            (_) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
+            (_) => const Padding(
+              padding: EdgeInsets.only(bottom: 12),
               child: ShimmerBox(
                 width: double.infinity,
                 height: 80,
@@ -481,10 +477,10 @@ class SearchResultShimmer extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 12),
+                  horizontal: 16, vertical: 12,),
               child: Row(
                 children: [
-                  ShimmerBox(width: 44, height: 44, borderRadius: 13),
+                  const ShimmerBox(width: 44, height: 44, borderRadius: 13),
                   const SizedBox(width: 13),
                   Expanded(
                     child: Column(
@@ -493,20 +489,20 @@ class SearchResultShimmer extends StatelessWidget {
                         ShimmerBox(
                             width: 90 + (i % 3) * 20.0,
                             height: 12,
-                            borderRadius: 5),
+                            borderRadius: 5,),
                         const SizedBox(height: 6),
                         ShimmerBox(
                             width: 60 + (i % 2) * 15.0,
                             height: 10,
-                            borderRadius: 4),
+                            borderRadius: 4,),
                       ],
                     ),
                   ),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       ShimmerBox(width: 76, height: 28, borderRadius: 8),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6),
                       ShimmerBox(width: 36, height: 10, borderRadius: 4),
                     ],
                   ),
@@ -519,7 +515,7 @@ class SearchResultShimmer extends StatelessWidget {
                 child: Divider(height: 1, color: divColor),
               ),
           ],
-        )),
+        ),),
       ),
     );
   }

@@ -40,7 +40,7 @@ class CategoryDetailScreen extends ConsumerWidget {
             backgroundColor: catColor,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_rounded,
-                  color: Colors.white),
+                  color: Colors.white,),
               onPressed: () => Navigator.pop(context),
             ),
             flexibleSpace: FlexibleSpaceBar(
@@ -109,7 +109,7 @@ class CategoryDetailScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   _TrendChart(
-                      data: monthlyTrend, color: catColor),
+                      data: monthlyTrend, color: catColor,),
                   const SizedBox(height: 24),
 
                   // ── Transactions ─────────────────────────────────────────
@@ -131,12 +131,12 @@ class CategoryDetailScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       Text('📭',
-                          style: TextStyle(fontSize: 40)),
+                          style: TextStyle(fontSize: 40),),
                       SizedBox(height: 12),
                       Text(
                         'Belum ada transaksi',
                         style: TextStyle(
-                            color: AppColors.textSecondary),
+                            color: AppColors.textSecondary,),
                       ),
                     ],
                   ),
@@ -172,16 +172,16 @@ class _StatBox extends StatelessWidget {
   final String value;
   final Color color;
   const _StatBox(
-      {required this.label, required this.value, required this.color});
+      {required this.label, required this.value, required this.color,});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -239,7 +239,7 @@ class _TrendChart extends StatelessWidget {
             show: true,
             drawVerticalLine: false,
             getDrawingHorizontalLine: (_) => const FlLine(
-                color: AppColors.divider, strokeWidth: 1),
+                color: AppColors.divider, strokeWidth: 1,),
           ),
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
@@ -255,18 +255,18 @@ class _TrendChart extends StatelessWidget {
                     child: Text(
                       entries[i].key,
                       style: const TextStyle(
-                          fontSize: 10, color: AppColors.textHint),
+                          fontSize: 10, color: AppColors.textHint,),
                     ),
                   );
                 },
               ),
             ),
             leftTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false)),
+                sideTitles: SideTitles(showTitles: false),),
             topTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false)),
+                sideTitles: SideTitles(showTitles: false),),
             rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false)),
+                sideTitles: SideTitles(showTitles: false),),
           ),
           borderData: FlBorderData(show: false),
           minX: 0,
@@ -291,7 +291,7 @@ class _TrendChart extends StatelessWidget {
               ),
               belowBarData: BarAreaData(
                 show: true,
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
               ),
             ),
           ],

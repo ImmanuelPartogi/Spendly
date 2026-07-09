@@ -1,10 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spendly/features/auth/domain/services/auth_service.dart';
+import '../features/auth/domain/services/auth_service.dart';
 import 'database/app_database.dart';
 import 'database/daos/transaction_dao.dart';
 import 'database/daos/wallet_dao.dart';
 import 'database/daos/budget_dao.dart';
-import 'services/sync_service.dart';
 import 'services/restore_service.dart';
 import '../features/transactions/data/repositories/transaction_repository_impl.dart';
 import '../features/transactions/domain/repositories/transaction_repository.dart';
@@ -35,7 +34,7 @@ final databaseProvider = Provider<AppDatabase>((ref) {
 // ─── DAOs ─────────────────────────────────────────────────────────────────────
 
 final transactionDaoProvider = Provider<TransactionDao>(
-    (ref) => TransactionDao(ref.watch(databaseProvider)));
+    (ref) => TransactionDao(ref.watch(databaseProvider)),);
 final walletDaoProvider =
     Provider<WalletDao>((ref) => WalletDao(ref.watch(databaseProvider)));
 final budgetDaoProvider =
@@ -59,7 +58,7 @@ final transactionRepositoryProvider = Provider<TransactionRepository>(
 );
 
 final budgetRepositoryProvider = Provider<BudgetRepository>(
-    (ref) => BudgetRepositoryImpl(ref.watch(budgetDaoProvider)));
+    (ref) => BudgetRepositoryImpl(ref.watch(budgetDaoProvider)),);
 
 // ─── Sync / Restore Service ───────────────────────────────────────────────────
 
@@ -84,15 +83,15 @@ final pinEnabledProvider = FutureProvider<bool>((ref) async {
 // ─── Use Cases — Transactions ──────────────────────────────────────────────────
 
 final addTransactionUseCaseProvider = Provider(
-    (ref) => AddTransactionUseCase(ref.watch(transactionRepositoryProvider)));
+    (ref) => AddTransactionUseCase(ref.watch(transactionRepositoryProvider)),);
 final getTransactionsUseCaseProvider = Provider(
-    (ref) => GetTransactionsUseCase(ref.watch(transactionRepositoryProvider)));
+    (ref) => GetTransactionsUseCase(ref.watch(transactionRepositoryProvider)),);
 final deleteTransactionUseCaseProvider = Provider((ref) =>
-    DeleteTransactionUseCase(ref.watch(transactionRepositoryProvider)));
+    DeleteTransactionUseCase(ref.watch(transactionRepositoryProvider)),);
 final updateTransactionUseCaseProvider = Provider((ref) =>
-    UpdateTransactionUseCase(ref.watch(transactionRepositoryProvider)));
+    UpdateTransactionUseCase(ref.watch(transactionRepositoryProvider)),);
 final calculateMonthlyUseCaseProvider = Provider((ref) =>
-    CalculateMonthlySpendingUseCase(ref.watch(transactionRepositoryProvider)));
+    CalculateMonthlySpendingUseCase(ref.watch(transactionRepositoryProvider)),);
 
 // ─── Use Cases — Budget ────────────────────────────────────────────────────────
 
@@ -106,61 +105,61 @@ final deleteBudgetUseCaseProvider =
 // ─── Use Cases — Wallet ────────────────────────────────────────────────────────
 
 final getWalletsUseCaseProvider = Provider<GetWalletsUseCase>(
-    (ref) => GetWalletsUseCase(ref.watch(walletDaoProvider)));
+    (ref) => GetWalletsUseCase(ref.watch(walletDaoProvider)),);
 final addWalletUseCaseProvider = Provider<AddWalletUseCase>(
     (ref) => AddWalletUseCase(
           ref.watch(walletDaoProvider),
           ref.watch(transactionDaoProvider),
-        ));
+        ),);
 final updateWalletUseCaseProvider = Provider<UpdateWalletUseCase>(
-    (ref) => UpdateWalletUseCase(ref.watch(walletDaoProvider)));
+    (ref) => UpdateWalletUseCase(ref.watch(walletDaoProvider)),);
 final deleteWalletUseCaseProvider = Provider<DeleteWalletUseCase>(
-    (ref) => DeleteWalletUseCase(ref.watch(walletDaoProvider)));
+    (ref) => DeleteWalletUseCase(ref.watch(walletDaoProvider)),);
 final transferFundsUseCaseProvider = Provider<TransferFundsUseCase>(
-    (ref) => TransferFundsUseCase(ref.watch(walletDaoProvider)));
+    (ref) => TransferFundsUseCase(ref.watch(walletDaoProvider)),);
 
 // ─── Use Cases — Goals ─────────────────────────────────────────────────────────
 
 final getGoalsUseCaseProvider = Provider<GetGoalsUseCase>(
-    (ref) => GetGoalsUseCase(ref.watch(goalDaoProvider)));
+    (ref) => GetGoalsUseCase(ref.watch(goalDaoProvider)),);
 final addGoalUseCaseProvider = Provider<AddGoalUseCase>(
-    (ref) => AddGoalUseCase(ref.watch(goalDaoProvider)));
+    (ref) => AddGoalUseCase(ref.watch(goalDaoProvider)),);
 final updateGoalUseCaseProvider = Provider<UpdateGoalUseCase>(
-    (ref) => UpdateGoalUseCase(ref.watch(goalDaoProvider)));
+    (ref) => UpdateGoalUseCase(ref.watch(goalDaoProvider)),);
 final deleteGoalUseCaseProvider = Provider<DeleteGoalUseCase>(
-    (ref) => DeleteGoalUseCase(ref.watch(goalDaoProvider)));
+    (ref) => DeleteGoalUseCase(ref.watch(goalDaoProvider)),);
 final allocateFundsUseCaseProvider = Provider<AllocateFundsUseCase>(
-    (ref) => AllocateFundsUseCase(ref.watch(goalDaoProvider)));
+    (ref) => AllocateFundsUseCase(ref.watch(goalDaoProvider)),);
 
 // ─── Use Cases — Recurring ─────────────────────────────────────────────────────
 
 final getRecurringsUseCaseProvider = Provider<GetRecurringsUseCase>(
-    (ref) => GetRecurringsUseCase(ref.watch(recurringDaoProvider)));
+    (ref) => GetRecurringsUseCase(ref.watch(recurringDaoProvider)),);
 final addRecurringUseCaseProvider = Provider<AddRecurringUseCase>(
-    (ref) => AddRecurringUseCase(ref.watch(recurringDaoProvider)));
+    (ref) => AddRecurringUseCase(ref.watch(recurringDaoProvider)),);
 final updateRecurringUseCaseProvider = Provider<UpdateRecurringUseCase>(
-    (ref) => UpdateRecurringUseCase(ref.watch(recurringDaoProvider)));
+    (ref) => UpdateRecurringUseCase(ref.watch(recurringDaoProvider)),);
 final deleteRecurringUseCaseProvider = Provider<DeleteRecurringUseCase>(
-    (ref) => DeleteRecurringUseCase(ref.watch(recurringDaoProvider)));
+    (ref) => DeleteRecurringUseCase(ref.watch(recurringDaoProvider)),);
 final toggleRecurringUseCaseProvider = Provider<ToggleRecurringUseCase>(
-    (ref) => ToggleRecurringUseCase(ref.watch(recurringDaoProvider)));
+    (ref) => ToggleRecurringUseCase(ref.watch(recurringDaoProvider)),);
 
 // ─── Insight ───────────────────────────────────────────────────────────────────
 
 final insightEngineProvider = Provider((ref) => InsightEngine(
     ref.watch(transactionRepositoryProvider),
-    ref.watch(budgetRepositoryProvider)));
+    ref.watch(budgetRepositoryProvider),),);
 
 // ─── Streams ───────────────────────────────────────────────────────────────────
 
 final walletListProvider = StreamProvider<List<WalletEntity>>(
-    (ref) => ref.watch(getWalletsUseCaseProvider).watch());
+    (ref) => ref.watch(getWalletsUseCaseProvider).watch(),);
 final goalListProvider = StreamProvider<List<GoalEntity>>(
-    (ref) => ref.watch(getGoalsUseCaseProvider).watch());
+    (ref) => ref.watch(getGoalsUseCaseProvider).watch(),);
 final recurringListProvider = StreamProvider<List<RecurringEntity>>(
-    (ref) => ref.watch(getRecurringsUseCaseProvider).watch());
+    (ref) => ref.watch(getRecurringsUseCaseProvider).watch(),);
 final budgetListStreamProvider = StreamProvider<List<BudgetEntity>>(
-    (ref) => ref.watch(getBudgetsUseCaseProvider).watch());
+    (ref) => ref.watch(getBudgetsUseCaseProvider).watch(),);
 
 /// Single source of truth untuk semua transaksi.
 final allTransactionsStreamProvider = StreamProvider<List<TransactionEntity>>(
@@ -250,14 +249,13 @@ final weekdaySpendingProvider = Provider<Map<int, double>>((ref) {
 });
 
 final budgetsWithSpentProvider = Provider<List<BudgetEntity>>((ref) {
-  final budgets = List<BudgetEntity>.from(
-    ref.watch(budgetListStreamProvider).valueOrNull ?? [],
-  );
+  final budgets =
+      ref.watch(budgetListStreamProvider).valueOrNull ?? const [];
   final categoryTotals = ref.watch(categoryBreakdownProvider);
-  for (final b in budgets) {
-    b.spent = categoryTotals[b.category] ?? 0;
-  }
-  return budgets;
+  return [
+    for (final b in budgets)
+      b.copyWith(spent: categoryTotals[b.category] ?? 0),
+  ];
 });
 
 final monthlySpendingProvider =
@@ -353,8 +351,8 @@ final analyticsTransactionsProvider =
   return ref.watch(transactionRepositoryProvider).watchAllTransactions().map(
       (list) => list
           .where(
-              (tx) => !tx.date.isBefore(startDay) && !tx.date.isAfter(endDay))
-          .toList());
+              (tx) => !tx.date.isBefore(startDay) && !tx.date.isAfter(endDay),)
+          .toList(),);
 });
 
 final analyticsExpenseProvider = Provider<double>((ref) {

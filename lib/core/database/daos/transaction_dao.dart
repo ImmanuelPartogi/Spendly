@@ -26,17 +26,17 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
     return (select(transactions)
           ..where((t) =>
               t.date.isBiggerOrEqualValue(start) &
-              t.date.isSmallerOrEqualValue(end))
+              t.date.isSmallerOrEqualValue(end),)
           ..orderBy([(t) => OrderingTerm.desc(t.date)]))
         .watch();
   }
 
   Future<List<Transaction>> getTransactionsByDateRange(
-          DateTime start, DateTime end) =>
+          DateTime start, DateTime end,) =>
       (select(transactions)
             ..where((t) =>
                 t.date.isBiggerOrEqualValue(start) &
-                t.date.isSmallerOrEqualValue(end))
+                t.date.isSmallerOrEqualValue(end),)
             ..orderBy([(t) => OrderingTerm.desc(t.date)]))
           .get();
 
@@ -108,7 +108,7 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<void> updateTransactionById(
-      String oldId, TransactionsCompanion newEntry) async {
+      String oldId, TransactionsCompanion newEntry,) async {
     final oldTx = await (select(transactions)
           ..where((t) => t.id.equals(oldId)))
         .getSingleOrNull();
@@ -151,27 +151,27 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
   // ── Aggregations ──────────────────────────────────────────────────────────
 
   Future<double> getTotalByTypeAndMonth(
-      String type, int year, int month) async {
+      String type, int year, int month,) async {
     final start = DateTime(year, month, 1);
     final end = DateTime(year, month + 1, 0, 23, 59, 59);
     final results = await (select(transactions)
           ..where((t) =>
               t.type.equals(type) &
               t.date.isBiggerOrEqualValue(start) &
-              t.date.isSmallerOrEqualValue(end)))
+              t.date.isSmallerOrEqualValue(end),))
         .get();
     return results.fold<double>(0.0, (sum, t) => sum + t.amount);
   }
 
   Future<Map<String, double>> getCategoryTotals(
-      int year, int month, String type) async {
+      int year, int month, String type,) async {
     final start = DateTime(year, month, 1);
     final end = DateTime(year, month + 1, 0, 23, 59, 59);
     final list = await (select(transactions)
           ..where((t) =>
               t.type.equals(type) &
               t.date.isBiggerOrEqualValue(start) &
-              t.date.isSmallerOrEqualValue(end)))
+              t.date.isSmallerOrEqualValue(end),))
         .get();
     final result = <String, double>{};
     for (final tx in list) {
@@ -181,14 +181,14 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<Map<int, double>> getDailyTotals(
-      int year, int month, String type) async {
+      int year, int month, String type,) async {
     final start = DateTime(year, month, 1);
     final end = DateTime(year, month + 1, 0, 23, 59, 59);
     final list = await (select(transactions)
           ..where((t) =>
               t.type.equals(type) &
               t.date.isBiggerOrEqualValue(start) &
-              t.date.isSmallerOrEqualValue(end)))
+              t.date.isSmallerOrEqualValue(end),))
         .get();
     final result = <int, double>{};
     for (final tx in list) {
@@ -198,14 +198,14 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<Map<int, double>> getWeekdayTotals(
-      int year, int month, String type) async {
+      int year, int month, String type,) async {
     final start = DateTime(year, month, 1);
     final end = DateTime(year, month + 1, 0, 23, 59, 59);
     final list = await (select(transactions)
           ..where((t) =>
               t.type.equals(type) &
               t.date.isBiggerOrEqualValue(start) &
-              t.date.isSmallerOrEqualValue(end)))
+              t.date.isSmallerOrEqualValue(end),))
         .get();
     final result = <int, double>{
       1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,

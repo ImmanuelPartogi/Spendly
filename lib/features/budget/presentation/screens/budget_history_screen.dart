@@ -137,7 +137,7 @@ class BudgetHistoryScreen extends ConsumerWidget {
                         Text(
                           'Belum ada riwayat budget',
                           style: TextStyle(
-                              color: AppColors.textSecondary, fontSize: 15),
+                              color: AppColors.textSecondary, fontSize: 15,),
                         ),
                       ],
                     ),
@@ -177,9 +177,9 @@ class _StatBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -288,7 +288,7 @@ class _HistoryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: entry.ratio.clamp(0.0, 1.0),
-              backgroundColor: color.withOpacity(0.1),
+              backgroundColor: color.withValues(alpha: 0.1),
               valueColor: AlwaysStoppedAnimation(color),
               minHeight: 6,
             ),
@@ -302,7 +302,7 @@ class _HistoryCard extends StatelessWidget {
               Text(
                 '${(entry.ratio * 100).toStringAsFixed(0)}% digunakan',
                 style: TextStyle(
-                    fontSize: 11, fontWeight: FontWeight.w600, color: color),
+                    fontSize: 11, fontWeight: FontWeight.w600, color: color,),
               ),
               Text(
                 entry.isOnBudget
@@ -332,7 +332,7 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(

@@ -27,7 +27,7 @@ class BudgetSummaryWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Budget',
-                style: Theme.of(context).textTheme.titleMedium),
+                style: Theme.of(context).textTheme.titleMedium,),
             if (onSeeAll != null)
               GestureDetector(
                 onTap: onSeeAll,
@@ -78,7 +78,7 @@ class _BudgetRow extends StatelessWidget {
                 children: [
                   Text(item.label,
                       style: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w600)),
+                          fontSize: 13, fontWeight: FontWeight.w600,),),
                   if (isWarning)
                     Padding(
                       padding: const EdgeInsets.only(left: 6),
@@ -113,7 +113,7 @@ class _BudgetRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: ratio,
-              backgroundColor: barColor.withOpacity(0.12),
+              backgroundColor: barColor.withValues(alpha: 0.12),
               valueColor: AlwaysStoppedAnimation(barColor),
               minHeight: 6,
             ),

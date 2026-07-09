@@ -21,18 +21,18 @@ class AppTheme {
 
   // ── Typography helpers ────────────────────────────────────────────────────
   static TextStyle _sora(double size, FontWeight weight, Color color,
-      {double? height, double? spacing}) =>
+      {double? height, double? spacing,}) =>
       GoogleFonts.sora(
           fontSize: size,
           fontWeight: weight,
           color: color,
           height: height,
-          letterSpacing: spacing);
+          letterSpacing: spacing,);
 
   static TextStyle _dm(double size, FontWeight weight, Color color,
-      {double? height}) =>
+      {double? height,}) =>
       GoogleFonts.dmSans(
-          fontSize: size, fontWeight: weight, color: color, height: height);
+          fontSize: size, fontWeight: weight, color: color, height: height,);
 
   static ThemeData get lightTheme => _build(Brightness.light);
   static ThemeData get darkTheme  => _build(Brightness.dark);
@@ -57,13 +57,11 @@ class AppTheme {
         brightness: brightness,
         primary: AppColors.primary,
         secondary: AppColors.accentPurple,
-        surface: surface,
-        background: bg,
+        surface: bg,
         error: AppColors.error,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: txtP,
-        onBackground: txtP,
       ),
 
       scaffoldBackgroundColor: bg,
@@ -124,22 +122,22 @@ class AppTheme {
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none),
+            borderSide: BorderSide.none,),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide(color: border, width: 1)),
+            borderSide: BorderSide(color: border, width: 1),),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide:
-                const BorderSide(color: AppColors.primary, width: 1.5)),
+                const BorderSide(color: AppColors.primary, width: 1.5),),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide:
-                const BorderSide(color: AppColors.error, width: 1)),
+                const BorderSide(color: AppColors.error, width: 1),),
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide:
-                const BorderSide(color: AppColors.error, width: 1.5)),
+                const BorderSide(color: AppColors.error, width: 1.5),),
         hintStyle: _dm(14, FontWeight.w400, txtH),
         labelStyle: _dm(14, FontWeight.w500, txtS),
         prefixStyle: _dm(14, FontWeight.w500, txtS),
@@ -153,18 +151,18 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           disabledBackgroundColor:
-              AppColors.primary.withOpacity(0.38),
-          disabledForegroundColor: Colors.white.withOpacity(0.55),
+              AppColors.primary.withValues(alpha: 0.38),
+          disabledForegroundColor: Colors.white.withValues(alpha: 0.55),
           elevation: 0,
           shadowColor: Colors.transparent,
           padding:
               const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14)),
+              borderRadius: BorderRadius.circular(14),),
           textStyle: GoogleFonts.sora(
               fontSize: 15,
               fontWeight: FontWeight.w700,
-              letterSpacing: 0.1),
+              letterSpacing: 0.1,),
           animationDuration: kDurationFast,
         ),
       ),
@@ -177,9 +175,9 @@ class AppTheme {
           padding:
               const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14)),
+              borderRadius: BorderRadius.circular(14),),
           textStyle: GoogleFonts.sora(
-              fontSize: 14, fontWeight: FontWeight.w600),
+              fontSize: 14, fontWeight: FontWeight.w600,),
           animationDuration: kDurationFast,
         ),
       ),
@@ -190,7 +188,7 @@ class AppTheme {
           foregroundColor:
               isDark ? AppColors.primaryLight : AppColors.primary,
           textStyle: GoogleFonts.sora(
-              fontSize: 14, fontWeight: FontWeight.w600),
+              fontSize: 14, fontWeight: FontWeight.w600,),
           padding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           animationDuration: kDurationFast,
@@ -206,25 +204,25 @@ class AppTheme {
         hoverElevation: 0,
         highlightElevation: 0,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18)),
+            borderRadius: BorderRadius.circular(18),),
       ),
 
       // ── Switch ────────────────────────────────────────────────────────────
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.white;
           }
           return isDark ? AppColors.textSecondaryDark : AppColors.textHint;
         }),
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return AppColors.primary;
           }
           return isDark ? AppColors.surfaceDark : AppColors.surface;
         }),
-        trackOutlineColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.transparent;
           }
           return border;
@@ -234,11 +232,11 @@ class AppTheme {
       // ── Chip ──────────────────────────────────────────────────────────────
       chipTheme: ChipThemeData(
         backgroundColor: surface,
-        selectedColor: AppColors.primary.withOpacity(0.12),
+        selectedColor: AppColors.primary.withValues(alpha: 0.12),
         labelStyle: _dm(13, FontWeight.w600, txtS),
         side: BorderSide(color: border),
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)),
+            borderRadius: BorderRadius.circular(10),),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       ),
 
@@ -255,10 +253,10 @@ class AppTheme {
         actionTextColor: AppColors.primaryLight,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14)),
+            borderRadius: BorderRadius.circular(14),),
         elevation: 0,
         insetPadding: const EdgeInsets.symmetric(
-            horizontal: 16, vertical: 12),
+            horizontal: 16, vertical: 12,),
       ),
 
       // ── Bottom Sheet ──────────────────────────────────────────────────────
@@ -279,7 +277,7 @@ class AppTheme {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24)),
+            borderRadius: BorderRadius.circular(24),),
         titleTextStyle: _sora(18, FontWeight.w700, txtP),
         contentTextStyle:
             _dm(14, FontWeight.w400, txtS, height: 1.55),
@@ -302,9 +300,9 @@ class AppTheme {
         color: card,
         surfaceTintColor: Colors.transparent,
         elevation: 8,
-        shadowColor: Colors.black.withOpacity(0.1),
+        shadowColor: Colors.black.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14)),
+            borderRadius: BorderRadius.circular(14),),
         textStyle: _dm(14, FontWeight.w500, txtP),
       ),
 
@@ -346,15 +344,15 @@ class _SlideUpFadeTransition extends PageTransitionsBuilder {
     final fadeIn = CurvedAnimation(
         parent: animation, curve: kDurationNormal.inMilliseconds > 0
             ? const Interval(0.0, 1.0, curve: Curves.easeOutQuart)
-            : Curves.linear);
+            : Curves.linear,);
     final slideIn = Tween<Offset>(
-            begin: const Offset(0, 0.03), end: Offset.zero)
+            begin: const Offset(0, 0.03), end: Offset.zero,)
         .animate(fadeIn);
 
     // Outgoing: slight scale-down + fade
     final fadeOut = Tween<double>(begin: 1.0, end: 0.97).animate(
         CurvedAnimation(
-            parent: secondaryAnimation, curve: Curves.easeIn));
+            parent: secondaryAnimation, curve: Curves.easeIn,),);
 
     return FadeTransition(
       opacity: fadeOut,

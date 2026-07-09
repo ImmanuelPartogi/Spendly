@@ -28,7 +28,7 @@ class ExportService {
             tx.category,
             tx.amount.toStringAsFixed(0),
             tx.note ?? '',
-          ]),
+          ],),
     ];
 
     final csv = const ListToCsvConverter().convert(rows);
@@ -71,7 +71,7 @@ class ExportService {
           if (monthLabel.isNotEmpty)
             pw.Text(monthLabel,
                 style: const pw.TextStyle(
-                    fontSize: 12, color: PdfColors.grey600)),
+                    fontSize: 12, color: PdfColors.grey600,),),
           pw.SizedBox(height: 16),
           // Summary
           pw.Container(
@@ -86,15 +86,15 @@ class ExportService {
               children: [
                 _pdfStat('Pemasukan',
                     CurrencyFormatter.format(totalIncome),
-                    PdfColors.green700),
+                    PdfColors.green700,),
                 _pdfStat('Pengeluaran',
                     CurrencyFormatter.format(totalExpense),
-                    PdfColors.red700),
+                    PdfColors.red700,),
                 _pdfStat('Tabungan',
                     CurrencyFormatter.format(savings),
                     savings >= 0
                         ? PdfColors.blue700
-                        : PdfColors.orange700),
+                        : PdfColors.orange700,),
               ],
             ),
           ),
@@ -102,7 +102,7 @@ class ExportService {
           // Table header
           pw.Table(
             border: pw.TableBorder.all(
-                color: PdfColors.grey300, width: 0.5),
+                color: PdfColors.grey300, width: 0.5,),
             columnWidths: {
               0: const pw.FlexColumnWidth(2),
               1: const pw.FlexColumnWidth(2),
@@ -120,15 +120,15 @@ class ExportService {
                   'Tipe',
                   'Kategori',
                   'Nominal',
-                  'Catatan'
+                  'Catatan',
                 ]
                     .map((h) => pw.Padding(
                           padding: const pw.EdgeInsets.all(8),
                           child: pw.Text(h,
                               style: pw.TextStyle(
                                   fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10)),
-                        ))
+                                  fontSize: 10,),),
+                        ),)
                     .toList(),
               ),
               // Data rows
@@ -137,20 +137,20 @@ class ExportService {
                       _pdfCell(_formatDate(tx.date)),
                       _pdfCell(tx.isExpense
                           ? 'Pengeluaran'
-                          : 'Pemasukan'),
+                          : 'Pemasukan',),
                       _pdfCell(tx.category),
                       _pdfCell(
-                          CurrencyFormatter.formatCompact(tx.amount)),
+                          CurrencyFormatter.formatCompact(tx.amount),),
                       _pdfCell(tx.note ?? '-'),
                     ],
-                  )),
+                  ),),
             ],
           ),
           pw.SizedBox(height: 16),
           pw.Text(
             'Dibuat oleh Spendly • ${_formatDate(DateTime.now())}',
             style: const pw.TextStyle(
-                fontSize: 9, color: PdfColors.grey500),
+                fontSize: 9, color: PdfColors.grey500,),
           ),
         ],
       ),
@@ -165,9 +165,11 @@ class ExportService {
   // ─── Share ───────────────────────────────────────────────────────────────────
 
   static Future<void> shareFile(File file, {String? subject}) async {
-    await Share.shareXFiles(
-      [XFile(file.path)],
-      subject: subject ?? 'Spendly Export',
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(file.path)],
+        subject: subject ?? 'Spendly Export',
+      ),
     );
   }
 
@@ -175,7 +177,7 @@ class ExportService {
 
   static Future<void> printPdf(File file) async {
     await Printing.layoutPdf(
-        onLayout: (_) async => await file.readAsBytes());
+        onLayout: (_) async => await file.readAsBytes(),);
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -185,18 +187,18 @@ class ExportService {
       '${d.month.toString().padLeft(2, '0')}/${d.year}';
 
   static pw.Widget _pdfStat(
-      String label, String value, PdfColor color) {
+      String label, String value, PdfColor color,) {
     return pw.Column(
       children: [
         pw.Text(label,
             style:
-                const pw.TextStyle(fontSize: 9, color: PdfColors.grey600)),
+                const pw.TextStyle(fontSize: 9, color: PdfColors.grey600),),
         pw.SizedBox(height: 4),
         pw.Text(value,
             style: pw.TextStyle(
                 fontSize: 12,
                 fontWeight: pw.FontWeight.bold,
-                color: color)),
+                color: color,),),
       ],
     );
   }

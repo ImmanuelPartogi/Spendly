@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import '../../core/theme/app_colors.dart';
 
 const _kTourDone = 'app_tour_done';
 
@@ -54,7 +53,7 @@ class CoachMarkService {
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
-            builder: (_, __) => _CoachContent(
+            builder: (_, __) => const _CoachContent(
               icon: '💳',
               title: 'Total Saldo',
               body:
@@ -73,7 +72,7 @@ class CoachMarkService {
         contents: [
           TargetContent(
             align: ContentAlign.top,
-            builder: (_, __) => _CoachContent(
+            builder: (_, __) => const _CoachContent(
               icon: '➕',
               title: 'Tambah Transaksi',
               body:
@@ -93,7 +92,7 @@ class CoachMarkService {
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
-            builder: (_, __) => _CoachContent(
+            builder: (_, __) => const _CoachContent(
               icon: '✨',
               title: 'Analisis Cerdas',
               body:
@@ -113,7 +112,7 @@ class CoachMarkService {
         contents: [
           TargetContent(
             align: ContentAlign.top,
-            builder: (_, __) => _CoachContent(
+            builder: (_, __) => const _CoachContent(
               icon: '📋',
               title: 'Transaksi Terbaru',
               body:
@@ -199,7 +198,7 @@ class _CoachContent extends StatelessWidget {
           Text(
             body,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.85),
+              color: Colors.white.withValues(alpha: 0.85),
               fontSize: 14,
               height: 1.5,
             ),

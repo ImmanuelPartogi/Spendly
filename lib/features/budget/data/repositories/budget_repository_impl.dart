@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:spendly/core/database/app_database.dart';
+import '../../../../core/database/app_database.dart';
 import '../../../../core/database/daos/budget_dao.dart';
 import '../../../../core/services/sync_service.dart';
 import '../../domain/entities/budget_entity.dart';
@@ -24,7 +24,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
       category: budget.category,
       limitAmount: budget.limitAmount,
       period: Value(budget.period),
-    ));
+    ),);
 
     // Sync ke Firebase
     _uploadBudget(budget);
@@ -43,7 +43,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
     });
   }
 
-  BudgetEntity _fromBudget(dynamic b) => BudgetEntity(
+  BudgetEntity _fromBudget(Budget b) => BudgetEntity(
         id: b.id,
         category: b.category,
         limitAmount: b.limitAmount,

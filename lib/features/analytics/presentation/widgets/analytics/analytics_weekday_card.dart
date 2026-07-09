@@ -43,34 +43,34 @@ class AnalyticsWeekdayCard extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: txtPrim,
-                      letterSpacing: -0.3)),
+                      letterSpacing: -0.3,),),
               const SizedBox(height: 3),
               Text('Hari dengan pengeluaran terbanyak',
-                  style: TextStyle(fontSize: 11, color: txtSec)),
-            ]),
+                  style: TextStyle(fontSize: 11, color: txtSec),),
+            ],),
             if (weekday.values.any((v) => v > 0))
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.10),
+                  color: AppColors.primary.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   const Icon(Icons.local_fire_department_rounded,
-                      size: 11, color: AppColors.primary),
+                      size: 11, color: AppColors.primary,),
                   const SizedBox(width: 4),
                   Text(dayNames[(maxDay - 1).clamp(0, 6)],
                       style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primary)),
-                ]),
+                          color: AppColors.primary,),),
+                ],),
               ),
           ],
         ),
         const SizedBox(height: 20),
         _WeekdayBarChart(data: weekday, isDark: isDark),
-      ]),
+      ],),
     );
   }
 }
@@ -85,8 +85,8 @@ class _WeekdayBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final sec = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
     final div = isDark
-        ? AppColors.borderDark.withOpacity(0.5)
-        : AppColors.border.withOpacity(0.7);
+        ? AppColors.borderDark.withValues(alpha: 0.5)
+        : AppColors.border.withValues(alpha: 0.7);
     final maxVal = data.values.fold(0.0, (a, b) => a > b ? a : b);
     const days = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
     final today = DateTime.now().weekday;
@@ -96,7 +96,7 @@ class _WeekdayBarChart extends StatelessWidget {
         height: 100,
         child: Center(
           child: Text('Belum ada data',
-              style: TextStyle(fontSize: 12, color: AppColors.textHint)),
+              style: TextStyle(fontSize: 12, color: AppColors.textHint),),
         ),
       );
     }
@@ -113,13 +113,13 @@ class _WeekdayBarChart extends StatelessWidget {
             tooltipRoundedRadius: 8,
             tooltipBorder: BorderSide(
                 color: isDark ? AppColors.borderDark : AppColors.border,
-                width: 0.5),
+                width: 0.5,),
             getTooltipItem: (group, _, rod, __) => BarTooltipItem(
               '${days[group.x]}\n${CurrencyFormatter.formatCompact(rod.toY)}',
               const TextStyle(
                   color: AppColors.primary,
                   fontSize: 11,
-                  fontWeight: FontWeight.w700),
+                  fontWeight: FontWeight.w700,),
             ),
           ),
         ),
@@ -138,7 +138,7 @@ class _WeekdayBarChart extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 10.5,
                           fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
-                          color: isToday ? AppColors.primary : sec)),
+                          color: isToday ? AppColors.primary : sec,),),
                 );
               },
             ),
@@ -166,8 +166,8 @@ class _WeekdayBarChart extends StatelessWidget {
               : isToday && val > 0
                   ? AppColors.primaryLight
                   : (isDark
-                      ? AppColors.primary.withOpacity(0.16)
-                      : AppColors.primary.withOpacity(0.12));
+                      ? AppColors.primary.withValues(alpha: 0.16)
+                      : AppColors.primary.withValues(alpha: 0.12));
 
           return BarChartGroupData(x: i, barRods: [
             BarChartRodData(
@@ -176,9 +176,9 @@ class _WeekdayBarChart extends StatelessWidget {
               width: 22,
               borderRadius: const BorderRadius.vertical(top: Radius.circular(7)),
             ),
-          ]);
+          ],);
         }),
-      )),
+      ),),
     );
   }
 }

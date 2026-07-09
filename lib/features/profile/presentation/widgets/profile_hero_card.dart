@@ -42,7 +42,7 @@ class ProfileHeroCard extends StatelessWidget {
             height: 150,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.05),
+              color: Colors.white.withValues(alpha: 0.05),
             ),
           ),
         ),
@@ -54,7 +54,7 @@ class ProfileHeroCard extends StatelessWidget {
             height: 100,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.04),
+              color: Colors.white.withValues(alpha: 0.04),
             ),
           ),
         ),
@@ -63,7 +63,7 @@ class ProfileHeroCard extends StatelessWidget {
           child: Column(children: [
             Row(children: [
               ProfileAvatarWidget(
-                  photoPath: photoPath, avatar: avatar, size: 64),
+                  photoPath: photoPath, avatar: avatar, size: 64,),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
@@ -95,27 +95,27 @@ class ProfileHeroCard extends StatelessWidget {
                         child: Text(
                           isAnon ? 'Mode Tamu' : (userEmail ?? ''),
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.75),
+                            color: Colors.white.withValues(alpha: 0.75),
                             fontSize: 12.5,
                             fontWeight: FontWeight.w400,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ]),
+                    ],),
                   ],
                 ),
               ),
-            ]),
+            ],),
             const SizedBox(height: 18),
-            Container(height: 1, color: Colors.white.withOpacity(0.14)),
+            Container(height: 1, color: Colors.white.withValues(alpha: 0.14)),
             const SizedBox(height: 16),
             Row(children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
                   'Total Saldo',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.65),
+                    color: Colors.white.withValues(alpha: 0.65),
                     fontSize: 11.5,
                     fontWeight: FontWeight.w400,
                     letterSpacing: 0.2,
@@ -131,15 +131,15 @@ class ProfileHeroCard extends StatelessWidget {
                     letterSpacing: -0.8,
                   ),
                 ),
-              ]),
+              ],),
               const Spacer(),
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
+                  color: Colors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white.withOpacity(0.20)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.20)),
                 ),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   Container(
@@ -153,16 +153,16 @@ class ProfileHeroCard extends StatelessWidget {
                   const SizedBox(width: 5),
                   Text('Aktif',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.90),
+                        color: Colors.white.withValues(alpha: 0.90),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                      )),
-                ]),
+                      ),),
+                ],),
               ),
-            ]),
-          ]),
+            ],),
+          ],),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -186,9 +186,9 @@ class ProfileAvatarWidget extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.white.withOpacity(0.18),
+        color: Colors.white.withValues(alpha: 0.18),
         border: Border.all(
-          color: Colors.white.withOpacity(0.35),
+          color: Colors.white.withValues(alpha: 0.35),
           width: 2,
         ),
       ),

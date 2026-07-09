@@ -34,13 +34,13 @@ class WalletScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.error_outline_rounded,
-                  size: 48, color: AppColors.expense),
+                  size: 48, color: AppColors.expense,),
               const SizedBox(height: 12),
               Text('Gagal memuat dompet', style: Theme.of(context).textTheme.bodyLarge),
               const SizedBox(height: 4),
               Text('$e',
                   style: const TextStyle(
-                      fontSize: 12, color: AppColors.textSecondary)),
+                      fontSize: 12, color: AppColors.textSecondary,),),
             ],
           ),
         ),
@@ -53,7 +53,7 @@ class WalletScreen extends ConsumerWidget {
                   Text('👛', style: TextStyle(fontSize: 48)),
                   SizedBox(height: 12),
                   Text('Belum ada dompet',
-                      style: TextStyle(color: AppColors.textSecondary)),
+                      style: TextStyle(color: AppColors.textSecondary),),
                 ],
               ),
             );
@@ -75,7 +75,7 @@ class WalletScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.3),
+                          color: AppColors.primary.withValues(alpha: 0.3),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -87,7 +87,7 @@ class WalletScreen extends ConsumerWidget {
                         Text(
                           'Total Saldo',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -106,7 +106,7 @@ class WalletScreen extends ConsumerWidget {
                         Text(
                           '${wallets.length} dompet aktif',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
+                            color: Colors.white.withValues(alpha: 0.7),
                             fontSize: 12,
                           ),
                         ),
@@ -139,11 +139,11 @@ class WalletScreen extends ConsumerWidget {
                 onPressed: () => _showTransferSheet(context, wallets),
                 backgroundColor: AppColors.primary,
                 icon: const Icon(Icons.swap_horiz_rounded,
-                    color: Colors.white),
+                    color: Colors.white,),
                 label: const Text('Transfer',
                     style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w700)),
+                        fontWeight: FontWeight.w700,),),
               )
             : null,
         orElse: () => null,
@@ -152,7 +152,7 @@ class WalletScreen extends ConsumerWidget {
   }
 
   void _showTransferSheet(
-      BuildContext context, List<WalletEntity> wallets) {
+      BuildContext context, List<WalletEntity> wallets,) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -162,7 +162,7 @@ class WalletScreen extends ConsumerWidget {
   }
 
   void _confirmDelete(
-      BuildContext context, WidgetRef ref, WalletEntity wallet) {
+      BuildContext context, WidgetRef ref, WalletEntity wallet,) {
     if (wallet.isDefault) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Dompet utama tidak bisa dihapus')),
@@ -174,7 +174,7 @@ class WalletScreen extends ConsumerWidget {
       builder: (_) => AlertDialog(
         title: const Text('Hapus Dompet?'),
         content: Text(
-            '"${wallet.name}" akan dihapus permanen beserta semua riwayat transaksinya.'),
+            '"${wallet.name}" akan dihapus permanen beserta semua riwayat transaksinya.',),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -186,7 +186,7 @@ class WalletScreen extends ConsumerWidget {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.expense),
+                backgroundColor: AppColors.expense,),
             child: const Text('Hapus'),
           ),
         ],
@@ -218,12 +218,12 @@ class _WalletCard extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: wallet.color.withOpacity(0.12),
+              color: wallet.color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Center(
               child: Text(wallet.type.emoji,
-                  style: const TextStyle(fontSize: 22)),
+                  style: const TextStyle(fontSize: 22),),
             ),
           ),
           const SizedBox(width: 14),
@@ -245,9 +245,9 @@ class _WalletCard extends StatelessWidget {
                       const SizedBox(width: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
+                            horizontal: 6, vertical: 2,),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1),
+                          color: AppColors.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: const Text(
@@ -266,7 +266,7 @@ class _WalletCard extends StatelessWidget {
                 Text(
                   wallet.type.label,
                   style: const TextStyle(
-                      fontSize: 12, color: AppColors.textSecondary),
+                      fontSize: 12, color: AppColors.textSecondary,),
                 ),
               ],
             ),
@@ -290,7 +290,7 @@ class _WalletCard extends StatelessWidget {
               const PopupMenuItem(
                 value: 'delete',
                 child: Text('Hapus',
-                    style: TextStyle(color: AppColors.expense)),
+                    style: TextStyle(color: AppColors.expense),),
               ),
             ],
           ),
@@ -352,7 +352,7 @@ class _TransferSheetState extends ConsumerState<_TransferSheet> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                'Transfer ${CurrencyFormatter.format(amount)} berhasil ✓'),
+                'Transfer ${CurrencyFormatter.format(amount)} berhasil ✓',),
             backgroundColor: AppColors.income,
           ),
         );
@@ -392,12 +392,12 @@ class _TransferSheetState extends ConsumerState<_TransferSheet> {
                 height: 4,
                 decoration: BoxDecoration(
                     color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2)),
+                    borderRadius: BorderRadius.circular(2),),
               ),
             ),
             const SizedBox(height: 20),
             Text('Transfer Antar Dompet',
-                style: Theme.of(context).textTheme.headlineSmall),
+                style: Theme.of(context).textTheme.headlineSmall,),
             const SizedBox(height: 20),
             _WalletDropdown(
               label: 'Dari',
@@ -411,11 +411,11 @@ class _TransferSheetState extends ConsumerState<_TransferSheet> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.arrow_downward_rounded,
-                    color: AppColors.primary, size: 18),
+                    color: AppColors.primary, size: 18,),
               ),
             ),
             const SizedBox(height: 12),
@@ -439,7 +439,7 @@ class _TransferSheetState extends ConsumerState<_TransferSheet> {
               Text(
                 _errorMsg!,
                 style: const TextStyle(
-                    color: AppColors.expense, fontSize: 12),
+                    color: AppColors.expense, fontSize: 12,),
               ),
             ],
             const SizedBox(height: 24),
@@ -452,7 +452,7 @@ class _TransferSheetState extends ConsumerState<_TransferSheet> {
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2),
+                            color: Colors.white, strokeWidth: 2,),
                       )
                     : const Text('Transfer'),
               ),
@@ -495,11 +495,11 @@ class _WalletDropdown extends StatelessWidget {
                       CurrencyFormatter.formatCompact(w.balance),
                       style: const TextStyle(
                           color: AppColors.textSecondary,
-                          fontSize: 12),
+                          fontSize: 12,),
                     ),
                   ],
                 ),
-              ))
+              ),)
           .toList(),
       onChanged: onChanged,
     );

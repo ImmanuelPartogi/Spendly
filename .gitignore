@@ -43,3 +43,23 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# ─── Secrets & Keystores ──────────────────────────────────────────────────────
+# NEVER commit keystores, credentials, or API keys
+*.jks
+*.keystore
+key.properties
+**/key.properties
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Firebase service account keys
+service-account*.json
+*-firebase-adminsdk*.json
+
+# Google services files with keys (use CI/CD injection instead)
+# android/app/google-services.json
+# ios/Runner/GoogleService-Info.plist

@@ -51,7 +51,7 @@ class AnalyticsSummaryRow extends StatelessWidget {
           card: card, bdr: bdr, sec: sec,
         ),
       ),
-    ]);
+    ],);
   }
 }
 
@@ -88,7 +88,7 @@ class _SummaryTile extends StatelessWidget {
             Container(
               width: 30, height: 30,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: color, size: 15),
@@ -97,12 +97,12 @@ class _SummaryTile extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.10),
+                  color: color.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(badge!,
                     style: TextStyle(
-                        fontSize: 9, fontWeight: FontWeight.w700, color: color)),
+                        fontSize: 9, fontWeight: FontWeight.w700, color: color,),),
               ),
           ],
         ),
@@ -118,14 +118,14 @@ class _SummaryTile extends StatelessWidget {
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
                 color: color,
-                letterSpacing: -0.4),
+                letterSpacing: -0.4,),
           ),
         ),
         const SizedBox(height: 2),
         Text(label,
             style: TextStyle(
-                fontSize: 10, color: sec, fontWeight: FontWeight.w500)),
-      ]),
+                fontSize: 10, color: sec, fontWeight: FontWeight.w500,),),
+      ],),
     );
   }
 }

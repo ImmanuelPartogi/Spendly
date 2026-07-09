@@ -47,11 +47,11 @@ class InsightScreen extends ConsumerWidget {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w700)),
+                                  fontWeight: FontWeight.w700,),),
                           Text('Berdasarkan transaksi kamu bulan ini',
                               style: TextStyle(
-                                  color: Colors.white.withOpacity(0.8),
-                                  fontSize: 12)),
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  fontSize: 12,),),
                         ],
                       ),
                     ),
@@ -65,7 +65,7 @@ class InsightScreen extends ConsumerWidget {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: SpendlyCard(
                       color: insight.isWarning
-                          ? AppColors.warning.withOpacity(0.06)
+                          ? AppColors.warning.withValues(alpha: 0.06)
                           : AppColors.card,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,13 +75,13 @@ class InsightScreen extends ConsumerWidget {
                             height: 48,
                             decoration: BoxDecoration(
                               color: insight.isWarning
-                                  ? AppColors.warning.withOpacity(0.12)
-                                  : AppColors.primary.withOpacity(0.08),
+                                  ? AppColors.warning.withValues(alpha: 0.12)
+                                  : AppColors.primary.withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
                               child: Text(insight.emoji,
-                                  style: const TextStyle(fontSize: 22)),
+                                  style: const TextStyle(fontSize: 22),),
                             ),
                           ),
                           const SizedBox(width: 14),
@@ -116,7 +116,7 @@ class InsightScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
-                  )),
+                  ),),
               const SizedBox(height: 80),
             ],
           );

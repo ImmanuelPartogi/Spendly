@@ -47,7 +47,7 @@ class AddRecurringUseCase {
 
   Future<void> call(RecurringEntity entity) => _dao.insertRecurring(
         RecurringsCompanion.insert(
-          id: entity.id.isEmpty ? Uuid().v4() : entity.id,
+          id: entity.id.isEmpty ? const Uuid().v4() : entity.id,
           title: entity.title,
           amount: entity.amount,
           type: entity.type,
@@ -100,7 +100,7 @@ class ToggleRecurringUseCase {
 
 /// Hitung nextDue berikutnya berdasarkan frekuensi.
 DateTime computeNextDue(RecurringFrequency frequency,
-    {required int dayOfMonth, required int dayOfWeek}) {
+    {required int dayOfMonth, required int dayOfWeek,}) {
   final now = DateTime.now();
   if (frequency == RecurringFrequency.monthly) {
     // Cari tanggal bulan ini, jika sudah lewat ambil bulan depan

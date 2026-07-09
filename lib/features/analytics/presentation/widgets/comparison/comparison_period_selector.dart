@@ -44,9 +44,9 @@ class ComparisonPeriodSelector extends StatelessWidget {
                   boxShadow: on
                       ? [
                           BoxShadow(
-                              color: AppColors.primary.withOpacity(0.25),
+                              color: AppColors.primary.withValues(alpha: 0.25),
                               blurRadius: 8,
-                              offset: const Offset(0, 3))
+                              offset: const Offset(0, 3),),
                         ]
                       : null,
                 ),
@@ -55,7 +55,7 @@ class ComparisonPeriodSelector extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 12,
                           fontWeight: on ? FontWeight.w700 : FontWeight.w500,
-                          color: on ? Colors.white : sec)),
+                          color: on ? Colors.white : sec,),),
                 ),
               ),
             ),

@@ -161,9 +161,9 @@ class AppDatabase extends _$AppDatabase {
         if (from < 3) {
           // Transactions: tambah synced + isLocked
           await m.addColumn(
-              transactions, transactions.synced);
+              transactions, transactions.synced,);
           await m.addColumn(
-              transactions, transactions.isLocked);
+              transactions, transactions.isLocked,);
           // Wallets: tambah synced
           await m.addColumn(wallets, wallets.synced);
           // Budgets: tambah synced
@@ -182,7 +182,7 @@ class AppDatabase extends _$AppDatabase {
       type: const Value('cash'),
       colorValue: const Value(0xFF00C48C),
       isDefault: const Value(true),
-    ));
+    ),);
   }
 }
 

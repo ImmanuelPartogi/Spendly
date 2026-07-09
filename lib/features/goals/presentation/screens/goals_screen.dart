@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
@@ -27,10 +26,10 @@ class GoalsScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.error_outline_rounded,
-                  size: 48, color: AppColors.expense),
+                  size: 48, color: AppColors.expense,),
               const SizedBox(height: 12),
               Text('Gagal memuat goals',
-                  style: Theme.of(context).textTheme.bodyLarge),
+                  style: Theme.of(context).textTheme.bodyLarge,),
             ],
           ),
         ),
@@ -43,7 +42,7 @@ class GoalsScreen extends ConsumerWidget {
                   Text('🏆', style: TextStyle(fontSize: 48)),
                   SizedBox(height: 12),
                   Text('Belum ada goals',
-                      style: TextStyle(color: AppColors.textSecondary)),
+                      style: TextStyle(color: AppColors.textSecondary),),
                 ],
               ),
             );
@@ -63,7 +62,7 @@ class GoalsScreen extends ConsumerWidget {
                       onAddFunds: () => _showAddFundsDialog(context, ref, g),
                       onEdit: () => _openAddEdit(context, existing: g),
                       onDelete: () => _confirmDelete(context, ref, g),
-                    )),
+                    ),),
               ],
               if (completed.isNotEmpty) ...[
                 const SizedBox(height: 16),
@@ -74,7 +73,7 @@ class GoalsScreen extends ConsumerWidget {
                       onAddFunds: () {},
                       onEdit: () {},
                       onDelete: () => _confirmDelete(context, ref, g),
-                    )),
+                    ),),
               ],
               const SizedBox(height: 80),
             ],
@@ -90,7 +89,7 @@ class GoalsScreen extends ConsumerWidget {
   }
 
   void _showAddFundsDialog(
-      BuildContext context, WidgetRef ref, GoalEntity goal) {
+      BuildContext context, WidgetRef ref, GoalEntity goal,) {
     final ctrl = TextEditingController();
     showDialog(
       context: context,
@@ -195,11 +194,11 @@ class _GoalCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: goal.isCompleted ? goal.color.withOpacity(0.05) : AppColors.card,
+        color: goal.isCompleted ? goal.color.withValues(alpha: 0.05) : AppColors.card,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color:
-              goal.isCompleted ? goal.color.withOpacity(0.3) : AppColors.border,
+              goal.isCompleted ? goal.color.withValues(alpha: 0.3) : AppColors.border,
           width: goal.isCompleted ? 1.5 : 1,
         ),
       ),
@@ -212,7 +211,7 @@ class _GoalCard extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: goal.color.withOpacity(0.12),
+                  color: goal.color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Center(
@@ -239,7 +238,7 @@ class _GoalCard extends StatelessWidget {
                           const Padding(
                             padding: EdgeInsets.only(left: 6),
                             child: Icon(Icons.check_circle_rounded,
-                                color: AppColors.income, size: 16),
+                                color: AppColors.income, size: 16,),
                           ),
                       ],
                     ),
@@ -271,7 +270,7 @@ class _GoalCard extends StatelessWidget {
                   const PopupMenuItem(
                     value: 'delete',
                     child: Text('Hapus',
-                        style: TextStyle(color: AppColors.expense)),
+                        style: TextStyle(color: AppColors.expense),),
                   ),
                 ],
               ),
@@ -297,7 +296,7 @@ class _GoalCard extends StatelessWidget {
               Text(
                 CurrencyFormatter.format(goal.targetAmount),
                 style: const TextStyle(
-                    fontSize: 12, color: AppColors.textSecondary),
+                    fontSize: 12, color: AppColors.textSecondary,),
               ),
             ],
           ),
@@ -310,7 +309,7 @@ class _GoalCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
               child: LinearProgressIndicator(
                 value: val,
-                backgroundColor: goal.color.withOpacity(0.12),
+                backgroundColor: goal.color.withValues(alpha: 0.12),
                 valueColor: AlwaysStoppedAnimation(goal.color),
                 minHeight: 8,
               ),
@@ -332,7 +331,7 @@ class _GoalCard extends StatelessWidget {
                 Text(
                   'Perlu ${CurrencyFormatter.formatCompact(goal.dailySavingsNeeded)}/hari',
                   style: const TextStyle(
-                      fontSize: 11, color: AppColors.textSecondary),
+                      fontSize: 11, color: AppColors.textSecondary,),
                 ),
             ],
           ),
@@ -349,7 +348,7 @@ class _GoalCard extends StatelessWidget {
                   side: BorderSide(color: goal.color),
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(10),),
                 ),
               ),
             ),
@@ -485,7 +484,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                 height: 4,
                 decoration: BoxDecoration(
                     color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2)),
+                    borderRadius: BorderRadius.circular(2),),
               ),
             ),
             const SizedBox(height: 16),
@@ -510,7 +509,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                     height: 44,
                     decoration: BoxDecoration(
                       color:
-                          isSel ? _color.withOpacity(0.15) : AppColors.surface,
+                          isSel ? _color.withValues(alpha: 0.15) : AppColors.surface,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: isSel ? _color : AppColors.border,
@@ -518,7 +517,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                       ),
                     ),
                     child: Center(
-                        child: Text(e, style: const TextStyle(fontSize: 20))),
+                        child: Text(e, style: const TextStyle(fontSize: 20)),),
                   ),
                 );
               }).toList(),
@@ -529,7 +528,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
             const SizedBox(height: 8),
             Row(
               children: _colors.map((c) {
-                final isSel = c.value == _color.value;
+                final isSel = c.toARGB32() == _color.toARGB32();
                 return GestureDetector(
                   onTap: () => setState(() => _color = c),
                   child: Container(
@@ -586,12 +585,12 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                 child: Row(
                   children: [
                     const Icon(Icons.flag_rounded,
-                        size: 18, color: AppColors.textSecondary),
+                        size: 18, color: AppColors.textSecondary,),
                     const SizedBox(width: 10),
                     Text(
                       'Deadline: ${_deadline.day}/${_deadline.month}/${_deadline.year}',
                       style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600),
+                          fontSize: 14, fontWeight: FontWeight.w600,),
                     ),
                   ],
                 ),
@@ -608,7 +607,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2))
+                            color: Colors.white, strokeWidth: 2,),)
                     : const Text('Simpan Goal'),
               ),
             ),

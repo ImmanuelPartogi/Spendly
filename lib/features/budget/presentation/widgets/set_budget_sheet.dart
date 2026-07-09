@@ -37,7 +37,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
     if (widget.existing != null) {
       _category        = widget.existing!.category;
       _amountCtrl.text = ThousandSeparatorInputFormatter.format(
-          widget.existing!.limitAmount);
+          widget.existing!.limitAmount,);
     }
     _amountCtrl.addListener(() => setState(() {}));
     _amountFocus.addListener(() => setState(() {}));
@@ -54,7 +54,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
     final amount = ThousandSeparatorInputFormatter.parse(_amountCtrl.text);
     if (amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Masukkan jumlah yang valid')));
+          const SnackBar(content: Text('Masukkan jumlah yang valid')),);
       return;
     }
     FocusScope.of(context).unfocus();
@@ -64,7 +64,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
             id: widget.existing?.id,
             category: _category,
             limitAmount: amount,
-          ));
+          ),);
       if (mounted) Navigator.pop(context);
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -90,7 +90,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.5 : 0.12),
+            color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.12),
             blurRadius: 32,
             offset: const Offset(0, -4),
           ),
@@ -127,7 +127,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                       borderRadius: BorderRadius.circular(11),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.28),
+                          color: AppColors.primary.withValues(alpha: 0.28),
                           blurRadius: 8,
                           offset: const Offset(0, 3),
                         ),
@@ -177,7 +177,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                           Icon(Icons.close_rounded, color: txtSec, size: 16),
                     ),
                   ),
-                ]),
+                ],),
               ),
               const SizedBox(height: 20),
 
@@ -192,23 +192,23 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 18, vertical: 4),
+                          horizontal: 18, vertical: 4,),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? selColor.withOpacity(0.06)
-                            : selColor.withOpacity(0.05),
+                            ? selColor.withValues(alpha: 0.06)
+                            : selColor.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: _amountFocus.hasFocus
-                              ? selColor.withOpacity(0.6)
-                              : selColor.withOpacity(0.22),
+                              ? selColor.withValues(alpha: 0.6)
+                              : selColor.withValues(alpha: 0.22),
                           width: _amountFocus.hasFocus ? 1.5 : 1,
                         ),
                         boxShadow: _amountFocus.hasFocus
                             ? [
                                 BoxShadow(
-                                    color: selColor.withOpacity(0.12),
-                                    blurRadius: 14),
+                                    color: selColor.withValues(alpha: 0.12),
+                                    blurRadius: 14,),
                               ]
                             : null,
                       ),
@@ -229,7 +229,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                             focusNode: _amountFocus,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              ThousandSeparatorInputFormatter()
+                              ThousandSeparatorInputFormatter(),
                             ],
                             style: TextStyle(
                               fontSize: 28,
@@ -245,10 +245,10 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                               hintStyle: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w800,
-                                color: selColor.withOpacity(0.25),
+                                color: selColor.withValues(alpha: 0.25),
                               ),
                               contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 12),
+                                  vertical: 12,),
                               fillColor: Colors.transparent,
                               filled: false,
                             ),
@@ -258,21 +258,21 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                         if (_amountCtrl.text.isNotEmpty)
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 3),
+                                horizontal: 8, vertical: 3,),
                             decoration: BoxDecoration(
-                              color: selColor.withOpacity(0.12),
+                              color: selColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
                               CurrencyFormatter.formatCompact(parsedAmt),
                               style: TextStyle(
                                 fontSize: 10.5,
-                                color: selColor.withOpacity(0.8),
+                                color: selColor.withValues(alpha: 0.8),
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
-                      ]),
+                      ],),
                     ),
                   ],
                 ),
@@ -308,23 +308,23 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                             duration: kDurationFast,
                             curve: kCurveDefault,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 6),
+                                horizontal: 8, vertical: 6,),
                             decoration: BoxDecoration(
                               color: selected
-                                  ? catColor.withOpacity(
-                                      isDark ? 0.18 : 0.12)
+                                  ? catColor.withValues(alpha: 
+                                      isDark ? 0.18 : 0.12,)
                                   : surfColor,
                               borderRadius: BorderRadius.circular(11),
                               border: Border.all(
                                 color: selected
-                                    ? catColor.withOpacity(0.55)
+                                    ? catColor.withValues(alpha: 0.55)
                                     : bdrColor,
                                 width: selected ? 1.5 : 1,
                               ),
                               boxShadow: selected
                                   ? [
                                       BoxShadow(
-                                        color: catColor.withOpacity(0.18),
+                                        color: catColor.withValues(alpha: 0.18),
                                         blurRadius: 8,
                                         offset: const Offset(0, 2),
                                       ),
@@ -372,14 +372,14 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                     ? Container(
                         height: 52,
                         decoration: BoxDecoration(
-                          color: selColor.withOpacity(0.6),
+                          color: selColor.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: const Center(
                           child: SizedBox(
                             width: 22, height: 22,
                             child: CircularProgressIndicator(
-                                color: Colors.white, strokeWidth: 2.5),
+                                color: Colors.white, strokeWidth: 2.5,),
                           ),
                         ),
                       )
@@ -399,7 +399,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [
                               BoxShadow(
-                                color: selColor.withOpacity(0.35),
+                                color: selColor.withValues(alpha: 0.35),
                                 blurRadius: 18,
                                 offset: const Offset(0, 6),
                               ),

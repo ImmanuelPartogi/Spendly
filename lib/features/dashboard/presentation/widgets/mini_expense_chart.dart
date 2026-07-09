@@ -121,7 +121,7 @@ class _MiniExpenseChartState extends ConsumerState<MiniExpenseChart>
                       children: [
                         TextSpan(
                           text: CurrencyFormatter.formatCompact(
-                              weekdayTotals[weekday] ?? 0),
+                              weekdayTotals[weekday] ?? 0,),
                           style: TextStyle(
                             color: isDark
                                 ? AppColors.textPrimaryDark
@@ -170,11 +170,11 @@ class _MiniExpenseChartState extends ConsumerState<MiniExpenseChart>
                   ),
                 ),
                 leftTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
                 topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
                 rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),),
               ),
               gridData: FlGridData(
                 show: true,
@@ -182,8 +182,8 @@ class _MiniExpenseChartState extends ConsumerState<MiniExpenseChart>
                 horizontalInterval: maxVal / 2,
                 getDrawingHorizontalLine: (_) => FlLine(
                   color: isDark
-                      ? AppColors.borderDark.withOpacity(0.5)
-                      : AppColors.border.withOpacity(0.7),
+                      ? AppColors.borderDark.withValues(alpha: 0.5)
+                      : AppColors.border.withValues(alpha: 0.7),
                   strokeWidth: 0.5,
                   dashArray: [4, 4],
                 ),
@@ -206,8 +206,8 @@ class _MiniExpenseChartState extends ConsumerState<MiniExpenseChart>
                   barColor = AppColors.primaryLight;
                 } else {
                   barColor = isDark
-                      ? AppColors.primary.withOpacity(0.18)
-                      : AppColors.primary.withOpacity(0.14);
+                      ? AppColors.primary.withValues(alpha: 0.18)
+                      : AppColors.primary.withValues(alpha: 0.14);
                 }
 
                 return BarChartGroupData(
@@ -218,7 +218,7 @@ class _MiniExpenseChartState extends ConsumerState<MiniExpenseChart>
                       color: barColor,
                       width: 18,
                       borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(7)),
+                          top: Radius.circular(7),),
                     ),
                   ],
                 );
@@ -258,7 +258,7 @@ class _ChartSkeleton extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: base,
                   borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(7)),
+                      top: Radius.circular(7),),
                 ),
               ),
             )

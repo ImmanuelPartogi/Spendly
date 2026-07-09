@@ -36,9 +36,9 @@ class TransactionsScreen extends ConsumerWidget {
           context: context,
           sliver: SliverPadding(
             padding: EdgeInsets.fromLTRB(16, 8, 16, _kBottomPad + safeBottom),
-            sliver: SliverToBoxAdapter(
+            sliver: const SliverToBoxAdapter(
               child: SpendlyCard(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: EdgeInsets.symmetric(vertical: 4),
                 child: TransactionListShimmer(count: 6),
               ),
             ),
@@ -103,10 +103,10 @@ class TransactionsScreen extends ConsumerWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => TransactionDetailScreen(
-                                        transaction: e.value),
+                                        transaction: e.value,),
                                   ),
                                 ),
-                              ))
+                              ),)
                           .toList(),
                     ),
                   ),
@@ -128,7 +128,7 @@ class TransactionsScreen extends ConsumerWidget {
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.35),
+                  color: AppColors.primary.withValues(alpha: 0.35),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                   spreadRadius: -4,
@@ -226,14 +226,14 @@ class _TransactionsAppBar extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: txtSec)),
+                              color: txtSec,),),
                       Text('Transaksi',
                           style: TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.w800,
                               color: txtPrim,
                               letterSpacing: -0.8,
-                              height: 1.1)),
+                              height: 1.1,),),
                     ],
                   ),
                 ),
@@ -252,7 +252,7 @@ class _TransactionsAppBar extends StatelessWidget {
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: txtPrim,
-                        letterSpacing: -0.6)),
+                        letterSpacing: -0.6,),),
               ),
             ),
           ),
@@ -276,8 +276,8 @@ class _TransactionsAppBar extends StatelessWidget {
               ),
             ),
           ),
-        ]);
-      }),
+        ],);
+      },),
     );
   }
 }

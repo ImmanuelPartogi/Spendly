@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart'; // ← tambah ini
-import 'package:spendly/core/providers.dart';
+import 'core/providers.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
@@ -60,20 +60,22 @@ void main() async {
         await restore.restoreFromFirebase().timeout(
           const Duration(seconds: 5),
           onTimeout: () {
-            debugPrint('[Main] Restore timeout — lanjut pakai cache');
+            debugPrint('[Main] Restore timeout — continuing with local cache');
           },
         );
-        debugPrint('[Main] Restore complete for uid=${user.uid}');
+        debugPrint('[Main] Restore complete for new user session');
       } catch (e) {
         debugPrint('[Main] Restore error: $e');
       }
       _container.read(restoreReadyProvider.notifier).state = true;
     } else {
-      // Uid sama (app restart / reconnect) — tidak perlu full restore
+      // Same UID (app restart / reconnect) — no full restore needed
       _container.read(restoreReadyProvider.notifier).state = true;
       try {
         await restore.recalculateBalances();
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('[Main] Balance recalculation error: $e');
+      }
     }
   });
 
@@ -91,7 +93,7 @@ void main() async {
   runApp(UncontrolledProviderScope(
     container: _container,
     child: const SpendlyApp(),
-  ));
+  ),);
 }
 
 class SpendlyApp extends ConsumerWidget {

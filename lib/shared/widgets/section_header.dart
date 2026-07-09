@@ -41,7 +41,7 @@ class SectionHeader extends StatelessWidget {
         ?? (isDark ? AppColors.textPrimaryDark : AppColors.textPrimary);
     final txtSec   = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
-    Widget titleWidget = Row(
+    final Widget titleWidget = Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

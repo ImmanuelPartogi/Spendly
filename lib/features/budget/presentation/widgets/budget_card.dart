@@ -55,7 +55,7 @@ class BudgetCard extends StatelessWidget {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(isDark ? 0.16 : 0.10),
+                  color: color.withValues(alpha: isDark ? 0.16 : 0.10),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(icon, color: color, size: 21),
@@ -71,14 +71,14 @@ class BudgetCard extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           color: txtPrim,
                           letterSpacing: -0.2,
-                        )),
+                        ),),
                     const SizedBox(height: 3),
                     Row(children: [
                       Container(
                         width: 6,
                         height: 6,
                         decoration: BoxDecoration(
-                            color: progressColor, shape: BoxShape.circle),
+                            color: progressColor, shape: BoxShape.circle,),
                       ),
                       const SizedBox(width: 5),
                       Text(pctLabel,
@@ -90,8 +90,8 @@ class BudgetCard extends StatelessWidget {
                                 : budget.isWarning
                                     ? AppColors.warning
                                     : txtSec,
-                          )),
-                    ]),
+                          ),),
+                    ],),
                   ],
                 ),
               ),
@@ -106,40 +106,40 @@ class BudgetCard extends StatelessWidget {
                   color: isDark ? AppColors.cardDark : AppColors.card,
                   offset: const Offset(0, 8),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),),
                   elevation: 6,
                   itemBuilder: (_) => [
                     PopupMenuItem(
                       value: 'edit',
                       height: 40,
                       child: Row(children: [
-                        Icon(Icons.edit_rounded,
-                            size: 15, color: AppColors.primary),
+                        const Icon(Icons.edit_rounded,
+                            size: 15, color: AppColors.primary,),
                         const SizedBox(width: 8),
                         Text('Edit',
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: txtPrim)),
-                      ]),
+                                color: txtPrim,),),
+                      ],),
                     ),
                     const PopupMenuItem(
                       value: 'delete',
                       height: 40,
                       child: Row(children: [
                         Icon(Icons.delete_outline_rounded,
-                            size: 15, color: AppColors.error),
+                            size: 15, color: AppColors.error,),
                         SizedBox(width: 8),
                         Text('Hapus',
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.error)),
-                      ]),
+                                color: AppColors.error,),),
+                      ],),
                     ),
                   ],
                   icon: Icon(Icons.more_vert_rounded,
-                      color: txtHint, size: 18),
+                      color: txtHint, size: 18,),
                   padding: EdgeInsets.zero,
                 ),
               ),
@@ -171,7 +171,7 @@ class BudgetCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(100),
                     boxShadow: [
                       BoxShadow(
-                        color: progressColor.withOpacity(0.35),
+                        color: progressColor.withValues(alpha: 0.35),
                         blurRadius: 6,
                         offset: const Offset(0, 2),
                       ),
@@ -180,7 +180,7 @@ class BudgetCard extends StatelessWidget {
                 ),
               ),
             ),
-          ]),
+          ],),
 
           const SizedBox(height: 11),
 
@@ -192,7 +192,7 @@ class BudgetCard extends StatelessWidget {
                       fontSize: 10,
                       color: txtHint,
                       fontWeight: FontWeight.w500,
-                      letterSpacing: 0.1)),
+                      letterSpacing: 0.1,),),
               const SizedBox(height: 1),
               Text(
                 CurrencyFormatter.formatCompact(budget.spent),
@@ -203,13 +203,13 @@ class BudgetCard extends StatelessWidget {
                   letterSpacing: -0.2,
                 ),
               ),
-            ]),
+            ],),
             const Spacer(),
             Container(
               padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: progressColor.withOpacity(isDark ? 0.15 : 0.10),
+                color: progressColor.withValues(alpha: isDark ? 0.15 : 0.10),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -228,7 +228,7 @@ class BudgetCard extends StatelessWidget {
                       fontSize: 10,
                       color: txtHint,
                       fontWeight: FontWeight.w500,
-                      letterSpacing: 0.1)),
+                      letterSpacing: 0.1,),),
               const SizedBox(height: 1),
               Text(
                 CurrencyFormatter.formatCompact(budget.limitAmount),
@@ -239,8 +239,8 @@ class BudgetCard extends StatelessWidget {
                   letterSpacing: -0.2,
                 ),
               ),
-            ]),
-          ]),
+            ],),
+          ],),
 
           // ── Warning banner ───────────────────────────────────────────────
           if (budget.isExceeded || budget.isWarning) ...[
@@ -250,10 +250,10 @@ class BudgetCard extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: progressColor.withOpacity(isDark ? 0.12 : 0.08),
+                color: progressColor.withValues(alpha: isDark ? 0.12 : 0.08),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                    color: progressColor.withOpacity(0.20), width: 1),
+                    color: progressColor.withValues(alpha: 0.20), width: 1,),
               ),
               child: Row(children: [
                 Icon(
@@ -276,7 +276,7 @@ class BudgetCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              ]),
+              ],),
             ),
           ],
         ],

@@ -257,7 +257,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: _isLoading
-                  ? SizedBox(
+                  ? const SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
@@ -269,13 +269,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                       onTap: _save,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
+                            horizontal: 16, vertical: 8,),
                         decoration: BoxDecoration(
                           gradient: AppColors.primaryGradient,
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.28),
+                              color: AppColors.primary.withValues(alpha: 0.28),
                               blurRadius: 10,
                               offset: const Offset(0, 3),
                             ),
@@ -341,14 +341,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
                     color: isFocused
-                        ? AppColors.primary.withOpacity(0.55)
+                        ? AppColors.primary.withValues(alpha: 0.55)
                         : bdrColor,
                     width: isFocused ? 1.5 : 1,
                   ),
                   boxShadow: isFocused
                       ? [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(0.09),
+                            color: AppColors.primary.withValues(alpha: 0.09),
                             blurRadius: 12,
                           ),
                         ]
@@ -377,7 +377,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 14),
+                        horizontal: 14, vertical: 14,),
                     fillColor: Colors.transparent,
                     filled: false,
                     isDense: true,
@@ -410,9 +410,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                               ? LinearGradient(
                                   colors: [
                                     AppColors.primary
-                                        .withOpacity(isDark ? 0.22 : 0.14),
+                                        .withValues(alpha: isDark ? 0.22 : 0.14),
                                     AppColors.accentPurple
-                                        .withOpacity(isDark ? 0.14 : 0.08),
+                                        .withValues(alpha: isDark ? 0.14 : 0.08),
                                   ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
@@ -422,7 +422,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: sel
-                                ? AppColors.primary.withOpacity(0.55)
+                                ? AppColors.primary.withValues(alpha: 0.55)
                                 : bdrColor,
                             width: sel ? 1.5 : 1,
                           ),
@@ -483,12 +483,12 @@ class _EditableAvatar extends StatelessWidget {
                 : null,
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppColors.primary.withOpacity(0.50),
+              color: AppColors.primary.withValues(alpha: 0.50),
               width: 2.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.25),
+                color: AppColors.primary.withValues(alpha: 0.25),
                 blurRadius: 20,
                 offset: const Offset(0, 6),
                 spreadRadius: -2,
@@ -518,7 +518,7 @@ class _EditableAvatar extends StatelessWidget {
               border: Border.all(color: bgColor, width: 2.5),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.35),
+                  color: AppColors.primary.withValues(alpha: 0.35),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -584,7 +584,7 @@ class _BottomSheetTile extends StatelessWidget {
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: iconColor.withOpacity(isDark ? 0.15 : 0.10),
+          color: iconColor.withValues(alpha: isDark ? 0.15 : 0.10),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(child: Icon(icon, size: 17, color: iconColor)),
@@ -638,18 +638,18 @@ class _SaveButtonState extends State<_SaveButton> {
                     colors: [
                       AppColors.primary,
                       Color.lerp(
-                          AppColors.primary, AppColors.accentPurple, 0.4)!,
+                          AppColors.primary, AppColors.accentPurple, 0.4,)!,
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-            color: widget.isLoading ? AppColors.primary.withOpacity(0.5) : null,
+            color: widget.isLoading ? AppColors.primary.withValues(alpha: 0.5) : null,
             borderRadius: BorderRadius.circular(14),
             boxShadow: widget.isLoading
                 ? null
                 : [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.36),
+                      color: AppColors.primary.withValues(alpha: 0.36),
                       blurRadius: 18,
                       offset: const Offset(0, 6),
                       spreadRadius: -2,

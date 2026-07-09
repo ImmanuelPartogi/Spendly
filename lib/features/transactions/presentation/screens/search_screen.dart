@@ -64,12 +64,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
   }
 
   List<TransactionEntity> _filter(List<TransactionEntity> all) {
-    var result = all.where((tx) {
+    final result = all.where((tx) {
       if (_query.isNotEmpty) {
         final q = _query.toLowerCase();
         if (!tx.category.toLowerCase().contains(q) &&
             !(tx.note?.toLowerCase().contains(q) ?? false) &&
-            !tx.amount.toString().contains(q)) return false;
+            !tx.amount.toString().contains(q)) {
+          return false;
+        }
       }
       if (_typeFilter == 'expense' && !tx.isExpense) return false;
       if (_typeFilter == 'income'  &&  tx.isExpense) return false;
@@ -95,7 +97,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
     final bgColor   = isDark ? AppColors.backgroundDark : AppColors.background;
     final surfColor = isDark ? AppColors.surfaceDark    : AppColors.surface;
     final bdrColor  = isDark ? AppColors.borderDark     : AppColors.border;
-    final cardColor = isDark ? AppColors.cardDark       : AppColors.card;
     final txtPrim   = isDark ? AppColors.textPrimaryDark   : AppColors.textPrimary;
     final txtSec    = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
     final txtHint   = isDark ? AppColors.textHintDark      : AppColors.textHint;
@@ -177,14 +178,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                 loading: () => ShimmerScope(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 4),
+                        horizontal: 16, vertical: 4,),
                     itemCount: 8,
                     itemBuilder: (_, __) => const _TileShimmer(),
                   ),
                 ),
                 error: (e, _) => Center(
                   child: Text('Terjadi kesalahan: $e',
-                      style: TextStyle(color: txtSec)),
+                      style: TextStyle(color: txtSec),),
                 ),
                 data: (all) {
                   final results = _filter(all);
@@ -197,7 +198,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
 
                   if (results.isEmpty) {
                     return _NoResults(
-                        query: _query, isDark: isDark);
+                        query: _query, isDark: isDark,);
                   }
 
                   return Column(
@@ -214,7 +215,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                       Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.fromLTRB(
-                              0, 0, 0, 100),
+                              0, 0, 0, 100,),
                           physics: const BouncingScrollPhysics(),
                           itemCount: results.length,
                           itemBuilder: (_, i) => _SearchTile(
@@ -227,7 +228,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                               MaterialPageRoute(
                                 builder: (_) =>
                                     TransactionDetailScreen(
-                                        transaction: results[i]),
+                                        transaction: results[i],),
                               ),
                             ),
                           ),
@@ -313,14 +314,14 @@ class _SearchHeader extends StatelessWidget {
                 borderRadius: BorderRadius.circular(13),
                 border: Border.all(
                   color: isFocused
-                      ? AppColors.primary.withOpacity(0.55)
+                      ? AppColors.primary.withValues(alpha: 0.55)
                       : bdrColor,
                   width: isFocused ? 1.5 : 1,
                 ),
                 boxShadow: isFocused
                     ? [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.08),
+                          color: AppColors.primary.withValues(alpha: 0.08),
                           blurRadius: 12,
                         ),
                       ]
@@ -457,9 +458,9 @@ class _AmountBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.10),
+        color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.20)),
+        border: Border.all(color: color.withValues(alpha: 0.20)),
       ),
       child: Text(
         '${isExpense ? '−' : '+'} ${CurrencyFormatter.formatCompact(amount)}',
@@ -506,11 +507,11 @@ class _SearchTile extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            splashColor: catColor.withOpacity(0.04),
-            highlightColor: catColor.withOpacity(0.02),
+            splashColor: catColor.withValues(alpha: 0.04),
+            highlightColor: catColor.withValues(alpha: 0.02),
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 12),
+                  horizontal: 16, vertical: 12,),
               child: Row(
                 children: [
                   // Category icon
@@ -520,15 +521,15 @@ class _SearchTile extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          catColor.withOpacity(isDark ? 0.20 : 0.14),
-                          catColor.withOpacity(isDark ? 0.10 : 0.07),
+                          catColor.withValues(alpha: isDark ? 0.20 : 0.14),
+                          catColor.withValues(alpha: isDark ? 0.10 : 0.07),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(13),
                       border: Border.all(
-                        color: catColor.withOpacity(isDark ? 0.20 : 0.12),
+                        color: catColor.withValues(alpha: isDark ? 0.20 : 0.12),
                         width: 1,
                       ),
                     ),
@@ -556,7 +557,7 @@ class _SearchTile extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                             color: AppColors.primary,
                             backgroundColor:
-                                AppColors.primary.withOpacity(0.10),
+                                AppColors.primary.withValues(alpha: 0.10),
                           ),
                         ),
                         const SizedBox(height: 3),
@@ -582,10 +583,10 @@ class _SearchTile extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 9, vertical: 4),
+                            horizontal: 9, vertical: 4,),
                         decoration: BoxDecoration(
-                          color: amountColor.withOpacity(
-                              isDark ? 0.14 : 0.09),
+                          color: amountColor.withValues(alpha: 
+                              isDark ? 0.14 : 0.09,),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -603,7 +604,7 @@ class _SearchTile extends StatelessWidget {
                         DateFormatter.formatDayMonth(tx.date),
                         style: TextStyle(
                           fontSize: 10.5,
-                          color: txtSec.withOpacity(0.7),
+                          color: txtSec.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -654,10 +655,10 @@ class _TypeChip extends StatelessWidget {
         duration: kDurationFast,
         padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
         decoration: BoxDecoration(
-          color: isSelected ? activeColor.withOpacity(0.10) : surfColor,
+          color: isSelected ? activeColor.withValues(alpha: 0.10) : surfColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? activeColor.withOpacity(0.5) : bdrColor,
+            color: isSelected ? activeColor.withValues(alpha: 0.5) : bdrColor,
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -718,7 +719,7 @@ class _SortButton extends StatelessWidget {
               isDark ? AppColors.backgroundDark : AppColors.background,
           shape: const RoundedRectangleBorder(
               borderRadius:
-                  BorderRadius.vertical(top: Radius.circular(22))),
+                  BorderRadius.vertical(top: Radius.circular(22)),),
           builder: (_) => Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
             child: Column(
@@ -767,7 +768,7 @@ class _SortButton extends StatelessWidget {
                               width: 24,
                               height: 24,
                               decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.12),
+                                color: AppColors.primary.withValues(alpha: 0.12),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
@@ -778,7 +779,7 @@ class _SortButton extends StatelessWidget {
                             )
                           : null,
                       onTap: () => Navigator.pop(context, s),
-                    )),
+                    ),),
               ],
             ),
           ),
@@ -807,7 +808,7 @@ class _SortButton extends StatelessWidget {
             ),
             const SizedBox(width: 2),
             Icon(Icons.keyboard_arrow_down_rounded,
-                size: 14, color: txtSec),
+                size: 14, color: txtSec,),
           ],
         ),
       ),
@@ -834,7 +835,7 @@ class _HighlightText extends StatelessWidget {
       return Text(text,
           style: baseStyle,
           overflow: TextOverflow.ellipsis,
-          maxLines: 1);
+          maxLines: 1,);
     }
     final lower  = text.toLowerCase();
     final qLower = query.toLowerCase();
@@ -843,7 +844,7 @@ class _HighlightText extends StatelessWidget {
       return Text(text,
           style: baseStyle,
           overflow: TextOverflow.ellipsis,
-          maxLines: 1);
+          maxLines: 1,);
     }
     return RichText(
       maxLines: 1,
@@ -860,7 +861,7 @@ class _HighlightText extends StatelessWidget {
             text: text.substring(idx + query.length),
             style: baseStyle,
           ),
-      ]),
+      ],),
     );
   }
 }
@@ -889,17 +890,17 @@ class _EmptyHint extends StatelessWidget {
             height: 72,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primary.withOpacity(0.09),
+              color: AppColors.primary.withValues(alpha: 0.09),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.10),
+                  color: AppColors.primary.withValues(alpha: 0.10),
                   blurRadius: 24,
                   spreadRadius: 2,
                 ),
               ],
             ),
             child: const Icon(Icons.search_rounded,
-                size: 32, color: AppColors.primary),
+                size: 32, color: AppColors.primary,),
           ),
           const SizedBox(height: 18),
           Text(
@@ -950,7 +951,7 @@ class _NoResults extends StatelessWidget {
             height: 72,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.textHint.withOpacity(0.10),
+              color: AppColors.textHint.withValues(alpha: 0.10),
             ),
             child: Icon(
               Icons.search_off_rounded,
@@ -998,18 +999,18 @@ class _TileShimmer extends StatelessWidget {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: [
               ShimmerBox(width: 44, height: 44, borderRadius: 13),
-              const SizedBox(width: 13),
+              SizedBox(width: 13),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ShimmerBox(width: 110, height: 12, borderRadius: 6),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     ShimmerBox(width: 72, height: 10, borderRadius: 5),
                   ],
                 ),
@@ -1018,7 +1019,7 @@ class _TileShimmer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   ShimmerBox(width: 76, height: 26, borderRadius: 8),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   ShimmerBox(width: 36, height: 10, borderRadius: 5),
                 ],
               ),

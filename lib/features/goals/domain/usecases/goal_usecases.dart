@@ -42,13 +42,13 @@ class AddGoalUseCase {
 
   Future<void> call(GoalEntity entity) => _dao.insertGoal(
         GoalsCompanion(
-          id: Value(entity.id.isEmpty ? Uuid().v4() : entity.id),
+          id: Value(entity.id.isEmpty ? const Uuid().v4() : entity.id),
           title: Value(entity.title),
           emoji: Value(entity.emoji),
           targetAmount: Value(entity.targetAmount),
           currentAmount: Value(entity.currentAmount),
           deadline: Value(entity.deadline),
-          colorValue: Value(entity.color.value),
+          colorValue: Value(entity.color.toARGB32()),
           isCompleted: Value(entity.isCompleted),
         ),
       );
@@ -66,7 +66,7 @@ class UpdateGoalUseCase {
           targetAmount: Value(entity.targetAmount),
           currentAmount: Value(entity.currentAmount),
           deadline: Value(entity.deadline),
-          colorValue: Value(entity.color.value),
+          colorValue: Value(entity.color.toARGB32()),
           isCompleted: Value(entity.isCompleted),
         ),
       );

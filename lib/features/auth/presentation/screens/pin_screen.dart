@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -35,7 +37,6 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
   late final Animation<double>         _entranceFade;
   late final Animation<Offset>         _entranceSlide;
   late final AnimationController       _successCtrl;
-  late final Animation<double>         _successScale;
   late final List<AnimationController> _dotCtrls;
   late final List<Animation<double>>   _dotScales;
 
@@ -46,7 +47,7 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
     super.initState();
 
     _shakeCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 480));
+        vsync: this, duration: const Duration(milliseconds: 480),);
     _shakeAnim = TweenSequence<double>([
       TweenSequenceItem(tween: Tween(begin: 0.0,   end: -12.0), weight: 1),
       TweenSequenceItem(tween: Tween(begin: -12.0, end:  12.0), weight: 2),
@@ -56,24 +57,22 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
     ]).animate(CurvedAnimation(parent: _shakeCtrl, curve: Curves.easeInOut));
 
     _entranceCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 700));
+        vsync: this, duration: const Duration(milliseconds: 700),);
     _entranceFade  = CurvedAnimation(
-        parent: _entranceCtrl, curve: const Interval(0, 0.75, curve: Curves.easeOut));
+        parent: _entranceCtrl, curve: const Interval(0, 0.75, curve: Curves.easeOut),);
     _entranceSlide = Tween<Offset>(
-        begin: const Offset(0, 0.04), end: Offset.zero)
+        begin: const Offset(0, 0.04), end: Offset.zero,)
         .animate(CurvedAnimation(
             parent: _entranceCtrl,
-            curve: const Interval(0, 0.75, curve: Curves.easeOutCubic)));
+            curve: const Interval(0, 0.75, curve: Curves.easeOutCubic),),);
 
     _successCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 250));
-    _successScale = Tween<double>(begin: 1.0, end: 1.08)
-        .animate(CurvedAnimation(parent: _successCtrl, curve: Curves.easeOut));
+        vsync: this, duration: const Duration(milliseconds: 250),);
 
     _dotCtrls = List.generate(
       _pinLength,
       (_) => AnimationController(
-          vsync: this, duration: const Duration(milliseconds: 220)),
+          vsync: this, duration: const Duration(milliseconds: 220),),
     );
     _dotScales = List.generate(_pinLength, (i) {
       return Tween<double>(begin: 0.4, end: 1.0).animate(
@@ -89,15 +88,17 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
     _shakeCtrl.dispose();
     _entranceCtrl.dispose();
     _successCtrl.dispose();
-    for (final c in _dotCtrls) c.dispose();
+    for (final c in _dotCtrls) {
+      c.dispose();
+    }
     super.dispose();
   }
 
   Future<void> _onKey(String key) async {
     if (key == 'del') {
       if (_pin.isNotEmpty) {
-        _dotCtrls[_pin.length - 1].reverse();
-        HapticFeedback.lightImpact();
+        unawaited(_dotCtrls[_pin.length - 1].reverse());
+        unawaited(HapticFeedback.lightImpact());
         setState(() { _pin = _pin.substring(0, _pin.length - 1); _errorMsg = null; });
       }
       return;
@@ -105,8 +106,8 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
 
     if (_pin.length >= _pinLength) return;
 
-    HapticFeedback.lightImpact();
-    _dotCtrls[_pin.length].forward(from: 0);
+    unawaited(HapticFeedback.lightImpact());
+    unawaited(_dotCtrls[_pin.length].forward(from: 0));
     final newPin = _pin + key;
     setState(() => _pin = newPin);
 
@@ -119,12 +120,14 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
   Future<void> _processPin(String pin) async {
     if (widget.mode == PinScreenMode.setup) {
       if (_firstPin == null) {
-        HapticFeedback.mediumImpact();
+        unawaited(HapticFeedback.mediumImpact());
         setState(() { _firstPin = pin; _pin = ''; _errorMsg = null; });
-        for (final c in _dotCtrls) c.reverse();
+        for (final c in _dotCtrls) {
+          unawaited(c.reverse());
+        }
       } else {
         if (_firstPin == pin) {
-          HapticFeedback.heavyImpact();
+          unawaited(HapticFeedback.heavyImpact());
           await AuthService.setPin(pin);
           widget.onSuccess?.call();
         } else {
@@ -136,7 +139,7 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
       setState(() => _isVerifying = true);
       final ok = await AuthService.verifyPin(pin);
       if (ok) {
-        HapticFeedback.heavyImpact();
+        unawaited(HapticFeedback.heavyImpact());
         widget.onSuccess?.call();
       } else {
         await _triggerError('PIN salah, coba lagi');
@@ -146,11 +149,13 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _triggerError(String msg) async {
-    HapticFeedback.vibrate();
+    unawaited(HapticFeedback.vibrate());
     await _shakeCtrl.forward(from: 0);
     if (mounted) {
       setState(() { _pin = ''; _errorMsg = msg; });
-      for (final c in _dotCtrls) c.reverse();
+      for (final c in _dotCtrls) {
+        unawaited(c.reverse());
+      }
     }
   }
 
@@ -216,7 +221,7 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
                 AnimatedBuilder(
                   animation: _shakeAnim,
                   builder: (_, child) => Transform.translate(
-                      offset: Offset(_shakeAnim.value, 0), child: child),
+                      offset: Offset(_shakeAnim.value, 0), child: child,),
                   child: _PinDotsRow(
                     filledCount: _pin.length,
                     pinLength: _pinLength,
@@ -245,7 +250,7 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
                       child: _errorMsg != null
                           ? _PinErrorPill(
                               key: ValueKey(_errorMsg),
-                              message: _errorMsg!)
+                              message: _errorMsg!,)
                           : const SizedBox.shrink(key: ValueKey('none')),
                     ),
                   ),
@@ -273,18 +278,18 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? AppColors.primary.withOpacity(0.10)
-                            : AppColors.primary.withOpacity(0.07),
+                            ? AppColors.primary.withValues(alpha: 0.10)
+                            : AppColors.primary.withValues(alpha: 0.07),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: AppColors.primary.withOpacity(0.18),
+                          color: AppColors.primary.withValues(alpha: 0.18),
                         ),
                       ),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Icon(Icons.lock_reset_rounded,
-                            size: 13, color: AppColors.primary.withOpacity(0.8)),
+                            size: 13, color: AppColors.primary.withValues(alpha: 0.8),),
                         const SizedBox(width: 6),
-                        Text(
+                        const Text(
                           'Lupa PIN? Gunakan password',
                           style: TextStyle(
                             fontSize: 13,
@@ -293,17 +298,17 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
                             letterSpacing: -0.1,
                           ),
                         ),
-                      ]),
+                      ],),
                     ),
                   ),
                 ],
 
                 const SizedBox(height: 36),
-              ]),
+              ],),
             ),
           ),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -326,9 +331,9 @@ class _PinBackground extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: RadialGradient(colors: [
-              AppColors.primary.withOpacity(isDark ? 0.11 : 0.09),
+              AppColors.primary.withValues(alpha: isDark ? 0.11 : 0.09),
               Colors.transparent,
-            ]),
+            ],),
           ),
         ),
       ),
@@ -339,15 +344,15 @@ class _PinBackground extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: RadialGradient(colors: [
-              AppColors.accentPurple.withOpacity(isDark ? 0.09 : 0.06),
+              AppColors.accentPurple.withValues(alpha: isDark ? 0.09 : 0.06),
               Colors.transparent,
-            ]),
+            ],),
           ),
         ),
       ),
       if (!isDark)
         Positioned.fill(child: CustomPaint(painter: _PinDotGrid())),
-    ]));
+    ],),);
   }
 }
 
@@ -355,7 +360,7 @@ class _PinDotGrid extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.primary.withOpacity(0.038)
+      ..color = AppColors.primary.withValues(alpha: 0.038)
       ..style = PaintingStyle.fill;
     const spacing = 26.0;
     for (double x = 0; x < size.width; x += spacing) {
@@ -391,7 +396,7 @@ class _TopBackButton extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
               blurRadius: 8, offset: const Offset(0, 2),
             ),
           ],
@@ -419,13 +424,13 @@ class _SetupStepBadge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: isConfirm
-              ? AppColors.income.withOpacity(0.10)
-              : AppColors.primary.withOpacity(0.08),
+              ? AppColors.income.withValues(alpha: 0.10)
+              : AppColors.primary.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isConfirm
-                ? AppColors.income.withOpacity(0.25)
-                : AppColors.primary.withOpacity(0.18),
+                ? AppColors.income.withValues(alpha: 0.25)
+                : AppColors.primary.withValues(alpha: 0.18),
           ),
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -433,8 +438,8 @@ class _SetupStepBadge extends StatelessWidget {
             width: 16, height: 16,
             decoration: BoxDecoration(
               color: isConfirm
-                  ? AppColors.income.withOpacity(0.15)
-                  : AppColors.primary.withOpacity(0.12),
+                  ? AppColors.income.withValues(alpha: 0.15)
+                  : AppColors.primary.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -458,7 +463,7 @@ class _SetupStepBadge extends StatelessWidget {
               letterSpacing: -0.1,
             ),
           ),
-        ]),
+        ],),
       ),
     );
   }
@@ -472,7 +477,7 @@ class _PinHeaderSection extends StatelessWidget {
   final bool isDark;
   final String title, subtitle;
   const _PinHeaderSection({
-    required this.isDark, required this.title, required this.subtitle});
+    required this.isDark, required this.title, required this.subtitle,});
 
   @override
   Widget build(BuildContext context) {
@@ -494,7 +499,7 @@ class _PinHeaderSection extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.32),
+              color: AppColors.primary.withValues(alpha: 0.32),
               blurRadius: 20,
               offset: const Offset(0, 8),
               spreadRadius: -4,
@@ -512,7 +517,7 @@ class _PinHeaderSection extends StatelessWidget {
           opacity: anim,
           child: SlideTransition(
             position: Tween<Offset>(
-                begin: const Offset(0, 0.12), end: Offset.zero).animate(anim),
+                begin: const Offset(0, 0.12), end: Offset.zero,).animate(anim),
             child: child,
           ),
         ),
@@ -545,7 +550,7 @@ class _PinHeaderSection extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ),
-    ]);
+    ],);
   }
 }
 
@@ -592,14 +597,14 @@ class _PinDotsRow extends StatelessWidget {
                 boxShadow: filled
                     ? [
                         BoxShadow(
-                          color: filledColor.withOpacity(0.40),
+                          color: filledColor.withValues(alpha: 0.40),
                           blurRadius: 10,
                           spreadRadius: -1,
                         ),
                       ]
                     : [
                         BoxShadow(
-                          color: Colors.black.withOpacity(isDark ? 0.2 : 0.05),
+                          color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
                           blurRadius: 4, offset: const Offset(0, 1),
                         ),
                       ],
@@ -625,15 +630,15 @@ class _PinErrorPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.expense.withOpacity(0.08),
+        color: AppColors.expense.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.expense.withOpacity(0.22)),
+        border: Border.all(color: AppColors.expense.withValues(alpha: 0.22)),
       ),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Container(
           width: 16, height: 16,
           decoration: BoxDecoration(
-            color: AppColors.expense.withOpacity(0.12),
+            color: AppColors.expense.withValues(alpha: 0.12),
             shape: BoxShape.circle,
           ),
           child: const Center(
@@ -650,7 +655,7 @@ class _PinErrorPill extends StatelessWidget {
             letterSpacing: -0.1,
           ),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -750,7 +755,7 @@ class _NumKeyState extends State<_NumKey> with SingleTickerProviderStateMixin {
           ? SizedBox(
               width: 18, height: 18,
               child: CircularProgressIndicator(
-                  color: txtSec, strokeWidth: 2))
+                  color: txtSec, strokeWidth: 2,),)
           : Icon(Icons.backspace_outlined, color: txtPrim, size: 20);
     } else {
       keyChild = Text(
@@ -785,7 +790,7 @@ class _NumKeyState extends State<_NumKey> with SingleTickerProviderStateMixin {
                   border: Border.all(color: bdrColor, width: 1),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(widget.isDark ? 0.22 : 0.055),
+                      color: Colors.black.withValues(alpha: widget.isDark ? 0.22 : 0.055),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                       spreadRadius: -2,

@@ -51,12 +51,12 @@ class _AnalyticsDailyCardState extends State<AnalyticsDailyCard> {
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: txtPrim,
-                      letterSpacing: -0.3)),
+                      letterSpacing: -0.3,),),
               const SizedBox(height: 3),
               Text('Tap bar untuk melihat detail hari',
-                  style: TextStyle(fontSize: 11, color: txtSec)),
-            ]),
-            _ChartBadge(label: 'Harian', color: AppColors.expense),
+                  style: TextStyle(fontSize: 11, color: txtSec),),
+            ],),
+            const _ChartBadge(label: 'Harian', color: AppColors.expense),
           ],
         ),
 
@@ -88,7 +88,7 @@ class _AnalyticsDailyCardState extends State<AnalyticsDailyCard> {
             onSelect: (i) =>
                 setState(() => _selected = (_selected == i) ? -1 : i),
           ),
-      ]),
+      ],),
     );
   }
 }
@@ -105,7 +105,7 @@ class _DayDetailTile extends StatelessWidget {
   });
 
   static const _days = [
-    'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'
+    'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu',
   ];
   static const _months = [
     'Jan','Feb','Mar','Apr','Mei','Jun',
@@ -134,41 +134,41 @@ class _DayDetailTile extends StatelessWidget {
         color: surf,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-            color: AppColors.expense.withOpacity(0.30), width: 1.0),
+            color: AppColors.expense.withValues(alpha: 0.30), width: 1.0,),
       ),
       child: Row(children: [
         Container(
           width: 36, height: 36,
           decoration: BoxDecoration(
-            color: AppColors.expense.withOpacity(0.12),
+            color: AppColors.expense.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(10),
           ),
           child: const Icon(Icons.calendar_today_rounded,
-              color: AppColors.expense, size: 17),
+              color: AppColors.expense, size: 17,),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(_dateLabel,
                 style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w700, color: txtPrim)),
+                    fontSize: 12, fontWeight: FontWeight.w700, color: txtPrim,),),
             Text('Total pengeluaran', style: TextStyle(fontSize: 10, color: txtSec)),
-          ]),
+          ],),
         ),
         Text(CurrencyFormatter.formatCompact(entry.value),
             style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
                 color: AppColors.expense,
-                letterSpacing: -0.4)),
+                letterSpacing: -0.4,),),
         const SizedBox(width: 8),
         GestureDetector(
           onTap: onDismiss,
           child: Icon(Icons.close_rounded,
               size: 16,
-              color: isDark ? AppColors.textHintDark : AppColors.textHint),
+              color: isDark ? AppColors.textHintDark : AppColors.textHint,),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -200,8 +200,8 @@ class _DailyBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final hint = isDark ? AppColors.textHintDark : AppColors.textHint;
     final div = isDark
-        ? AppColors.borderDark.withOpacity(0.5)
-        : AppColors.border.withOpacity(0.7);
+        ? AppColors.borderDark.withValues(alpha: 0.5)
+        : AppColors.border.withValues(alpha: 0.7);
     final maxVal = sorted.map((e) => e.value).fold(0.0, (a, b) => a > b ? a : b);
     final barW = sorted.length <= 7 ? 28.0 : 18.0;
 
@@ -235,7 +235,7 @@ class _DailyBarChart extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 9.5,
                           fontWeight: isSel ? FontWeight.w700 : FontWeight.w500,
-                          color: isSel ? AppColors.expense : hint)),
+                          color: isSel ? AppColors.expense : hint,),),
                 );
               },
             ),
@@ -259,10 +259,10 @@ class _DailyBarChart extends StatelessWidget {
           final color = isSel
               ? AppColors.expense
               : isMax
-                  ? AppColors.expense.withOpacity(0.65)
+                  ? AppColors.expense.withValues(alpha: 0.65)
                   : (isDark
-                      ? AppColors.expense.withOpacity(0.18)
-                      : AppColors.expense.withOpacity(0.14));
+                      ? AppColors.expense.withValues(alpha: 0.18)
+                      : AppColors.expense.withValues(alpha: 0.14));
 
           return BarChartGroupData(x: e.key, barRods: [
             BarChartRodData(
@@ -273,12 +273,12 @@ class _DailyBarChart extends StatelessWidget {
               backDrawRodData: BackgroundBarChartRodData(
                 show: isSel,
                 toY: maxVal * 1.35,
-                color: AppColors.expense.withOpacity(0.05),
+                color: AppColors.expense.withValues(alpha: 0.05),
               ),
             ),
-          ]);
+          ],);
         }).toList(),
-      )),
+      ),),
     );
   }
 }
@@ -294,19 +294,19 @@ class _ChartBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.10),
+        color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Container(
             width: 5,
             height: 5,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),),
         const SizedBox(width: 5),
         Text(label,
             style: TextStyle(
-                fontSize: 10, fontWeight: FontWeight.w600, color: color)),
-      ]),
+                fontSize: 10, fontWeight: FontWeight.w600, color: color,),),
+      ],),
     );
   }
 }
@@ -320,7 +320,7 @@ class _EmptyChart extends StatelessWidget {
       height: 100,
       child: Center(
         child: Text('Belum ada data pengeluaran',
-            style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+            style: TextStyle(fontSize: 12, color: AppColors.textSecondary),),
       ),
     );
   }

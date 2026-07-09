@@ -29,10 +29,10 @@ class RecurringScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.error_outline_rounded,
-                  size: 48, color: AppColors.expense),
+                  size: 48, color: AppColors.expense,),
               const SizedBox(height: 12),
               Text('Gagal memuat data',
-                  style: Theme.of(context).textTheme.bodyLarge),
+                  style: Theme.of(context).textTheme.bodyLarge,),
             ],
           ),
         ),
@@ -48,7 +48,7 @@ class RecurringScreen extends ConsumerWidget {
                     'Belum ada transaksi berulang',
                     style: TextStyle(
                         fontSize: 16,
-                        color: AppColors.textSecondary),
+                        color: AppColors.textSecondary,),
                   ),
                 ],
               ),
@@ -73,7 +73,7 @@ class RecurringScreen extends ConsumerWidget {
                           _openAddEdit(context, existing: r),
                       onDelete: () =>
                           _confirmDelete(context, ref, r),
-                    )),
+                    ),),
               ],
               if (inactive.isNotEmpty) ...[
                 const SizedBox(height: 16),
@@ -88,7 +88,7 @@ class RecurringScreen extends ConsumerWidget {
                           _openAddEdit(context, existing: r),
                       onDelete: () =>
                           _confirmDelete(context, ref, r),
-                    )),
+                    ),),
               ],
               const SizedBox(height: 80),
             ],
@@ -104,7 +104,7 @@ class RecurringScreen extends ConsumerWidget {
   }
 
   void _openAddEdit(BuildContext context,
-      {RecurringEntity? existing}) {
+      {RecurringEntity? existing,}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -114,13 +114,13 @@ class RecurringScreen extends ConsumerWidget {
   }
 
   void _confirmDelete(
-      BuildContext context, WidgetRef ref, RecurringEntity item) {
+      BuildContext context, WidgetRef ref, RecurringEntity item,) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Hapus?'),
         content: const Text(
-            'Transaksi berulang ini akan dihapus permanen.'),
+            'Transaksi berulang ini akan dihapus permanen.',),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -132,7 +132,7 @@ class RecurringScreen extends ConsumerWidget {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.expense),
+                backgroundColor: AppColors.expense,),
             child: const Text('Hapus'),
           ),
         ],
@@ -205,7 +205,7 @@ class _RecurringCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: catColor.withOpacity(0.12),
+              color: catColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
@@ -236,9 +236,9 @@ class _RecurringCard extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
+                          horizontal: 6, vertical: 2,),
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.1),
+                        color: color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
@@ -255,7 +255,7 @@ class _RecurringCard extends StatelessWidget {
                       'Jatuh tempo: ${_nextDueLabel()}',
                       style: const TextStyle(
                           fontSize: 11,
-                          color: AppColors.textSecondary),
+                          color: AppColors.textSecondary,),
                     ),
                   ],
                 ),
@@ -283,12 +283,12 @@ class _RecurringCard extends StatelessWidget {
                     },
                     itemBuilder: (_) => [
                       const PopupMenuItem(
-                          value: 'edit', child: Text('Edit')),
+                          value: 'edit', child: Text('Edit'),),
                       const PopupMenuItem(
                         value: 'delete',
                         child: Text('Hapus',
                             style:
-                                TextStyle(color: AppColors.expense)),
+                                TextStyle(color: AppColors.expense),),
                       ),
                     ],
                   ),
@@ -430,7 +430,7 @@ class _AddRecurringSheetState
                 height: 4,
                 decoration: BoxDecoration(
                     color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2)),
+                    borderRadius: BorderRadius.circular(2),),
               ),
             ),
             const SizedBox(height: 16),
@@ -457,7 +457,7 @@ class _AddRecurringSheetState
                           const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                         color: _type == AppConstants.typeExpense
-                            ? AppColors.expense.withOpacity(0.1)
+                            ? AppColors.expense.withValues(alpha: 0.1)
                             : AppColors.surface,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
@@ -498,7 +498,7 @@ class _AddRecurringSheetState
                           const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                         color: _type == AppConstants.typeIncome
-                            ? AppColors.income.withOpacity(0.1)
+                            ? AppColors.income.withValues(alpha: 0.1)
                             : AppColors.surface,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
@@ -538,7 +538,7 @@ class _AddRecurringSheetState
               controller: _amountCtrl,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                  labelText: 'Nominal', prefixText: 'Rp '),
+                  labelText: 'Nominal', prefixText: 'Rp ',),
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
@@ -551,7 +551,7 @@ class _AddRecurringSheetState
                   .map((c) => DropdownMenuItem(
                         value: c,
                         child: Text(c),
-                      ))
+                      ),)
                   .toList(),
               onChanged: (v) {
                 if (v != null) setState(() => _category = v);
@@ -559,7 +559,7 @@ class _AddRecurringSheetState
             ),
             const SizedBox(height: 16),
             Text('Frekuensi',
-                style: Theme.of(context).textTheme.titleSmall),
+                style: Theme.of(context).textTheme.titleSmall,),
             const SizedBox(height: 8),
             Row(
               children: RecurringFrequency.values.map((f) {
@@ -575,7 +575,7 @@ class _AddRecurringSheetState
                           const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                         color: isSel
-                            ? AppColors.primary.withOpacity(0.1)
+                            ? AppColors.primary.withValues(alpha: 0.1)
                             : AppColors.surface,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
@@ -606,7 +606,7 @@ class _AddRecurringSheetState
             if (_frequency == RecurringFrequency.monthly) ...[
               const SizedBox(height: 16),
               Text('Tanggal Jatuh Tempo',
-                  style: Theme.of(context).textTheme.titleSmall),
+                  style: Theme.of(context).textTheme.titleSmall,),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 6,
@@ -666,7 +666,7 @@ class _AddRecurringSheetState
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2),
+                            color: Colors.white, strokeWidth: 2,),
                       )
                     : const Text('Simpan'),
               ),

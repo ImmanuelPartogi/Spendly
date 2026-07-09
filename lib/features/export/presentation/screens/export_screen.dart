@@ -35,7 +35,7 @@ _Period('Kustom', 'range', Icons.tune_rounded),
           filename: 'spendly_${DateTime.now().millisecondsSinceEpoch}',
         );
         await ExportService.shareFile(file,
-            subject: 'Spendly Export CSV');
+            subject: 'Spendly Export CSV',);
       } else {
         final file = await ExportService.exportToPdf(
           transactions.cast(),
@@ -43,7 +43,7 @@ _Period('Kustom', 'range', Icons.tune_rounded),
           filename: 'spendly_${DateTime.now().millisecondsSinceEpoch}',
         );
         await ExportService.shareFile(file,
-            subject: 'Spendly Laporan PDF');
+            subject: 'Spendly Laporan PDF',);
       }
     } catch (e) {
       if (mounted) {
@@ -98,7 +98,7 @@ _Period('Kustom', 'range', Icons.tune_rounded),
       '${d.day}/${d.month}/${d.year}';
   String _month(int m) => [
         'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
       ][m - 1];
 
   @override
@@ -113,7 +113,7 @@ appBar: AppBar(title: const Text('Ekspor Data')),
           children: [
             // ── Format selector ───────────────────────────────────────────
             Text('Format Export',
-                style: Theme.of(context).textTheme.titleMedium),
+                style: Theme.of(context).textTheme.titleMedium,),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -144,7 +144,7 @@ appBar: AppBar(title: const Text('Ekspor Data')),
 
             // ── Period selector ───────────────────────────────────────────
             Text('Periode',
-                style: Theme.of(context).textTheme.titleMedium),
+                style: Theme.of(context).textTheme.titleMedium,),
             const SizedBox(height: 12),
             GridView.count(
               crossAxisCount: 2,
@@ -163,10 +163,10 @@ appBar: AppBar(title: const Text('Ekspor Data')),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 180),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 10),
+                        horizontal: 14, vertical: 10,),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.primary.withOpacity(0.1)
+                          ? AppColors.primary.withValues(alpha: 0.1)
                           : AppColors.surface,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
@@ -182,7 +182,7 @@ appBar: AppBar(title: const Text('Ekspor Data')),
                             size: 16,
                             color: isSelected
                                 ? AppColors.primary
-                                : AppColors.textSecondary),
+                                : AppColors.textSecondary,),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -208,17 +208,17 @@ appBar: AppBar(title: const Text('Ekspor Data')),
               const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 14, vertical: 10),
+                    horizontal: 14, vertical: 10,),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.05),
+                  color: AppColors.primary.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                      color: AppColors.primary.withOpacity(0.3)),
+                      color: AppColors.primary.withValues(alpha: 0.3),),
                 ),
                 child: Row(
                   children: [
                     const Icon(Icons.date_range_rounded,
-                        size: 16, color: AppColors.primary),
+                        size: 16, color: AppColors.primary,),
                     const SizedBox(width: 8),
                     Text(
                       '${_fmt(_customRange!.start)} — ${_fmt(_customRange!.end)}',
@@ -234,7 +234,7 @@ appBar: AppBar(title: const Text('Ekspor Data')),
                       child: const Text('Ubah',
                           style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.primary)),
+                              color: AppColors.primary,),),
                     ),
                   ],
                 ),
@@ -256,7 +256,7 @@ appBar: AppBar(title: const Text('Ekspor Data')),
                   Row(
                     children: [
                       const Icon(Icons.info_outline_rounded,
-                          size: 16, color: AppColors.textSecondary),
+                          size: 16, color: AppColors.textSecondary,),
                       const SizedBox(width: 8),
                       Text(
                         'Info Export',
@@ -268,11 +268,11 @@ appBar: AppBar(title: const Text('Ekspor Data')),
                   ),
                   const SizedBox(height: 10),
                   _InfoRow(
-                      label: 'Format', value: _format.toUpperCase()),
+                      label: 'Format', value: _format.toUpperCase(),),
                   _InfoRow(
-                      label: 'Periode', value: _getPeriodLabel()),
+                      label: 'Periode', value: _getPeriodLabel(),),
                   const _InfoRow(
-                      label: 'Isi', value: 'Semua transaksi'),
+                      label: 'Isi', value: 'Semua transaksi',),
                 ],
               ),
             ),
@@ -288,12 +288,12 @@ appBar: AppBar(title: const Text('Ekspor Data')),
                         width: 18,
                         height: 18,
                         child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2),
+                            color: Colors.white, strokeWidth: 2,),
                       )
                     : const Icon(Icons.upload_rounded),
                 label: Text(_isLoading
                     ? 'Mengekspor…'
-                    : 'Ekspor & Bagikan'),
+                    : 'Ekspor & Bagikan',),
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(vertical: 16),
@@ -341,7 +341,7 @@ class _FormatCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: selected ? color.withOpacity(0.08) : AppColors.card,
+          color: selected ? color.withValues(alpha: 0.08) : AppColors.card,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: selected ? color : AppColors.border,
@@ -353,7 +353,7 @@ class _FormatCard extends StatelessWidget {
           children: [
             Icon(icon,
                 color: selected ? color : AppColors.textSecondary,
-                size: 28),
+                size: 28,),
             const SizedBox(height: 10),
             Text(
               label,
@@ -366,7 +366,7 @@ class _FormatCard extends StatelessWidget {
             Text(
               subtitle,
               style: const TextStyle(
-                  fontSize: 11, color: AppColors.textSecondary),
+                  fontSize: 11, color: AppColors.textSecondary,),
             ),
           ],
         ),
@@ -388,13 +388,13 @@ class _InfoRow extends StatelessWidget {
         children: [
           Text(label,
               style: const TextStyle(
-                  fontSize: 12, color: AppColors.textSecondary)),
+                  fontSize: 12, color: AppColors.textSecondary,),),
           const Spacer(),
           Text(value,
               style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary)),
+                  color: AppColors.textPrimary,),),
         ],
       ),
     );

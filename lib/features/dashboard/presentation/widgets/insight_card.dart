@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/spendly_shimmer.dart';
+import '../../../insight/domain/services/insight_engine.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // InsightCarousel — v3 (compact + professional)
@@ -23,17 +24,17 @@ _InsightStyle _styleFor(String type, bool isWarning) {
   }
   switch (type) {
     case 'category_spend':
-      return _InsightStyle(accentColor: AppColors.primary,         label: 'Kategori Terbesar');
+      return const _InsightStyle(accentColor: AppColors.primary,         label: 'Kategori Terbesar');
     case 'highest_day':
-      return _InsightStyle(accentColor: const Color(0xFF7C5DFA),   label: 'Hari Favorit');
+      return const _InsightStyle(accentColor: Color(0xFF7C5DFA),   label: 'Hari Favorit');
     case 'spend_trend':
-      return _InsightStyle(accentColor: const Color(0xFF06B6D4),   label: 'Tren Pengeluaran');
+      return const _InsightStyle(accentColor: Color(0xFF06B6D4),   label: 'Tren Pengeluaran');
     case 'savings':
-      return _InsightStyle(accentColor: const Color(0xFF22C55E),   label: 'Tabungan');
+      return const _InsightStyle(accentColor: Color(0xFF22C55E),   label: 'Tabungan');
     case 'balance_warning':
-      return _InsightStyle(accentColor: AppColors.warning,         label: 'Saldo');
+      return const _InsightStyle(accentColor: AppColors.warning,         label: 'Saldo');
     default:
-      return _InsightStyle(accentColor: AppColors.primary,         label: 'Insight');
+      return const _InsightStyle(accentColor: AppColors.primary,         label: 'Insight');
   }
 }
 
@@ -120,19 +121,19 @@ class _InsightCarouselState extends ConsumerState<InsightCarousel> {
               borderRadius: BorderRadius.circular(16),
             ),
             padding: const EdgeInsets.all(14),
-            child: Row(
+            child: const Row(
               children: [
                 ShimmerBox(width: 40, height: 40, borderRadius: 12),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment:  MainAxisAlignment.center,
                     children: [
                       ShimmerBox(width: 72, height: 9, borderRadius: 5),
-                      const SizedBox(height: 7),
+                      SizedBox(height: 7),
                       ShimmerBox(width: double.infinity, height: 11, borderRadius: 5),
-                      const SizedBox(height: 5),
+                      SizedBox(height: 5),
                       ShimmerBox(width: 120, height: 11, borderRadius: 5),
                     ],
                   ),
@@ -149,7 +150,7 @@ class _InsightCarouselState extends ConsumerState<InsightCarousel> {
 // ─── Kartu ────────────────────────────────────────────────────────────────────
 
 class _InsightCard extends StatelessWidget {
-  final dynamic insight;
+  final InsightData insight;
   final _InsightStyle style;
   final bool isDark;
 
@@ -171,12 +172,12 @@ class _InsightCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: insight.isWarning
-              ? accent.withOpacity(isDark ? 0.08 : 0.05)
+              ? accent.withValues(alpha: isDark ? 0.08 : 0.05)
               : cardBg,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: insight.isWarning
-                ? accent.withOpacity(0.25)
+                ? accent.withValues(alpha: 0.25)
                 : borderColor,
             width: 0.8,
           ),
@@ -190,7 +191,7 @@ class _InsightCard extends StatelessWidget {
               width:  40,
               height: 40,
               decoration: BoxDecoration(
-                color:        accent.withOpacity(0.12),
+                color:        accent.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
@@ -237,7 +238,7 @@ class _InsightCard extends StatelessWidget {
               Icons.chevron_right_rounded,
               size:  16,
               color: (isDark ? AppColors.textHintDark : AppColors.textHint)
-                  .withOpacity(0.4),
+                  .withValues(alpha: 0.4),
             ),
           ],
         ),
@@ -275,7 +276,7 @@ class _DotIndicator extends StatelessWidget {
             color: isActive
                 ? AppColors.primary
                 : (isDark ? AppColors.textHintDark : AppColors.textHint)
-                    .withOpacity(0.3),
+                    .withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(3),
           ),
         );

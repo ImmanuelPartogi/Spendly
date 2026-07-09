@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
-import '../screens/search_screen.dart';
 
 enum TransactionSortOption {
   newest('Terbaru'),
@@ -107,7 +106,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           amountMax: _amountRange.end < 10000000
               ? _amountRange.end
               : null,
-        ), _sort));
+        ), _sort,),);
   }
 
   @override
@@ -126,10 +125,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             child: Row(
               children: [
                 Text('Filter & Urutkan',
-                    style: Theme.of(context).textTheme.headlineSmall),
+                    style: Theme.of(context).textTheme.headlineSmall,),
                 const Spacer(),
                 TextButton(
-                    onPressed: _reset, child: const Text('Atur Ulang')),
+                    onPressed: _reset, child: const Text('Atur Ulang'),),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close_rounded),
@@ -146,7 +145,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 children: [
                   // ── Sort ─────────────────────────────────────────────────
                   Text('Urutkan',
-                      style: Theme.of(context).textTheme.titleMedium),
+                      style: Theme.of(context).textTheme.titleMedium,),
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 8,
@@ -159,7 +158,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         onSelected: (_) =>
                             setState(() => _sort = s),
                         selectedColor:
-                            AppColors.primary.withOpacity(0.15),
+                            AppColors.primary.withValues(alpha: 0.15),
                         labelStyle: TextStyle(
                           color: isSelected
                               ? AppColors.primary
@@ -175,7 +174,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
                   // ── Type ─────────────────────────────────────────────────
                   Text('Tipe',
-                      style: Theme.of(context).textTheme.titleMedium),
+                      style: Theme.of(context).textTheme.titleMedium,),
                   const SizedBox(height: 10),
                   Row(
                     children: ['expense', 'income', null].map((t) {
@@ -192,9 +191,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           selected: isSelected,
                           onSelected: (_) => setState(
                               () => _filter =
-                                  _filter.copyWith(type: t)),
+                                  _filter.copyWith(type: t),),
                           selectedColor:
-                              AppColors.primary.withOpacity(0.15),
+                              AppColors.primary.withValues(alpha: 0.15),
                           labelStyle: TextStyle(
                             color: isSelected
                                 ? AppColors.primary
@@ -208,14 +207,14 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
                   // ── Categories ────────────────────────────────────────────
                   Text('Kategori',
-                      style: Theme.of(context).textTheme.titleMedium),
+                      style: Theme.of(context).textTheme.titleMedium,),
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: [
                       ...AppConstants.expenseCategories,
-                      ...AppConstants.incomeCategories
+                      ...AppConstants.incomeCategories,
                     ].map((cat) {
                       final isSelected =
                           _filter.categories.contains(cat);
@@ -224,7 +223,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         selected: isSelected,
                         onSelected: (_) => _toggleCategory(cat),
                         selectedColor:
-                            AppColors.primary.withOpacity(0.12),
+                            AppColors.primary.withValues(alpha: 0.12),
                         labelStyle: TextStyle(
                           fontSize: 12,
                           color: isSelected
@@ -243,7 +242,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     children: [
                       Text('Rentang Nominal',
                           style:
-                              Theme.of(context).textTheme.titleMedium),
+                              Theme.of(context).textTheme.titleMedium,),
                       Text(
                         '${CurrencyFormatter.formatCompact(_amountRange.start)} – '
                         '${CurrencyFormatter.formatCompact(_amountRange.end)}',
@@ -262,7 +261,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     divisions: 100,
                     activeColor: AppColors.primary,
                     inactiveColor:
-                        AppColors.primary.withOpacity(0.2),
+                        AppColors.primary.withValues(alpha: 0.2),
                     onChanged: (v) =>
                         setState(() => _amountRange = v),
                   ),
@@ -270,7 +269,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
                   // ── Date range ────────────────────────────────────────────
                   Text('Rentang Tanggal',
-                      style: Theme.of(context).textTheme.titleMedium),
+                      style: Theme.of(context).textTheme.titleMedium,),
                   const SizedBox(height: 10),
                   Row(
                     children: [
@@ -289,7 +288,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             );
                             if (d != null) {
                               setState(() => _filter =
-                                  _filter.copyWith(dateFrom: d));
+                                  _filter.copyWith(dateFrom: d),);
                             }
                           },
                         ),
@@ -310,7 +309,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             );
                             if (d != null) {
                               setState(() => _filter =
-                                  _filter.copyWith(dateTo: d));
+                                  _filter.copyWith(dateTo: d),);
                             }
                           },
                         ),
@@ -361,7 +360,7 @@ class _DateButton extends StatelessWidget {
         child: Row(
           children: [
             const Icon(Icons.calendar_today_rounded,
-                size: 14, color: AppColors.textSecondary),
+                size: 14, color: AppColors.textSecondary,),
             const SizedBox(width: 6),
             Expanded(
               child: Text(

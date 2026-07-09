@@ -69,7 +69,7 @@ class _EmptyStateState extends State<EmptyState>
     final txtSec =
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
     final bgCircle =
-        isDark ? accent.withOpacity(0.12) : accent.withOpacity(0.08);
+        isDark ? accent.withValues(alpha: 0.12) : accent.withValues(alpha: 0.08);
 
     return Center(
       child: FadeTransition(
@@ -90,7 +90,7 @@ class _EmptyStateState extends State<EmptyState>
                     color: bgCircle,
                     boxShadow: [
                       BoxShadow(
-                        color: accent.withOpacity(isDark ? 0.18 : 0.12),
+                        color: accent.withValues(alpha: isDark ? 0.18 : 0.12),
                         blurRadius: 28,
                         spreadRadius: 4,
                       ),
@@ -195,7 +195,7 @@ class _ActionButtonState extends State<_ActionButton> {
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: widget.color.withOpacity(0.30),
+                color: widget.color.withValues(alpha: 0.30),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),

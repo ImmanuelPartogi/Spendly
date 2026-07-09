@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spendly/core/database/app_database.dart';
+import '../../../../core/database/app_database.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/providers.dart';
@@ -121,11 +121,13 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
     final amount = ThousandSeparatorInputFormatter.parse(_amountCtrl.text);
     if (amount <= 0) {
       await HapticUtils.error();
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Masukkan jumlah yang valid')));
+          const SnackBar(content: Text('Masukkan jumlah yang valid')),);
       return;
     }
 
+    if (!mounted) return;
     FocusScope.of(context).unfocus();
     setState(() => _isLoading = true);
 
@@ -140,7 +142,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
           type: const Value('cash'),
           colorValue: const Value(0xFF00C48C),
           isDefault: const Value(true),
-        ));
+        ),);
         wallets = await walletDao.getAllWallets();
       }
 
@@ -178,7 +180,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
       await HapticUtils.error();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Gagal menyimpan: $e')));
+            SnackBar(content: Text('Gagal menyimpan: $e')),);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -189,6 +191,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
   Future<void> _pickDate() async {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     await HapticUtils.light();
+    if (!mounted) return;
     final picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
@@ -201,15 +204,15 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                   primary: AppColors.primary,
                   onPrimary: Colors.white,
                   surface: AppColors.cardDark,
-                  onSurface: AppColors.textPrimaryDark)
+                  onSurface: AppColors.textPrimaryDark,)
               : const ColorScheme.light(
                   primary: AppColors.primary,
                   onPrimary: Colors.white,
                   surface: AppColors.card,
-                  onSurface: AppColors.textPrimary),
+                  onSurface: AppColors.textPrimary,),
           textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                  foregroundColor: AppColors.primary)),
+                  foregroundColor: AppColors.primary,),),
         ),
         child: child!,
       ),
@@ -239,9 +242,9 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
         color: bgColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         boxShadow: [BoxShadow(
-          color: Colors.black.withOpacity(isDark ? 0.5 : 0.12),
+          color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.12),
           blurRadius: 32, offset: const Offset(0, -4),
-        )],
+        ),],
       ),
       child: Padding(
         padding: EdgeInsets.only(bottom: bottomPad),
@@ -282,29 +285,29 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 18, vertical: 4),
+                      horizontal: 18, vertical: 4,),
                   decoration: BoxDecoration(
                     color: isDark
-                        ? accentColor.withOpacity(0.06)
-                        : accentColor.withOpacity(0.05),
+                        ? accentColor.withValues(alpha: 0.06)
+                        : accentColor.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: _amountFocus.hasFocus
-                          ? accentColor.withOpacity(0.6)
-                          : accentColor.withOpacity(0.22),
+                          ? accentColor.withValues(alpha: 0.6)
+                          : accentColor.withValues(alpha: 0.22),
                       width: _amountFocus.hasFocus ? 1.5 : 1,
                     ),
                     boxShadow: _amountFocus.hasFocus
                         ? [BoxShadow(
-                            color: accentColor.withOpacity(0.12),
-                            blurRadius: 14)]
+                            color: accentColor.withValues(alpha: 0.12),
+                            blurRadius: 14,),]
                         : null,
                   ),
                   child: Row(children: [
                     Text('Rp', style: TextStyle(
                       fontSize: 22, fontWeight: FontWeight.w700,
                       color: accentColor, letterSpacing: -0.2,
-                    )),
+                    ),),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
@@ -323,7 +326,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                           hintText: '0',
                           hintStyle: TextStyle(
                             fontSize: 28, fontWeight: FontWeight.w800,
-                            color: accentColor.withOpacity(0.25),
+                            color: accentColor.withValues(alpha: 0.25),
                           ),
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 12),
@@ -339,7 +342,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                             .parse(_amountCtrl.text),
                         color: accentColor,
                       ),
-                  ]),
+                  ],),
                 ),
               ),
               const SizedBox(height: 16),
@@ -366,21 +369,21 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 160),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 13, vertical: 8),
+                                horizontal: 13, vertical: 8,),
                             decoration: BoxDecoration(
                               gradient: selected
                                   ? LinearGradient(colors: [
-                                      accentColor.withOpacity(0.15),
-                                      accentColor.withOpacity(0.08),
+                                      accentColor.withValues(alpha: 0.15),
+                                      accentColor.withValues(alpha: 0.08),
                                     ],
                                     begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight)
+                                    end: Alignment.bottomRight,)
                                   : null,
                               color: selected ? null : surfColor,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                 color: selected
-                                    ? accentColor.withOpacity(0.5)
+                                    ? accentColor.withValues(alpha: 0.5)
                                     : bdrColor,
                                 width: selected ? 1.5 : 1,
                               ),
@@ -435,16 +438,16 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 160),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 6),
+                                horizontal: 8, vertical: 6,),
                             decoration: BoxDecoration(
                               color: selected
-                                  ? catColor.withOpacity(
-                                      isDark ? 0.18 : 0.12)
+                                  ? catColor.withValues(alpha: 
+                                      isDark ? 0.18 : 0.12,)
                                   : surfColor,
                               borderRadius: BorderRadius.circular(11),
                               border: Border.all(
                                 color: selected
-                                    ? catColor.withOpacity(0.55)
+                                    ? catColor.withValues(alpha: 0.55)
                                     : bdrColor,
                                 width: selected ? 1.5 : 1,
                               ),
@@ -454,7 +457,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                               children: [
                                 Icon(CategoryUtils.getIcon(cat),
                                     size: 15,
-                                    color: selected ? catColor : txtSec),
+                                    color: selected ? catColor : txtSec,),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
@@ -486,7 +489,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(children: [
                   Expanded(
-                    child: Container(
+                    child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: surfColor,
                         borderRadius: BorderRadius.circular(13),
@@ -515,7 +518,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                             ),
                           ),
                         ),
-                      ]),
+                      ],),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -523,7 +526,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                     onTap: _pickDate,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 13),
+                          horizontal: 14, vertical: 13,),
                       decoration: BoxDecoration(
                         color: surfColor,
                         borderRadius: BorderRadius.circular(13),
@@ -531,7 +534,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                       ),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Icon(Icons.calendar_today_rounded,
-                            size: 15, color: txtSec),
+                            size: 15, color: txtSec,),
                         const SizedBox(width: 7),
                         Text(
                           '${_selectedDate.day}/${_selectedDate.month}',
@@ -541,10 +544,10 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                             color: txtPrim,
                           ),
                         ),
-                      ]),
+                      ],),
                     ),
                   ),
-                ]),
+                ],),
               ),
               const SizedBox(height: 22),
 
@@ -555,14 +558,14 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                     ? Container(
                         height: 52,
                         decoration: BoxDecoration(
-                          color: accentColor.withOpacity(0.6),
+                          color: accentColor.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: const Center(
                           child: SizedBox(
                             width: 22, height: 22,
                             child: CircularProgressIndicator(
-                                color: Colors.white, strokeWidth: 2.5),
+                                color: Colors.white, strokeWidth: 2.5,),
                           ),
                         ),
                       )
@@ -581,10 +584,10 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                             ),
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [BoxShadow(
-                              color: accentColor.withOpacity(0.35),
+                              color: accentColor.withValues(alpha: 0.35),
                               blurRadius: 18,
                               offset: const Offset(0, 6),
-                            )],
+                            ),],
                           ),
                           child: Center(child: Text(
                             widget.existing == null
@@ -596,7 +599,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                               fontWeight: FontWeight.w700,
                               letterSpacing: 0.1,
                             ),
-                          )),
+                          ),),
                         ),
                       ),
               ),
@@ -671,7 +674,7 @@ class _SheetHeader extends StatelessWidget {
             isExpense ? 'Catat pengeluaran' : 'Catat pemasukan',
             style: TextStyle(fontSize: 12, color: txtSec),
           ),
-        ]),
+        ],),
         const Spacer(),
 
         // Tombol pindai (hanya untuk transaksi baru)
@@ -682,21 +685,21 @@ class _SheetHeader extends StatelessWidget {
               margin: const EdgeInsets.only(right: 6),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.10),
+                color: AppColors.primary.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                    color: AppColors.primary.withOpacity(0.20)),
+                    color: AppColors.primary.withValues(alpha: 0.20),),
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.document_scanner_rounded,
-                      color: AppColors.primary, size: 16),
+                      color: AppColors.primary, size: 16,),
                   SizedBox(width: 5),
                   Text('Pindai', style: TextStyle(
                     fontSize: 12, fontWeight: FontWeight.w700,
                     color: AppColors.primary,
-                  )),
+                  ),),
                 ],
               ),
             ),
@@ -716,7 +719,7 @@ class _SheetHeader extends StatelessWidget {
             child: Icon(Icons.close_rounded, color: txtSec, size: 16),
           ),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -757,17 +760,17 @@ class _TabSwitcher extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(10),
             boxShadow: [BoxShadow(
-              color: accentColor.withOpacity(0.28),
+              color: accentColor.withValues(alpha: 0.28),
               blurRadius: 10, offset: const Offset(0, 3),
-            )],
+            ),],
           ),
           indicatorSize: TabBarIndicatorSize.tab,
           labelColor: Colors.white,
           unselectedLabelColor: txtSec,
           labelStyle: const TextStyle(
-              fontWeight: FontWeight.w700, fontSize: 13.5),
+              fontWeight: FontWeight.w700, fontSize: 13.5,),
           unselectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.w500, fontSize: 13.5),
+              fontWeight: FontWeight.w500, fontSize: 13.5,),
           dividerColor: Colors.transparent,
           tabs: const [
             Tab(text: 'Pengeluaran'),
@@ -789,14 +792,14 @@ class _AmountBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
         CurrencyFormatter.formatCompact(amount),
         style: TextStyle(
           fontSize: 10.5,
-          color: color.withOpacity(0.8),
+          color: color.withValues(alpha: 0.8),
           fontWeight: FontWeight.w700,
         ),
       ),
@@ -814,6 +817,6 @@ class _SectionLabel extends StatelessWidget {
     return Text(text, style: TextStyle(
       fontSize: 11.5, fontWeight: FontWeight.w600,
       color: color, letterSpacing: 0.3,
-    ));
+    ),);
   }
 }

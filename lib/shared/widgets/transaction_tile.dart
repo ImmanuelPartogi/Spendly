@@ -127,7 +127,7 @@ class _TileContent extends StatelessWidget {
     final txtPrim     = isDark ? AppColors.textPrimaryDark   : AppColors.textPrimary;
     final txtSec      = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
     final divColor    = isDark ? AppColors.dividerDark       : AppColors.divider;
-    final splashColor = catColor.withOpacity(0.04);
+    final splashColor = catColor.withValues(alpha: 0.04);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -179,7 +179,7 @@ class _TileContent extends StatelessWidget {
                                 transaction.note?.isNotEmpty == true
                                     ? transaction.note!
                                     : DateFormatter.formatRelative(
-                                        transaction.date),
+                                        transaction.date,),
                                 style: TextStyle(
                                   fontSize: 11.5,
                                   color: txtSec,
@@ -204,10 +204,10 @@ class _TileContent extends StatelessWidget {
                       // Amount pill
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 9, vertical: 4),
+                            horizontal: 9, vertical: 4,),
                         decoration: BoxDecoration(
-                          color: amountColor.withOpacity(
-                              isDark ? 0.14 : 0.09),
+                          color: amountColor.withValues(alpha: 
+                              isDark ? 0.14 : 0.09,),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -225,7 +225,7 @@ class _TileContent extends StatelessWidget {
                         DateFormatter.formatDayMonth(transaction.date),
                         style: TextStyle(
                           fontSize: 10.5,
-                          color: txtSec.withOpacity(0.7),
+                          color: txtSec.withValues(alpha: 0.7),
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -273,15 +273,15 @@ class _CategoryIcon extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            color.withOpacity(isDark ? 0.20 : 0.14),
-            color.withOpacity(isDark ? 0.10 : 0.07),
+            color.withValues(alpha: isDark ? 0.20 : 0.14),
+            color.withValues(alpha: isDark ? 0.10 : 0.07),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(13),
         border: Border.all(
-          color: color.withOpacity(isDark ? 0.20 : 0.12),
+          color: color.withValues(alpha: isDark ? 0.20 : 0.12),
           width: 1,
         ),
       ),
@@ -304,18 +304,18 @@ class TransactionTileShimmer extends StatelessWidget {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
               ShimmerBox(width: 44, height: 44, borderRadius: 13),
-              const SizedBox(width: 13),
+              SizedBox(width: 13),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ShimmerBox(width: 108, height: 12, borderRadius: 6),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     ShimmerBox(width: 72, height: 10, borderRadius: 5),
                   ],
                 ),
@@ -324,7 +324,7 @@ class TransactionTileShimmer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   ShimmerBox(width: 76, height: 26, borderRadius: 8),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   ShimmerBox(width: 36, height: 10, borderRadius: 5),
                 ],
               ),

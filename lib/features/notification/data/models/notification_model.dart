@@ -146,7 +146,7 @@ class NotificationModel {
         routeTarget: json['routeTarget'] as String?,
         payload: json['payload'] != null
             ? Map<String, dynamic>.from(
-                json['payload'] as Map)
+                json['payload'] as Map,)
             : null,
       );
 

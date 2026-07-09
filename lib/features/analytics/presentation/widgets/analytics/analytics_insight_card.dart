@@ -20,7 +20,7 @@ class AnalyticsInsightCard extends StatelessWidget {
   });
 
   static const _dayNames = [
-    'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'
+    'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu',
   ];
 
   @override
@@ -54,7 +54,7 @@ class AnalyticsInsightCard extends StatelessWidget {
         title: 'Kategori Terbesar',
         subtitle: '${topCat.key} · $pct% dari total',
         value: CurrencyFormatter.formatCompact(topCat.value),
-      ));
+      ),);
     }
 
     if (avgDaily > 0) {
@@ -64,7 +64,7 @@ class AnalyticsInsightCard extends StatelessWidget {
         title: 'Rata-rata Harian',
         subtitle: 'Dari $activeDays hari dengan transaksi',
         value: CurrencyFormatter.formatCompact(avgDaily),
-      ));
+      ),);
     }
 
     if (peakWeekday != null && peakWeekday.value > 0) {
@@ -74,7 +74,7 @@ class AnalyticsInsightCard extends StatelessWidget {
         title: 'Hari Paling Boros',
         subtitle: 'Pengeluaran tertinggi dalam seminggu',
         value: _dayNames[(peakWeekday.key - 1).clamp(0, 6)],
-      ));
+      ),);
     }
 
     if (insights.isEmpty) return const SizedBox.shrink();
@@ -92,10 +92,10 @@ class AnalyticsInsightCard extends StatelessWidget {
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: txtPrim,
-                letterSpacing: -0.3)),
+                letterSpacing: -0.3,),),
         const SizedBox(height: 3),
         Text('Ringkasan pola pengeluaran kamu',
-            style: TextStyle(fontSize: 11, color: txtSec)),
+            style: TextStyle(fontSize: 11, color: txtSec),),
         const SizedBox(height: 16),
         ...insights.asMap().entries.map((e) {
           final d = e.value;
@@ -108,9 +108,9 @@ class AnalyticsInsightCard extends StatelessWidget {
               const SizedBox(height: 12),
             ] else
               const SizedBox(height: 14),
-          ]);
+          ],);
         }),
-      ]),
+      ],),
     );
   }
 }
@@ -147,7 +147,7 @@ class _InsightRow extends StatelessWidget {
       Container(
         width: 38, height: 38,
         decoration: BoxDecoration(
-          color: data.color.withOpacity(0.12),
+          color: data.color.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(11),
         ),
         child: Icon(data.icon, color: data.color, size: 18),
@@ -160,18 +160,18 @@ class _InsightRow extends StatelessWidget {
                   fontSize: 12.5,
                   fontWeight: FontWeight.w700,
                   color: txtPrim,
-                  letterSpacing: -0.1)),
+                  letterSpacing: -0.1,),),
           const SizedBox(height: 2),
           Text(data.subtitle,
-              style: TextStyle(fontSize: 10.5, color: txtSec)),
-        ]),
+              style: TextStyle(fontSize: 10.5, color: txtSec),),
+        ],),
       ),
       Text(data.value,
           style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w800,
               color: data.color,
-              letterSpacing: -0.3)),
-    ]);
+              letterSpacing: -0.3,),),
+    ],);
   }
 }

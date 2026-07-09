@@ -43,7 +43,7 @@ class ComparisonCategoryCard extends StatelessWidget {
     final txtSec =
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: card,
         borderRadius: BorderRadius.circular(20),
@@ -60,16 +60,16 @@ class ComparisonCategoryCard extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: txtPrim,
-                      letterSpacing: -0.3)),
+                      letterSpacing: -0.3,),),
               const SizedBox(height: 3),
               Text('Tap kategori untuk filter grafik utama',
-                  style: TextStyle(fontSize: 11, color: txtSec)),
+                  style: TextStyle(fontSize: 11, color: txtSec),),
               const SizedBox(height: 14),
               Container(
                 height: 40,
                 padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                    color: surf, borderRadius: BorderRadius.circular(12)),
+                    color: surf, borderRadius: BorderRadius.circular(12),),
                 child: TabBar(
                   controller: tabCtrl,
                   indicator: BoxDecoration(
@@ -77,18 +77,18 @@ class ComparisonCategoryCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(9),
                     boxShadow: [
                       BoxShadow(
-                          color: AppColors.primary.withOpacity(0.25),
+                          color: AppColors.primary.withValues(alpha: 0.25),
                           blurRadius: 8,
-                          offset: const Offset(0, 2))
+                          offset: const Offset(0, 2),),
                     ],
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,
                   labelColor: Colors.white,
                   unselectedLabelColor: txtSec,
                   labelStyle: const TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 12),
+                      fontWeight: FontWeight.w700, fontSize: 12,),
                   unselectedLabelStyle: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 12),
+                      fontWeight: FontWeight.w500, fontSize: 12,),
                   dividerColor: Colors.transparent,
                   overlayColor:
                       WidgetStateProperty.all(Colors.transparent),
@@ -120,7 +120,7 @@ class ComparisonCategoryCard extends StatelessWidget {
             ],
           ),
         ),
-      ]),
+      ],),
     );
   }
 }
@@ -155,19 +155,19 @@ class _CatList extends StatelessWidget {
           Container(
             width: 44, height: 44,
             decoration: BoxDecoration(
-                color: surf, borderRadius: BorderRadius.circular(12)),
+                color: surf, borderRadius: BorderRadius.circular(12),),
             child: Icon(
                 isExpense
                     ? Icons.shopping_cart_outlined
                     : Icons.account_balance_wallet_outlined,
                 color: isDark ? AppColors.textHintDark : AppColors.textHint,
-                size: 20),
+                size: 20,),
           ),
           const SizedBox(height: 10),
           Text(
               'Tidak ada data ${isExpense ? "pengeluaran" : "pemasukan"}',
-              style: TextStyle(color: txtSec, fontSize: 12)),
-        ]),
+              style: TextStyle(color: txtSec, fontSize: 12),),
+        ],),
       );
     }
 
@@ -188,7 +188,7 @@ class _CatList extends StatelessWidget {
                   ? 'Semua kategori'
                   : '${selected.length} kategori aktif',
               style: TextStyle(
-                  fontSize: 11, color: txtSec, fontWeight: FontWeight.w500)),
+                  fontSize: 11, color: txtSec, fontWeight: FontWeight.w500,),),
           const Spacer(),
           if (selected.isNotEmpty)
             GestureDetector(
@@ -197,17 +197,17 @@ class _CatList extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: accent.withOpacity(0.10),
+                  color: accent.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text('Atur Ulang',
                     style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: accent)),
+                        color: accent,),),
               ),
             ),
-        ]),
+        ],),
       ),
       Expanded(
         child: ListView.builder(
@@ -235,11 +235,11 @@ class _CatList extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.fromLTRB(12, 11, 12, 11),
                   decoration: BoxDecoration(
-                    color: isPinned ? catColor.withOpacity(0.07) : surf,
+                    color: isPinned ? catColor.withValues(alpha: 0.07) : surf,
                     borderRadius: BorderRadius.circular(13),
                     border: Border.all(
                       color: isPinned
-                          ? catColor.withOpacity(0.35)
+                          ? catColor.withValues(alpha: 0.35)
                           : bdr,
                       width: isPinned ? 1.0 : 0.5,
                     ),
@@ -248,7 +248,7 @@ class _CatList extends StatelessWidget {
                     Container(
                       width: 34, height: 34,
                       decoration: BoxDecoration(
-                        color: catColor.withOpacity(0.12),
+                        color: catColor.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(9),
                       ),
                       child: Icon(catIcon, color: catColor, size: 16),
@@ -263,20 +263,20 @@ class _CatList extends StatelessWidget {
                                   fontSize: 12.5,
                                   fontWeight: FontWeight.w600,
                                   color: txtPrim,
-                                  letterSpacing: -0.1)),
+                                  letterSpacing: -0.1,),),
                           const SizedBox(height: 5),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(3),
                             child: Stack(children: [
                               Container(
                                   height: 3,
-                                  color: catColor.withOpacity(0.10)),
+                                  color: catColor.withValues(alpha: 0.10),),
                               FractionallySizedBox(
                                 widthFactor: pct.clamp(0.01, 1.0),
                                 child: Container(
-                                    height: 3, color: catColor),
+                                    height: 3, color: catColor,),
                               ),
-                            ]),
+                            ],),
                           ),
                         ],
                       ),
@@ -290,22 +290,22 @@ class _CatList extends StatelessWidget {
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
                                 color: catColor,
-                                letterSpacing: -0.3)),
+                                letterSpacing: -0.3,),),
                         const SizedBox(height: 2),
                         Text('${(pct * 100).toStringAsFixed(0)}%',
                             style: TextStyle(
                                 fontSize: 10,
                                 color: txtSec,
-                                fontWeight: FontWeight.w500)),
+                                fontWeight: FontWeight.w500,),),
                       ],
                     ),
-                  ]),
+                  ],),
                 ),
               ),
             );
           },
         ),
       ),
-    ]);
+    ],);
   }
 }
