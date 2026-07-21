@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'auth_service_firebase.dart';
 
 class SyncService {
-  static final _firestore    = FirebaseFirestore.instance;
+  static final _firestore = FirebaseFirestore.instance;
   static final _connectivity = Connectivity();
 
   static Future<bool> get isOnline async {
@@ -46,7 +46,7 @@ class SyncService {
     if (!await isOnline) return;
     try {
       await _col('transactions').doc(id).update({
-        'deleted':   true,
+        'deleted': true,
         'deletedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -85,7 +85,7 @@ class SyncService {
     if (!await isOnline) return;
     try {
       await _col('wallets').doc(id).update({
-        'deleted':   true,
+        'deleted': true,
         'deletedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -120,11 +120,26 @@ class SyncService {
     }
   }
 
+  static Future<void> deleteBudget(String category) async {
+    if (!await isOnline) return;
+    try {
+      await _col('budgets').doc(category).update({
+        'deleted': true,
+        'deletedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      debugPrint('[Sync] Delete budget error: $e');
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> downloadAllBudgets() async {
     if (!await isOnline) return [];
     try {
       final snap = await _col('budgets').get();
-      return snap.docs.map((d) => d.data()).toList();
+      return snap.docs
+          .map((d) => d.data())
+          .where((d) => d['deleted'] != true)
+          .toList();
     } catch (e) {
       debugPrint('[Sync] Download budgets error: $e');
       return [];
@@ -147,7 +162,8 @@ class SyncService {
   // ── PENDING SYNC ──────────────────────────────────────────────────────────
 
   static Future<void> syncPendingTransactions(
-      List<Map<String, dynamic>> pending,) async {
+    List<Map<String, dynamic>> pending,
+  ) async {
     if (!await isOnline) return;
     if (pending.isEmpty) return;
     debugPrint('[Sync] Syncing ${pending.length} pending transactions...');
@@ -176,8 +192,8 @@ class SyncService {
       ]);
       return SyncDownloadResult(
         transactions: results[0],
-        wallets:      results[1],
-        budgets:      results[2],
+        wallets: results[1],
+        budgets: results[2],
       );
     } catch (e) {
       debugPrint('[Sync] Download all error: $e');
@@ -199,7 +215,7 @@ class SyncService {
       }
     }
     result['updatedAt'] = FieldValue.serverTimestamp();
-    result['platform']  = defaultTargetPlatform.name;
+    result['platform'] = defaultTargetPlatform.name;
     return result;
   }
 }
@@ -217,13 +233,12 @@ class SyncDownloadResult {
 
   factory SyncDownloadResult.empty() => const SyncDownloadResult(
         transactions: [],
-        wallets:      [],
-        budgets:      [],
+        wallets: [],
+        budgets: [],
       );
 
   bool get isEmpty =>
       transactions.isEmpty && wallets.isEmpty && budgets.isEmpty;
 
-  int get totalItems =>
-      transactions.length + wallets.length + budgets.length;
+  int get totalItems => transactions.length + wallets.length + budgets.length;
 }

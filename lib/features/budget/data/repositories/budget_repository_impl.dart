@@ -20,18 +20,33 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   @override
   Future<void> setBudget(BudgetEntity budget) async {
-    await _dao.upsertBudget(BudgetsCompanion.insert(
-      category: budget.category,
-      limitAmount: budget.limitAmount,
-      period: Value(budget.period),
-    ),);
+    await _dao.upsertBudget(
+      BudgetsCompanion.insert(
+        category: budget.category,
+        limitAmount: budget.limitAmount,
+        period: Value(budget.period),
+      ),
+    );
 
     // Sync ke Firebase
     _uploadBudget(budget);
   }
 
   @override
-  Future<void> deleteBudget(int id) => _dao.deleteBudget(id);
+  Future<void> deleteBudget(int id) async {
+    final existing = await _dao.getBudgetById(id);
+    await _dao.deleteBudget(id);
+
+    if (existing != null) {
+      _deleteBudgetRemote(existing.category);
+    }
+  }
+
+  void _deleteBudgetRemote(String category) {
+    SyncService.deleteBudget(category).catchError((e) {
+      debugPrint('[BudgetRepo] Delete budget remote error: $e');
+    });
+  }
 
   void _uploadBudget(BudgetEntity budget) {
     SyncService.uploadBudget({

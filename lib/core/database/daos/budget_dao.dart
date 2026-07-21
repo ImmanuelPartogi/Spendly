@@ -15,6 +15,11 @@ class BudgetDao extends DatabaseAccessor<AppDatabase> with _$BudgetDaoMixin {
         ..limit(1))
       .getSingleOrNull();
 
+  Future<Budget?> getBudgetById(int id) => (select(budgets)
+        ..where((b) => b.id.equals(id))
+        ..limit(1))
+      .getSingleOrNull();
+
   Future<void> upsertBudget(BudgetsCompanion entry) async {
     final existing = await getBudgetByCategory(entry.category.value);
     if (existing == null) {
