@@ -480,7 +480,7 @@ class _WalletDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<WalletEntity>(
-      value: value,
+      initialValue: value,
       decoration: InputDecoration(labelText: label),
       items: wallets
           .map((w) => DropdownMenuItem(

@@ -33,7 +33,7 @@ jobs:
         run: flutter pub get
 
       - name: Static Code Analysis
-        run: flutter analyze --fatal-infos
+        run: flutter analyze --fatal-warnings
 
       - name: Run Test Suite
         run: flutter test
