@@ -10,6 +10,8 @@ import '../../../../shared/widgets/transaction_tile.dart';
 import 'add_transaction_screen.dart';
 import 'search_screen.dart';
 import 'transaction_detail_screen.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
 const double _kBottomPad = 108.0;
 
@@ -18,6 +20,8 @@ class TransactionsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+    final titleText = AppStrings.get('transactions', locale);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
@@ -67,9 +71,9 @@ class TransactionsScreen extends ConsumerWidget {
                     child: SpendlyCard(
                       child: EmptyState(
                         icon: Icons.receipt_long_rounded,
-                        title: 'Belum ada transaksi',
-                        subtitle: 'Tap + untuk mencatat transaksi pertama',
-                        actionLabel: 'Tambah Transaksi',
+                        title: AppStrings.get('no_transactions', locale),
+                        subtitle: AppStrings.get('empty_transactions_sub_alt', locale),
+                        actionLabel: AppStrings.get('add_transaction', locale),
                         onAction: () => _openAdd(context),
                       ),
                     ),
@@ -88,7 +92,7 @@ class TransactionsScreen extends ConsumerWidget {
                   EdgeInsets.fromLTRB(16, 8, 16, _kBottomPad + safeBottom),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  SectionHeader(title: 'Semua Transaksi', titleColor: txtPrim),
+                  SectionHeader(title: AppStrings.get('all_transactions', locale), titleColor: txtPrim),
                   const SizedBox(height: 12),
                   SpendlyCard(
                     padding: const EdgeInsets.symmetric(vertical: 4),
@@ -178,7 +182,7 @@ class TransactionsScreen extends ConsumerWidget {
 
 // ─── App Bar ──────────────────────────────────────────────────────────────────
 
-class _TransactionsAppBar extends StatelessWidget {
+class _TransactionsAppBar extends ConsumerWidget {
   final bool isDark;
   final double safeTop;
   final VoidCallback onSearch;
@@ -190,7 +194,8 @@ class _TransactionsAppBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
@@ -222,12 +227,12 @@ class _TransactionsAppBar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Catatan &',
+                      Text(AppStrings.get('records_and', locale),
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                               color: txtSec,),),
-                      Text('Transaksi',
+                      Text(AppStrings.get('transactions', locale),
                           style: TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.w800,
@@ -247,7 +252,7 @@ class _TransactionsAppBar extends StatelessWidget {
               alignment: Alignment.bottomLeft,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
-                child: Text('Transaksi',
+                child: Text(AppStrings.get('transactions', locale),
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,

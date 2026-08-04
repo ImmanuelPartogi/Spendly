@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../auth/domain/services/auth_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/presentation/screens/pin_screen.dart';
+import '../../../../core/localization/locale_provider.dart';
+import '../../../notification/domain/providers/notification_providers.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -150,6 +152,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               onChanged: (v) {
                 setState(() => _language = v);
                 _savePrefs();
+                final langCode = v == 'English' ? 'en' : 'id';
+                ref.read(localeProvider.notifier).setLocale(langCode);
               },
             ),
             _Divider(isDark: isDark),
@@ -170,6 +174,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // ── Notifikasi ──────────────────────────────────────────────────────
           _SectionHeader('NOTIFIKASI', txtSec: txtSec),
           _SettingsCard(isDark: isDark, children: [
+            _SwitchTile(
+              icon: Icons.notifications_active_rounded,
+              iconColor: AppColors.income,
+              label: 'Pengingat Inaktivitas & Rekap',
+              subtitle: 'Pengingat transaksi harian & rekap mingguan',
+              value: ref.watch(notificationEnabledProvider),
+              isDark: isDark,
+              onChanged: (v) {
+                ref.read(notificationEnabledProvider.notifier).toggleNotification(v);
+              },
+            ),
+            _Divider(isDark: isDark),
             _SwitchTile(
               icon: Icons.warning_amber_rounded,
               iconColor: AppColors.warning,

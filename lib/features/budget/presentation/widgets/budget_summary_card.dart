@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../shared/widgets/spendly_card.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
-class BudgetSummaryCard extends StatelessWidget {
+class BudgetSummaryCard extends ConsumerWidget {
   final bool isDark;
   final double totalLimit;
   final double totalSpent;
@@ -20,7 +23,8 @@ class BudgetSummaryCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final overallPct =
         totalLimit > 0 ? (totalSpent / totalLimit).clamp(0.0, 1.0) : 0.0;
     final diff = totalLimit - totalSpent;
@@ -38,9 +42,9 @@ class BudgetSummaryCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Total Budget Bulan Ini',
-                    style: TextStyle(
+                  Text(
+                    AppStrings.get('total_monthly_budget', locale),
+                    style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -69,7 +73,7 @@ class BudgetSummaryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '$budgetCount kategori',
+                  '$budgetCount ${AppStrings.get('categories', locale)}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -100,7 +104,7 @@ class BudgetSummaryCard extends StatelessWidget {
           Row(
             children: [
               _SummaryChip(
-                label: 'Terpakai',
+                label: AppStrings.get('used', locale),
                 value: CurrencyFormatter.format(totalSpent),
                 icon: Icons.arrow_upward_rounded,
                 valueColor:
@@ -108,7 +112,7 @@ class BudgetSummaryCard extends StatelessWidget {
               ),
               const Spacer(),
               _SummaryChip(
-                label: isOver ? 'Melebihi' : 'Sisa',
+                label: isOver ? AppStrings.get('exceeded', locale) : AppStrings.get('remaining', locale),
                 value: isOver
                     ? '+ ${CurrencyFormatter.format(diff.abs())}'
                     : CurrencyFormatter.format(diff),

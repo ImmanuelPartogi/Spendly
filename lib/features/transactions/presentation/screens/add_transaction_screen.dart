@@ -13,6 +13,8 @@ import '../../../../core/utils/haptic_utils.dart';
 import '../../../scanner/presentation/screens/scanner_screen.dart';
 import '../../data/models/transaction_model.dart';
 import '../../domain/entities/transaction_entity.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AddTransactionSheet — Bottom sheet tambah / edit transaksi
@@ -118,12 +120,13 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
 
   // ── Simpan ────────────────────────────────────────────────────────────────
   Future<void> _save() async {
+    final locale = ref.read(localeProvider);
     final amount = ThousandSeparatorInputFormatter.parse(_amountCtrl.text);
     if (amount <= 0) {
       await HapticUtils.error();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Masukkan jumlah yang valid')),);
+          SnackBar(content: Text(AppStrings.get('amount_required', locale))),);
       return;
     }
 
@@ -179,8 +182,9 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
       debugPrint('[AddTransaction] Stack: $stack');
       await HapticUtils.error();
       if (mounted) {
+        final locale = ref.read(localeProvider);
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Gagal menyimpan: $e')),);
+            SnackBar(content: Text('${AppStrings.get('error_occurred', locale)}: $e')),);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -226,6 +230,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
 
   @override
   Widget build(BuildContext context) {
+    final locale      = ref.watch(localeProvider);
     final isDark      = Theme.of(context).brightness == Brightness.dark;
     final bgColor     = isDark ? AppColors.backgroundDark : AppColors.background;
     final surfColor   = isDark ? AppColors.surfaceDark    : AppColors.surface;
@@ -353,7 +358,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SectionLabel('Nominal Cepat', txtSec),
+                    _SectionLabel(AppStrings.get('quick_amounts', locale), txtSec),
                     const SizedBox(height: 10),
                     Wrap(
                       spacing: 7, runSpacing: 7,
@@ -413,7 +418,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SectionLabel('Kategori', txtSec),
+                    _SectionLabel(AppStrings.get('category', locale), txtSec),
                     const SizedBox(height: 10),
                     GridView.builder(
                       shrinkWrap: true,
@@ -504,7 +509,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                             controller: _noteCtrl,
                             style: TextStyle(color: txtPrim, fontSize: 13.5),
                             decoration: InputDecoration(
-                              hintText: 'Tambah catatan...',
+                              hintText: AppStrings.get('write_note', locale),
                               hintStyle:
                                   TextStyle(color: txtHint, fontSize: 13.5),
                               border: InputBorder.none,
@@ -591,8 +596,8 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                           ),
                           child: Center(child: Text(
                             widget.existing == null
-                                ? 'Simpan Transaksi'
-                                : 'Perbarui Transaksi',
+                                ? AppStrings.get('save_transaction', locale)
+                                : AppStrings.get('edit_transaction', locale),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 15.5,
@@ -637,7 +642,7 @@ class _DragHandle extends StatelessWidget {
   }
 }
 
-class _SheetHeader extends StatelessWidget {
+class _SheetHeader extends ConsumerWidget {
   final TransactionEntity? existing;
   final bool isExpense, isDark;
   final Color surfColor, bdrColor, txtPrim, txtSec;
@@ -657,13 +662,16 @@ class _SheetHeader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 8, 0),
       child: Row(children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            existing == null ? 'Tambah Transaksi' : 'Ubah Transaksi',
+            existing == null
+                ? AppStrings.get('add_transaction', locale)
+                : AppStrings.get('edit_transaction', locale),
             style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.w800,
               color: txtPrim, letterSpacing: -0.4,
@@ -671,7 +679,9 @@ class _SheetHeader extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            isExpense ? 'Catat pengeluaran' : 'Catat pemasukan',
+            isExpense
+                ? AppStrings.get('expense', locale)
+                : AppStrings.get('income', locale),
             style: TextStyle(fontSize: 12, color: txtSec),
           ),
         ],),
@@ -690,13 +700,13 @@ class _SheetHeader extends StatelessWidget {
                 border: Border.all(
                     color: AppColors.primary.withValues(alpha: 0.20),),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.document_scanner_rounded,
+                  const Icon(Icons.document_scanner_rounded,
                       color: AppColors.primary, size: 16,),
-                  SizedBox(width: 5),
-                  Text('Pindai', style: TextStyle(
+                  const SizedBox(width: 5),
+                  Text(AppStrings.get('scan', locale), style: const TextStyle(
                     fontSize: 12, fontWeight: FontWeight.w700,
                     color: AppColors.primary,
                   ),),
@@ -724,7 +734,7 @@ class _SheetHeader extends StatelessWidget {
   }
 }
 
-class _TabSwitcher extends StatelessWidget {
+class _TabSwitcher extends ConsumerWidget {
   final TabController tabCtrl;
   final Color accentColor, surfColor, bdrColor, txtSec;
 
@@ -737,7 +747,8 @@ class _TabSwitcher extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -772,9 +783,9 @@ class _TabSwitcher extends StatelessWidget {
           unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.w500, fontSize: 13.5,),
           dividerColor: Colors.transparent,
-          tabs: const [
-            Tab(text: 'Pengeluaran'),
-            Tab(text: 'Pemasukan'),
+          tabs: [
+            Tab(text: AppStrings.get('expense', locale)),
+            Tab(text: AppStrings.get('income', locale)),
           ],
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../transactions/domain/entities/transaction_entity.dart';
 import '../../domain/services/export_service.dart';
 
 class ExportScreen extends ConsumerStatefulWidget {
@@ -20,25 +22,68 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     _Period('Bulan ini', 'month', Icons.calendar_month_rounded),
     _Period('3 Bulan', '3months', Icons.date_range_rounded),
     _Period('Tahun ini', 'year', Icons.calendar_today_rounded),
-_Period('Kustom', 'range', Icons.tune_rounded),
+    _Period('Kustom', 'range', Icons.tune_rounded),
   ];
 
   Future<void> _export() async {
     setState(() => _isLoading = true);
     try {
-      // TODO: fetch transactions from provider based on period
-      final transactions = <dynamic>[];
+      final repo = ref.read(transactionRepositoryProvider);
+      final allTxs = await repo.getAllTransactions();
+      final now = DateTime.now();
+      List<TransactionEntity> transactions = [];
+
+      switch (_period) {
+        case 'month':
+          transactions = allTxs
+              .where((t) => t.date.year == now.year && t.date.month == now.month)
+              .toList();
+          break;
+        case '3months':
+          final threeMonthsAgo = DateTime(now.year, now.month - 2, 1);
+          transactions = allTxs
+              .where((t) => !t.date.isBefore(threeMonthsAgo))
+              .toList();
+          break;
+        case 'year':
+          transactions =
+              allTxs.where((t) => t.date.year == now.year).toList();
+          break;
+        case 'range':
+          if (_customRange != null) {
+            final start = DateTime(
+                _customRange!.start.year,
+                _customRange!.start.month,
+                _customRange!.start.day,);
+            final end = DateTime(
+                _customRange!.end.year,
+                _customRange!.end.month,
+                _customRange!.end.day,
+                23,
+                59,
+                59,);
+            transactions = allTxs
+                .where((t) =>
+                    !t.date.isBefore(start) && !t.date.isAfter(end),)
+                .toList();
+          } else {
+            transactions = allTxs;
+          }
+          break;
+        default:
+          transactions = allTxs;
+      }
 
       if (_format == 'csv') {
         final file = await ExportService.exportToCsv(
-          transactions.cast(),
+          transactions,
           filename: 'spendly_${DateTime.now().millisecondsSinceEpoch}',
         );
         await ExportService.shareFile(file,
             subject: 'Spendly Export CSV',);
       } else {
         final file = await ExportService.exportToPdf(
-          transactions.cast(),
+          transactions,
           monthLabel: _getPeriodLabel(),
           filename: 'spendly_${DateTime.now().millisecondsSinceEpoch}',
         );
@@ -106,7 +151,8 @@ _Period('Kustom', 'range', Icons.tune_rounded),
     return Scaffold(
       backgroundColor: AppColors.background,
 appBar: AppBar(title: const Text('Ekspor Data')),
-      body: SingleChildScrollView(
+      body: SafeArea(
+        child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,7 +349,8 @@ appBar: AppBar(title: const Text('Ekspor Data')),
           ],
         ),
       ),
-    );
+    ),
+  );
   }
 }
 

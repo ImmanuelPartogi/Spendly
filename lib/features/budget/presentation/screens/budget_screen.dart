@@ -7,6 +7,8 @@ import '../../domain/entities/budget_entity.dart';
 import '../widgets/budget_card.dart';
 import '../widgets/budget_summary_card.dart';
 import '../widgets/set_budget_sheet.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
 const double _kBottomPad = 108.0;
 
@@ -15,6 +17,8 @@ class BudgetScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale      = ref.watch(localeProvider);
+    final titleText   = AppStrings.get('monthly_budget', locale);
     final isDark      = Theme.of(context).brightness == Brightness.dark;
     final bgColor     = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim     = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
@@ -56,10 +60,9 @@ class BudgetScreen extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: EmptyState(
-                      title: 'Belum ada anggaran',
-                      subtitle:
-                          'Tetapkan batas pengeluaran per kategori untuk mulai memantau keuangan',
-                      actionLabel: 'Buat Anggaran',
+                      title: AppStrings.get('no_budgets', locale),
+                      subtitle: AppStrings.get('set_budget_sub', locale),
+                      actionLabel: AppStrings.get('create_budget', locale),
                       onAction: () => _openSetBudget(context, ref, null),
                       icon: Icons.account_balance_wallet_outlined,
                     ),
@@ -109,7 +112,7 @@ class BudgetScreen extends ConsumerWidget {
 
 // ─── App Bar ──────────────────────────────────────────────────────────────────
 
-class _BudgetAppBar extends StatelessWidget {
+class _BudgetAppBar extends ConsumerWidget {
   final bool isDark;
   final double safeTop;
   final VoidCallback onAdd;
@@ -121,7 +124,8 @@ class _BudgetAppBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale  = ref.watch(localeProvider);
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec  = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
@@ -155,14 +159,14 @@ class _BudgetAppBar extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Kelola &',
+                        AppStrings.get('manage_and', locale),
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: txtSec,),
                       ),
                       Text(
-                        'Anggaran',
+                        AppStrings.get('budget', locale),
                         style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
@@ -186,7 +190,7 @@ class _BudgetAppBar extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
                 child: Text(
-                  'Anggaran',
+                  AppStrings.get('budget', locale),
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -229,7 +233,7 @@ class _BudgetAppBar extends StatelessWidget {
 
 // ─── Header daftar anggaran ───────────────────────────────────────────────────
 
-class _BudgetListHeader extends StatelessWidget {
+class _BudgetListHeader extends ConsumerWidget {
   final bool isDark;
   final int count;
   final int exceededCount;
@@ -243,11 +247,12 @@ class _BudgetListHeader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return Row(
       children: [
         Text(
-          'Anggaran Aktif',
+          AppStrings.get('active_budgets', locale),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w700,
@@ -287,7 +292,7 @@ class _BudgetListHeader extends StatelessWidget {
                   color: AppColors.error, size: 11,),
               const SizedBox(width: 3),
               Text(
-                '$exceededCount terlampaui',
+                '$exceededCount ${AppStrings.get('exceeded_count', locale)}',
                 style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,

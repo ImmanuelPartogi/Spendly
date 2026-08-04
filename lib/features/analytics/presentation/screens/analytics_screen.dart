@@ -9,6 +9,8 @@ import '../widgets/analytics/analytics_date_header.dart';
 import '../widgets/analytics/analytics_insight_card.dart';
 import '../widgets/analytics/analytics_summary_row.dart';
 import '../widgets/analytics/analytics_weekday_card.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
 const double _kBottomPad = 108.0;
 
@@ -107,6 +109,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final safeTop = MediaQuery.of(context).padding.top;
@@ -127,7 +130,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       body: txAsync.when(
         loading: () => const SafeArea(child: AnalyticsSkeleton()),
         error: (e, _) =>
-            Center(child: Text('Terjadi kesalahan: $e', style: TextStyle(color: txtSec))),
+            Center(child: Text('${AppStrings.get('error_occurred', locale)}: $e', style: TextStyle(color: txtSec))),
         data: (_) => CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
@@ -178,7 +181,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
 // ─── App Bar ──────────────────────────────────────────────────────────────────
 
-class _AnalyticsAppBar extends StatelessWidget {
+class _AnalyticsAppBar extends ConsumerWidget {
   final bool isDark;
   final double safeTop;
   final bool isFiltered;
@@ -192,7 +195,8 @@ class _AnalyticsAppBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
@@ -225,12 +229,12 @@ class _AnalyticsAppBar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Laporan &',
+                      Text(AppStrings.get('reports_and', locale),
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                               color: txtSec,),),
-                      Text('Analytics',
+                      Text(AppStrings.get('analytics', locale),
                           style: TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.w800,
@@ -251,7 +255,7 @@ class _AnalyticsAppBar extends StatelessWidget {
               alignment: Alignment.bottomLeft,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
-                child: Text('Analytics',
+                child: Text(AppStrings.get('analytics', locale),
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
@@ -299,7 +303,7 @@ class _AnalyticsAppBar extends StatelessWidget {
 
 // ─── Filter Sheet ─────────────────────────────────────────────────────────────
 
-class _FilterSheet extends StatelessWidget {
+class _FilterSheet extends ConsumerWidget {
   final bool isDark;
   final VoidCallback onThisWeek;
   final VoidCallback onThisMonth;
@@ -313,7 +317,8 @@ class _FilterSheet extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
@@ -336,35 +341,35 @@ class _FilterSheet extends StatelessWidget {
                 ),
               ),
             ),
-            Text('Filter Periode',
+            Text(AppStrings.get('period_filter', locale),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: txtPrim,
                     letterSpacing: -0.4,),),
             const SizedBox(height: 4),
-            Text('Pilih rentang waktu yang ingin ditampilkan',
+            Text(AppStrings.get('select_time_range', locale),
                 style: TextStyle(fontSize: 12, color: txtSec),),
             const SizedBox(height: 16),
             _SheetOption(
-              label: 'Minggu Ini',
-              subtitle: 'Tampilkan data 7 hari berjalan',
+              label: AppStrings.get('this_week', locale),
+              subtitle: AppStrings.get('this_week_sub', locale),
               icon: Icons.calendar_view_week_rounded,
               onTap: onThisWeek,
               isDark: isDark,
             ),
             const SizedBox(height: 8),
             _SheetOption(
-              label: 'Bulan Ini',
-              subtitle: 'Tampilkan seluruh data bulan ini',
+              label: AppStrings.get('this_month', locale),
+              subtitle: AppStrings.get('this_month_sub', locale),
               icon: Icons.calendar_month_rounded,
               onTap: onThisMonth,
               isDark: isDark,
             ),
             const SizedBox(height: 8),
             _SheetOption(
-              label: 'Rentang Kustom',
-              subtitle: 'Pilih tanggal mulai dan akhir sendiri',
+              label: AppStrings.get('custom_range', locale),
+              subtitle: AppStrings.get('custom_range_sub', locale),
               icon: Icons.date_range_rounded,
               onTap: onCustom,
               isDark: isDark,

@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/currency_formatter.dart';
 import '../../../../../shared/widgets/spendly_card.dart';
+import '../../../../../core/localization/app_strings.dart';
+import '../../../../../core/localization/locale_provider.dart';
 
-class ProfileHeroCard extends StatelessWidget {
+class ProfileHeroCard extends ConsumerWidget {
   final String name;
   final String avatar;
   final String? photoPath;
@@ -23,8 +26,9 @@ class ProfileHeroCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final displayName = name.isEmpty ? 'Akun Saya' : name;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+    final displayName = name.isEmpty ? AppStrings.get('my_account', locale) : name;
 
     return SpendlyCard(
       gradient: AppColors.primaryGradient,
@@ -93,7 +97,7 @@ class ProfileHeroCard extends StatelessWidget {
                       const SizedBox(width: 5),
                       Flexible(
                         child: Text(
-                          isAnon ? 'Mode Tamu' : (userEmail ?? ''),
+                          isAnon ? AppStrings.get('guest_mode', locale) : (userEmail ?? ''),
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.75),
                             fontSize: 12.5,
@@ -113,7 +117,7 @@ class ProfileHeroCard extends StatelessWidget {
             Row(children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  'Total Saldo',
+                  AppStrings.get('total_balance', locale),
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.65),
                     fontSize: 11.5,
@@ -151,7 +155,7 @@ class ProfileHeroCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 5),
-                  Text('Aktif',
+                  Text(AppStrings.get('active', locale),
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.90),
                         fontSize: 12,

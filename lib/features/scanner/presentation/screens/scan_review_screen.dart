@@ -11,7 +11,10 @@ import '../../../../core/utils/haptic_utils.dart';
 import '../../../transactions/data/models/transaction_model.dart';
 import '../../../wallet/domain/entities/wallet_entity.dart';
 import '../../domain/models/scanned_transaction_result.dart';
+import '../../domain/services/ocr_parser_service.dart';
 import '../widgets/scan_result_edit_sheet.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Model — ScanResultItem
@@ -111,6 +114,7 @@ class ScanReviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final allItems = ref.watch(scanReviewProvider);
 
@@ -123,11 +127,11 @@ class ScanReviewScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tinjau Hasil Scan'),
+        title: Text(AppStrings.get('review_scan_results', locale)),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            tooltip: 'Pilih Semua',
+            tooltip: AppStrings.get('select_all', locale),
             icon: const Icon(Icons.select_all_rounded, size: 20),
             onPressed: () =>
                 ref.read(scanReviewProvider.notifier).selectAll(),
@@ -204,6 +208,7 @@ class ScanReviewScreen extends ConsumerWidget {
     WidgetRef ref,
     List<ScanResultItem> allItems,
   ) async {
+    final locale = ref.read(localeProvider);
     final selected = allItems.where((e) => e.isSelected).toList();
     if (selected.isEmpty) return;
 
@@ -211,19 +216,18 @@ class ScanReviewScreen extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Konfirmasi Penyimpanan'),
+        title: Text(AppStrings.get('confirm_save', locale)),
         content: Text(
-          '${selected.length} transaksi akan disimpan ke dompet Anda. '
-          'Pastikan data sudah benar sebelum melanjutkan.',
+          '${selected.length} ${AppStrings.get('save_transactions_confirm_sub', locale)}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Periksa Lagi'),
+            child: Text(AppStrings.get('check_again', locale)),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Simpan Sekarang'),
+            child: Text(AppStrings.get('save_now', locale)),
           ),
         ],
       ),
@@ -243,8 +247,8 @@ class ScanReviewScreen extends ConsumerWidget {
     if (wallets.isEmpty) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Belum ada dompet. Tambah dompet dulu.'),
+          SnackBar(
+            content: Text(AppStrings.get('no_wallets_warning', locale)),
           ),
         );
       }
@@ -261,7 +265,7 @@ class ScanReviewScreen extends ConsumerWidget {
         );
         return StatefulBuilder(
           builder: (ctx, setSt) => AlertDialog(
-            title: const Text('Pilih Dompet'),
+            title: Text(AppStrings.get('select_wallet', locale)),
             content: DropdownButtonFormField<WalletEntity>(
               value: selected,
               decoration: const InputDecoration(
@@ -280,11 +284,11 @@ class ScanReviewScreen extends ConsumerWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text('Batal'),
+                child: Text(AppStrings.get('cancel', locale)),
               ),
               FilledButton(
                 onPressed: () => Navigator.pop(ctx, selected),
-                child: const Text('Simpan'),
+                child: Text(AppStrings.get('save', locale)),
               ),
             ],
           ),
@@ -333,9 +337,8 @@ class ScanReviewScreen extends ConsumerWidget {
 
     // ── Snackbar hasil ──────────────────────────────────────────────────────────
     final snackbarMsg = failCount > 0
-        ? '$successCount transaksi berhasil disimpan. '
-            '$failCount transaksi gagal disimpan. Coba lagi nanti.'
-        : '$successCount transaksi berhasil disimpan';
+        ? '$successCount ${AppStrings.get('save_transaction', locale)}'
+        : '$successCount ${AppStrings.get('save_transaction', locale)}';
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(snackbarMsg)),
@@ -346,25 +349,9 @@ class ScanReviewScreen extends ConsumerWidget {
     Navigator.pop(context); // tutup scanner
   }
 
-  /// Map source → kategori terdekat yang tersedia.
+  /// Map source → kategori terdekat yang tersedia via OcrParserService.
   String _mapCategory(ScannedTransactionResult r) {
-    if (r.type == ScannedDocumentType.salarySlip) return 'Gaji';
-
-    final src = (r.source ?? '').toLowerCase();
-    const shopKeywords = [
-      'indomaret', 'alfamart', 'alfamidi', 'lawson', 'circle k',
-      'giant', 'hypermart', 'carrefour', 'transmart', 'tokopedia',
-      'shopee', 'lazada', 'bukalapak',
-    ];
-    if (shopKeywords.any((k) => src.contains(k))) return 'Belanja';
-
-    const foodKeywords = ['restoran', 'kafe', 'cafe', 'makan', 'restaurant'];
-    if (foodKeywords.any((k) => src.contains(k))) return 'Makanan & Minuman';
-
-    const transportKeywords = ['gojek', 'grab', 'traveloka'];
-    if (transportKeywords.any((k) => src.contains(k))) return 'Transportasi';
-
-    return 'Lainnya';
+    return OcrParserService.suggestCategory(type: r.type, source: r.source);
   }
 }
 
@@ -372,7 +359,7 @@ class ScanReviewScreen extends ConsumerWidget {
 // Widgets
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _SummaryBar extends StatelessWidget {
+class _SummaryBar extends ConsumerWidget {
   final int selectedCount;
   final int failedCount;
   final int editedCount;
@@ -384,7 +371,8 @@ class _SummaryBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -392,7 +380,7 @@ class _SummaryBar extends StatelessWidget {
           Expanded(
             child: _SummaryChip(
               count: selectedCount,
-              label: 'Akan Disimpan',
+              label: AppStrings.get('will_be_saved', locale),
               color: AppColors.income,
             ),
           ),
@@ -400,7 +388,7 @@ class _SummaryBar extends StatelessWidget {
           Expanded(
             child: _SummaryChip(
               count: failedCount,
-              label: 'Gagal',
+              label: AppStrings.get('failed', locale),
               color: AppColors.error,
             ),
           ),
@@ -408,7 +396,7 @@ class _SummaryBar extends StatelessWidget {
           Expanded(
             child: _SummaryChip(
               count: editedCount,
-              label: 'Diedit',
+              label: AppStrings.get('edited', locale),
               color: Colors.orange,
             ),
           ),
@@ -465,7 +453,7 @@ class _SummaryChip extends StatelessWidget {
   }
 }
 
-class _SuccessResultCard extends StatelessWidget {
+class _SuccessResultCard extends ConsumerWidget {
   final ScanResultItem item;
   final bool isDark;
   final VoidCallback onToggle;
@@ -478,19 +466,20 @@ class _SuccessResultCard extends StatelessWidget {
     required this.onEdit,
   });
 
-  String get _typeLabel {
+  String _typeLabel(Locale locale) {
     switch (item.result.type) {
       case ScannedDocumentType.receipt:
-        return 'Struk';
+        return AppStrings.get('receipt', locale);
       case ScannedDocumentType.salarySlip:
-        return 'Slip Gaji';
+        return AppStrings.get('salary_slip', locale);
       case ScannedDocumentType.unknown:
-        return 'Tidak Diketahui';
+        return AppStrings.get('unknown', locale);
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final cardColor = isDark ? AppColors.cardDark : AppColors.card;
     final bdrColor = isDark ? AppColors.borderDark : AppColors.border;
     final txtSec =
@@ -498,11 +487,11 @@ class _SuccessResultCard extends StatelessWidget {
 
     final dateStr = item.result.date != null
         ? DateFormat('dd MMM yyyy').format(item.result.date!)
-        : 'Tanggal tidak terdeteksi';
+        : AppStrings.get('date_not_detected', locale);
 
     final amountStr = item.result.amount != null
         ? CurrencyFormatter.format(item.result.amount!)
-        : 'Nominal tidak terdeteksi';
+        : AppStrings.get('amount_not_detected', locale);
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -542,7 +531,7 @@ class _SuccessResultCard extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        item.result.source ?? 'Tidak Diketahui',
+                        item.result.source ?? AppStrings.get('unknown', locale),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -560,9 +549,9 @@ class _SuccessResultCard extends StatelessWidget {
                           color: Colors.orange.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Text(
-                          'Diedit',
-                          style: TextStyle(
+                        child: Text(
+                          AppStrings.get('edited', locale),
+                          style: const TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w700,
                             color: Colors.orange,
@@ -582,7 +571,7 @@ class _SuccessResultCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    _typeLabel,
+                    _typeLabel(locale),
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
@@ -617,9 +606,9 @@ class _SuccessResultCard extends StatelessWidget {
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
-                      'Ubah',
-                      style: TextStyle(fontSize: 12),
+                    child: Text(
+                      AppStrings.get('edit', locale),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ),
@@ -660,7 +649,7 @@ class _SuccessResultCard extends StatelessWidget {
   }
 }
 
-class _FailedResultCard extends StatelessWidget {
+class _FailedResultCard extends ConsumerWidget {
   final ScanResultItem item;
   final bool isDark;
   final VoidCallback onToggle;
@@ -674,7 +663,8 @@ class _FailedResultCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final cardColor = isDark ? AppColors.cardDark : AppColors.card;
     final bdrColor = isDark ? AppColors.borderDark : AppColors.border;
 
@@ -727,7 +717,7 @@ class _FailedResultCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Gagal Dipindai',
+                  AppStrings.get('scan_failed', locale),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -737,7 +727,7 @@ class _FailedResultCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   item.result.errorMessage ??
-                      'Teks tidak terdeteksi. Pastikan gambar cukup jelas.',
+                      AppStrings.get('scan_failed_sub', locale),
                   style: TextStyle(
                     fontSize: 12,
                     color: AppColors.textSecondary,
@@ -755,9 +745,9 @@ class _FailedResultCard extends StatelessWidget {
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
-                      'Coba Edit',
-                      style: TextStyle(fontSize: 12),
+                    child: Text(
+                      AppStrings.get('try_edit', locale),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ),
@@ -796,7 +786,7 @@ class _FailedResultCard extends StatelessWidget {
   }
 }
 
-class _BottomActionBar extends StatelessWidget {
+class _BottomActionBar extends ConsumerWidget {
   final int selectedCount;
   final VoidCallback onCancel;
   final VoidCallback onSave;
@@ -808,7 +798,8 @@ class _BottomActionBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -828,7 +819,7 @@ class _BottomActionBar extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              child: const Text('Batal'),
+              child: Text(AppStrings.get('cancel', locale)),
             ),
           ),
           const SizedBox(width: 12),
@@ -838,7 +829,7 @@ class _BottomActionBar extends StatelessWidget {
               style: FilledButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              child: Text('Simpan $selectedCount Transaksi'),
+              child: Text('${AppStrings.get('save', locale)} $selectedCount ${AppStrings.get('transactions', locale)}'),
             ),
           ),
         ],

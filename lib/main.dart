@@ -20,8 +20,12 @@ void main() async {
 
   await initializeDateFormatting('id', null); // ← tambah ini
 
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+    ),
   );
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

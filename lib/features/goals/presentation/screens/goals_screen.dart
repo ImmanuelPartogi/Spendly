@@ -4,6 +4,8 @@ import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../domain/entities/goal_entity.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Goals Screen
@@ -14,12 +16,14 @@ class GoalsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final goalsAsync = ref.watch(goalListProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Target Keuangan')),
-      body: goalsAsync.when(
+      appBar: AppBar(title: Text(AppStrings.get('financial_goals', locale))),
+      body: SafeArea(
+        child: goalsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
           child: Column(
@@ -28,21 +32,21 @@ class GoalsScreen extends ConsumerWidget {
               const Icon(Icons.error_outline_rounded,
                   size: 48, color: AppColors.expense,),
               const SizedBox(height: 12),
-              Text('Gagal memuat goals',
+              Text(AppStrings.get('load_goals_failed', locale),
                   style: Theme.of(context).textTheme.bodyLarge,),
             ],
           ),
         ),
         data: (goals) {
           if (goals.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('🏆', style: TextStyle(fontSize: 48)),
-                  SizedBox(height: 12),
-                  Text('Belum ada goals',
-                      style: TextStyle(color: AppColors.textSecondary),),
+                  const Text('🏆', style: TextStyle(fontSize: 48)),
+                  const SizedBox(height: 12),
+                  Text(AppStrings.get('no_goals', locale),
+                      style: const TextStyle(color: AppColors.textSecondary),),
                 ],
               ),
             );
@@ -55,24 +59,24 @@ class GoalsScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             children: [
               if (active.isNotEmpty) ...[
-                const _SectionTitle('Goals Aktif'),
+                _SectionTitle(AppStrings.get('active_goals', locale)),
                 const SizedBox(height: 10),
                 ...active.map((g) => _GoalCard(
                       goal: g,
-                      onAddFunds: () => _showAddFundsDialog(context, ref, g),
+                      onAddFunds: () => _showAddFundsDialog(context, ref, g, locale),
                       onEdit: () => _openAddEdit(context, existing: g),
-                      onDelete: () => _confirmDelete(context, ref, g),
+                      onDelete: () => _confirmDelete(context, ref, g, locale),
                     ),),
               ],
               if (completed.isNotEmpty) ...[
                 const SizedBox(height: 16),
-                const _SectionTitle('🎉 Tercapai'),
+                _SectionTitle('🎉 ${AppStrings.get('achieved_goals', locale)}'),
                 const SizedBox(height: 10),
                 ...completed.map((g) => _GoalCard(
                       goal: g,
                       onAddFunds: () {},
                       onEdit: () {},
-                      onDelete: () => _confirmDelete(context, ref, g),
+                      onDelete: () => _confirmDelete(context, ref, g, locale),
                     ),),
               ],
               const SizedBox(height: 80),
@@ -80,6 +84,7 @@ class GoalsScreen extends ConsumerWidget {
           );
         },
       ),
+    ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openAddEdit(context),
         backgroundColor: AppColors.primary,
@@ -89,23 +94,23 @@ class GoalsScreen extends ConsumerWidget {
   }
 
   void _showAddFundsDialog(
-      BuildContext context, WidgetRef ref, GoalEntity goal,) {
+      BuildContext context, WidgetRef ref, GoalEntity goal, Locale locale) {
     final ctrl = TextEditingController();
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Alokasi ke "${goal.title}"'),
+        title: Text('${AppStrings.get('allocate_to', locale)} "${goal.title}"'),
         content: TextField(
           controller: ctrl,
           keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(hintText: 'Jumlah', prefixText: 'Rp '),
+              InputDecoration(hintText: AppStrings.get('amount', locale), prefixText: 'Rp '),
           autofocus: true,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
+            child: Text(AppStrings.get('cancel', locale)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -117,23 +122,23 @@ class GoalsScreen extends ConsumerWidget {
               }
               if (context.mounted) Navigator.pop(context);
             },
-            child: const Text('Alokasi'),
+            child: Text(AppStrings.get('allocate', locale)),
           ),
         ],
       ),
     );
   }
 
-  void _confirmDelete(BuildContext context, WidgetRef ref, GoalEntity goal) {
+  void _confirmDelete(BuildContext context, WidgetRef ref, GoalEntity goal, Locale locale) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Hapus Goal?'),
-        content: Text('"${goal.title}" akan dihapus permanen.'),
+        title: Text(AppStrings.get('delete_goal_confirm', locale)),
+        content: Text('"${goal.title}" ${AppStrings.get('delete_goal_sub', locale)}'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
+            child: Text(AppStrings.get('cancel', locale)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -141,7 +146,7 @@ class GoalsScreen extends ConsumerWidget {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.expense),
-            child: const Text('Hapus'),
+            child: Text(AppStrings.get('delete', locale)),
           ),
         ],
       ),
@@ -175,7 +180,7 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-class _GoalCard extends StatelessWidget {
+class _GoalCard extends ConsumerWidget {
   final GoalEntity goal;
   final VoidCallback onAddFunds;
   final VoidCallback onEdit;
@@ -189,7 +194,8 @@ class _GoalCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -244,10 +250,10 @@ class _GoalCard extends StatelessWidget {
                     ),
                     Text(
                       goal.isCompleted
-                          ? 'Goal tercapai! 🎉'
+                          ? AppStrings.get('goal_achieved_status', locale)
                           : goal.isOverdue
-                              ? '⚠️ Deadline terlewati'
-                              : '${goal.daysLeft} hari tersisa',
+                              ? AppStrings.get('deadline_overdue', locale)
+                              : '${goal.daysLeft} ${AppStrings.get('days_left', locale)}',
                       style: TextStyle(
                         fontSize: 12,
                         color: goal.isCompleted
@@ -266,11 +272,11 @@ class _GoalCard extends StatelessWidget {
                   if (v == 'delete') onDelete();
                 },
                 itemBuilder: (_) => [
-                  const PopupMenuItem(value: 'edit', child: Text('Edit')),
-                  const PopupMenuItem(
+                  PopupMenuItem(value: 'edit', child: Text(AppStrings.get('edit', locale))),
+                  PopupMenuItem(
                     value: 'delete',
-                    child: Text('Hapus',
-                        style: TextStyle(color: AppColors.expense),),
+                    child: Text(AppStrings.get('delete', locale),
+                        style: const TextStyle(color: AppColors.expense),),
                   ),
                 ],
               ),
@@ -320,7 +326,7 @@ class _GoalCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${(goal.progress * 100).toStringAsFixed(0)}% tercapai',
+                '${(goal.progress * 100).toStringAsFixed(0)}% ${AppStrings.get('achieved_percent', locale)}',
                 style: TextStyle(
                   fontSize: 11,
                   color: goal.color,
@@ -329,7 +335,7 @@ class _GoalCard extends StatelessWidget {
               ),
               if (!goal.isCompleted && goal.dailySavingsNeeded > 0)
                 Text(
-                  'Perlu ${CurrencyFormatter.formatCompact(goal.dailySavingsNeeded)}/hari',
+                  '${AppStrings.get('need_per_day', locale)} ${CurrencyFormatter.formatCompact(goal.dailySavingsNeeded)}${AppStrings.get('per_day', locale)}',
                   style: const TextStyle(
                       fontSize: 11, color: AppColors.textSecondary,),
                 ),
@@ -342,7 +348,7 @@ class _GoalCard extends StatelessWidget {
               child: OutlinedButton.icon(
                 onPressed: onAddFunds,
                 icon: const Icon(Icons.add_rounded, size: 16),
-                label: const Text('Alokasi Dana'),
+                label: Text(AppStrings.get('allocate_funds', locale)),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: goal.color,
                   side: BorderSide(color: goal.color),
@@ -461,6 +467,8 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(localeProvider);
+
     return Container(
       margin: const EdgeInsets.only(top: 60),
       decoration: const BoxDecoration(
@@ -489,12 +497,12 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
             ),
             const SizedBox(height: 16),
             Text(
-              widget.existing == null ? 'Buat Goal Baru' : 'Edit Goal',
+              widget.existing == null ? AppStrings.get('create_new_goal', locale) : AppStrings.get('edit_goal', locale),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
             // Emoji picker
-            Text('Ikon', style: Theme.of(context).textTheme.titleSmall),
+            Text(AppStrings.get('icon', locale), style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -524,7 +532,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
             ),
             const SizedBox(height: 16),
             // Color picker
-            Text('Warna', style: Theme.of(context).textTheme.titleSmall),
+            Text(AppStrings.get('color', locale), style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Row(
               children: _colors.map((c) {
@@ -552,14 +560,14 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
             const SizedBox(height: 16),
             TextField(
               controller: _titleCtrl,
-              decoration: const InputDecoration(labelText: 'Nama Goal'),
+              decoration: InputDecoration(labelText: AppStrings.get('goal_name', locale)),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _targetCtrl,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Target Nominal',
+              decoration: InputDecoration(
+                labelText: AppStrings.get('target_amount', locale),
                 prefixText: 'Rp ',
               ),
             ),
@@ -588,7 +596,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                         size: 18, color: AppColors.textSecondary,),
                     const SizedBox(width: 10),
                     Text(
-                      'Deadline: ${_deadline.day}/${_deadline.month}/${_deadline.year}',
+                      '${AppStrings.get('deadline', locale)}: ${_deadline.day}/${_deadline.month}/${_deadline.year}',
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w600,),
                     ),
@@ -608,7 +616,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                         height: 20,
                         child: CircularProgressIndicator(
                             color: Colors.white, strokeWidth: 2,),)
-                    : const Text('Simpan Goal'),
+                    : Text(AppStrings.get('save_goal', locale)),
               ),
             ),
           ],

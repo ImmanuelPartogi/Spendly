@@ -37,6 +37,9 @@ class Wallets extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+@TableIndex(name: 'idx_transactions_date', columns: {#date})
+@TableIndex(name: 'idx_transactions_wallet', columns: {#walletId})
+@TableIndex(name: 'idx_transactions_category', columns: {#category})
 class Transactions extends Table {
   TextColumn get id => text().withLength(min: 36, max: 36)();
   TextColumn get walletId => text()();
@@ -135,13 +138,14 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.e);
 
   @override
-  int get schemaVersion => 3; // ← naik dari 2 ke 3
+  int get schemaVersion => 4; // ← naik dari 3 ke 4 (tambah indeks transaksi)
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
+        await _createIndexes();
         await _seedDefaultWallet();
       },
       onUpgrade: (Migrator m, int from, int to) async {
@@ -171,8 +175,18 @@ class AppDatabase extends _$AppDatabase {
           // Goals: tambah synced
           await m.addColumn(goals, goals.synced);
         }
+        // v3 → v4: Indeks performa tabel Transactions
+        if (from < 4) {
+          await _createIndexes();
+        }
       },
     );
+  }
+
+  Future<void> _createIndexes() async {
+    await customStatement('CREATE INDEX IF NOT EXISTS idx_transactions_date ON transactions (date);');
+    await customStatement('CREATE INDEX IF NOT EXISTS idx_transactions_wallet ON transactions (wallet_id);');
+    await customStatement('CREATE INDEX IF NOT EXISTS idx_transactions_category ON transactions (category);');
   }
 
   Future<void> _seedDefaultWallet() async {

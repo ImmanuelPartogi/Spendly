@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/category_utils.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../shared/widgets/spendly_card.dart';
 import '../../domain/entities/budget_entity.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
-class BudgetCard extends StatelessWidget {
+class BudgetCard extends ConsumerWidget {
   final BudgetEntity budget;
   final bool isDark;
   final VoidCallback onEdit;
@@ -20,7 +23,8 @@ class BudgetCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final color = CategoryUtils.getColor(budget.category);
     final icon = CategoryUtils.getIcon(budget.category);
     final pct = budget.percentage;
@@ -38,10 +42,10 @@ class BudgetCard extends StatelessWidget {
             : AppColors.income;
 
     final pctLabel = budget.isExceeded
-        ? 'Terlampaui'
+        ? AppStrings.get('exceeded_status', locale)
         : budget.isWarning
-            ? 'Hampir di batas'
-            : '${(pct * 100).round()}% terpakai';
+            ? AppStrings.get('near_limit_status', locale)
+            : '${(pct * 100).round()}% ${AppStrings.get('used', locale)}';
 
     return SpendlyCard(
       padding: const EdgeInsets.all(16),
@@ -116,22 +120,22 @@ class BudgetCard extends StatelessWidget {
                         const Icon(Icons.edit_rounded,
                             size: 15, color: AppColors.primary,),
                         const SizedBox(width: 8),
-                        Text('Edit',
+                        Text(AppStrings.get('edit', locale),
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: txtPrim,),),
                       ],),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'delete',
                       height: 40,
                       child: Row(children: [
-                        Icon(Icons.delete_outline_rounded,
+                        const Icon(Icons.delete_outline_rounded,
                             size: 15, color: AppColors.error,),
-                        SizedBox(width: 8),
-                        Text('Hapus',
-                            style: TextStyle(
+                        const SizedBox(width: 8),
+                        Text(AppStrings.get('delete', locale),
+                            style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.error,),),
@@ -187,7 +191,7 @@ class BudgetCard extends StatelessWidget {
           // ── Amounts row ──────────────────────────────────────────────────
           Row(children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Dipakai',
+              Text(AppStrings.get('used', locale),
                   style: TextStyle(
                       fontSize: 10,
                       color: txtHint,
@@ -223,7 +227,7 @@ class BudgetCard extends StatelessWidget {
             ),
             const Spacer(),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text('Batas',
+              Text(AppStrings.get('limit', locale),
                   style: TextStyle(
                       fontSize: 10,
                       color: txtHint,
@@ -267,8 +271,8 @@ class BudgetCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     budget.isExceeded
-                        ? 'Budget terlampaui sebesar ${CurrencyFormatter.formatCompact(budget.spent - budget.limitAmount)}'
-                        : 'Sisa ${CurrencyFormatter.formatCompact(budget.remaining)} — hati-hati pengeluaran',
+                        ? '${AppStrings.get('exceeded_by', locale)} ${CurrencyFormatter.formatCompact(budget.spent - budget.limitAmount)}'
+                        : '${AppStrings.get('remaining', locale)} ${CurrencyFormatter.formatCompact(budget.remaining)}',
                     style: TextStyle(
                       fontSize: 11,
                       color: progressColor,

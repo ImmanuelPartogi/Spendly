@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../domain/models/scanned_transaction_result.dart';
 import '../screens/scan_review_screen.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
 /// Bottom sheet untuk mengedit atau mengoreksi satu [ScanResultItem] sebelum
 /// disimpan sebagai transaksi.
-class ScanResultEditSheet extends StatefulWidget {
+class ScanResultEditSheet extends ConsumerStatefulWidget {
   final ScanResultItem item;
   final ValueChanged<ScanResultItem> onSave;
 
@@ -18,10 +21,10 @@ class ScanResultEditSheet extends StatefulWidget {
   });
 
   @override
-  State<ScanResultEditSheet> createState() => _ScanResultEditSheetState();
+  ConsumerState<ScanResultEditSheet> createState() => _ScanResultEditSheetState();
 }
 
-class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
+class _ScanResultEditSheetState extends ConsumerState<ScanResultEditSheet> {
   late final TextEditingController _sourceCtrl;
   late final TextEditingController _amountCtrl;
   late final TextEditingController _noteCtrl;
@@ -77,9 +80,10 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
   // ── Simpan ──────────────────────────────────────────────────────────────────
 
   void _onSave() {
+    final locale = ref.read(localeProvider);
     final source = _sourceCtrl.text.trim();
     if (source.isEmpty) {
-      setState(() => _sourceError = 'Sumber tidak boleh kosong');
+      setState(() => _sourceError = AppStrings.get('source_or_merchant', locale));
       return;
     }
 
@@ -116,6 +120,7 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(localeProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -150,7 +155,7 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
               const SizedBox(height: 16),
 
               Text(
-                'Edit Hasil Scan',
+                AppStrings.get('edit_scan_result', locale),
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -158,12 +163,12 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
               const SizedBox(height: 24),
 
               // Field 1 — Sumber / Merchant
-              _FieldLabel('Sumber atau Nama Merchant'),
+              _FieldLabel(AppStrings.get('source_or_merchant', locale)),
               const SizedBox(height: 8),
               TextField(
                 controller: _sourceCtrl,
                 decoration: InputDecoration(
-                  hintText: 'Contoh: Indomaret',
+                  hintText: AppStrings.get('merchant_hint', locale),
                   border: const OutlineInputBorder(),
                   errorText: _sourceError,
                   prefixIcon: const Icon(Icons.store_rounded, size: 20),
@@ -177,7 +182,7 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
               const SizedBox(height: 16),
 
               // Field 2 — Jenis Dokumen
-              _FieldLabel('Jenis Dokumen'),
+              _FieldLabel(AppStrings.get('doc_type', locale)),
               const SizedBox(height: 8),
               DropdownButtonFormField<ScannedDocumentType>(
                 value: _docType,
@@ -185,18 +190,18 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.description_rounded, size: 20),
                 ),
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: ScannedDocumentType.receipt,
-                    child: Text('Struk'),
+                    child: Text(AppStrings.get('receipt', locale)),
                   ),
                   DropdownMenuItem(
                     value: ScannedDocumentType.salarySlip,
-                    child: Text('Slip Gaji'),
+                    child: Text(AppStrings.get('salary_slip', locale)),
                   ),
                   DropdownMenuItem(
                     value: ScannedDocumentType.unknown,
-                    child: Text('Tidak Diketahui'),
+                    child: Text(AppStrings.get('unknown', locale)),
                   ),
                 ],
                 onChanged: (v) {
@@ -206,7 +211,7 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
               const SizedBox(height: 16),
 
               // Field 3 — Nominal
-              _FieldLabel('Nominal Transaksi'),
+              _FieldLabel(AppStrings.get('transaction_amount', locale)),
               const SizedBox(height: 8),
               TextField(
                 controller: _amountCtrl,
@@ -225,7 +230,7 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
               const SizedBox(height: 16),
 
               // Field 4 — Tanggal
-              _FieldLabel('Tanggal Transaksi'),
+              _FieldLabel(AppStrings.get('transaction_date', locale)),
               const SizedBox(height: 8),
               GestureDetector(
                 onTap: _pickDate,
@@ -249,15 +254,15 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
               const SizedBox(height: 16),
 
               // Field 5 — Catatan
-              _FieldLabel('Catatan'),
+              _FieldLabel(AppStrings.get('note', locale)),
               const SizedBox(height: 8),
               TextField(
                 controller: _noteCtrl,
                 maxLines: 3,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.edit_note_rounded, size: 20),
-                  hintText: 'Tambah catatan...',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.edit_note_rounded, size: 20),
+                  hintText: AppStrings.get('add_note_hint', locale),
                 ),
               ),
               const SizedBox(height: 24),
@@ -270,7 +275,7 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    child: const Text('Batal'),
+                    child: Text(AppStrings.get('cancel', locale)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -280,7 +285,7 @@ class _ScanResultEditSheetState extends State<ScanResultEditSheet> {
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    child: const Text('Simpan Perubahan'),
+                    child: Text(AppStrings.get('save_changes', locale)),
                   ),
                 ),
               ]),

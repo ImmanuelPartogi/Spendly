@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/services/auth_service_firebase.dart';
+import '../controllers/auth_controller.dart';
 
 enum _AuthStep { email, passwordFallback, register }
 
@@ -99,22 +98,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
   // ── Email: cek eksistensi akun ────────────────────────────────────────────
 
-  Future<bool> _emailExists(String email) async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email, password: '___spendly_check___',);
-      return true;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') return false;
-      if (e.code == 'wrong-password' ||
-          e.code == 'invalid-credential' ||
-          e.code == 'invalid-login-credentials') {
-        return true;
-      }
-      rethrow;
-    }
-  }
-
   Future<void> _continueWithEmail() async {
     final email = _emailCtrl.text.trim();
     if (email.isEmpty) {
@@ -128,69 +111,57 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     }
 
     setState(() { _isLoading = true; _errorMsg = null; });
-    try {
-      final exists = await _emailExists(email);
-      if (!mounted) return;
+    final controller = ref.read(authControllerProvider.notifier);
+    final exists = await controller.checkEmailExists(email);
+    if (!mounted) return;
+    setState(() { _isLoading = false; });
 
-      if (!exists) {
-        setState(() =>
-            _errorMsg = 'Akun tidak ditemukan. Silakan daftar terlebih dahulu.',);
-        return;
-      }
-
-      _checkedEmail = email;
-      await _transitionTo(_AuthStep.passwordFallback);
-    } on FirebaseAuthException catch (e) {
-      if (mounted) setState(() => _errorMsg = _friendlyError(e.code));
-    } catch (_) {
-      if (mounted) {
-        setState(() =>
-            _errorMsg = 'Terjadi kesalahan. Periksa koneksi internet.',);
-      }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
+    final state = ref.read(authControllerProvider);
+    if (state.errorMessage != null) {
+      setState(() => _errorMsg = state.errorMessage);
+      return;
     }
+
+    if (!exists) {
+      setState(() =>
+          _errorMsg = 'Akun tidak ditemukan. Silakan daftar terlebih dahulu.',);
+      return;
+    }
+
+    _checkedEmail = email;
+    await _transitionTo(_AuthStep.passwordFallback);
   }
 
   // ── Password login ────────────────────────────────────────────────────────
-  //
-  // Setelah login berhasil, AppGate menangani sisanya:
-  //   • Jika PIN ada di storage → tampilkan PinScreen.verify
-  //   • Jika PIN belum pernah disetup → tampilkan PinScreen.setup
 
   Future<void> _loginWithPassword() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() { _isLoading = true; _errorMsg = null; });
-    try {
-      await FirebaseAuthService.signInWithEmail(_checkedEmail!, _passCtrl.text);
-    } on FirebaseAuthException catch (e) {
-      if (mounted) setState(() => _errorMsg = _friendlyError(e.code));
-    } catch (_) {
-      if (mounted) setState(() => _errorMsg = 'Terjadi kesalahan. Coba lagi.');
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
+    final controller = ref.read(authControllerProvider.notifier);
+    final success = await controller.signInWithEmail(_checkedEmail!, _passCtrl.text);
+    if (!mounted) return;
+    setState(() { _isLoading = false; });
+    if (!success) {
+      final state = ref.read(authControllerProvider);
+      setState(() => _errorMsg = state.errorMessage ?? 'Gagal masuk. Coba lagi.');
     }
   }
 
   // ── Register ──────────────────────────────────────────────────────────────
-  //
-  // Setelah register berhasil, AppGate otomatis tampilkan PinScreen.setup
-  // karena PIN belum ada di storage dan decision belum dibuat.
 
   Future<void> _register() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() { _isLoading = true; _errorMsg = null; });
-    try {
-      await FirebaseAuthService.registerWithEmail(
-        _emailCtrl.text.trim(),
-        _passCtrl.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (mounted) setState(() => _errorMsg = _friendlyError(e.code));
-    } catch (_) {
-      if (mounted) setState(() => _errorMsg = 'Terjadi kesalahan. Coba lagi.');
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
+    final controller = ref.read(authControllerProvider.notifier);
+    final success = await controller.registerWithEmail(
+      _emailCtrl.text.trim(),
+      _passCtrl.text,
+    );
+    if (!mounted) return;
+    setState(() { _isLoading = false; });
+    if (!success) {
+      final state = ref.read(authControllerProvider);
+      setState(() => _errorMsg = state.errorMessage ?? 'Gagal mendaftar. Coba lagi.');
     }
   }
 
@@ -200,59 +171,36 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     final email = (_checkedEmail ?? _emailCtrl.text).trim();
     if (email.isEmpty) return;
     setState(() { _isLoading = true; _errorMsg = null; });
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Row(children: [
-            Container(
-              width: 24, height: 24,
-              decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,),
-              child: const Icon(Icons.check_rounded,
-                  color: Colors.white, size: 14,),
-            ),
-            const SizedBox(width: 10),
-            Text('Link reset dikirim ke $email',
-                style: const TextStyle(
-                    fontSize: 13, fontWeight: FontWeight.w500,),),
-          ],),
-          backgroundColor: AppColors.income,
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          elevation: 0,
-        ),);
-      }
-    } on FirebaseAuthException catch (e) {
-      if (mounted) setState(() => _errorMsg = _friendlyError(e.code));
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  String _friendlyError(String code) {
-    switch (code) {
-      case 'user-not-found':
-        return 'Akun tidak ditemukan';
-      case 'wrong-password':
-      case 'invalid-credential':
-      case 'invalid-login-credentials':
-        return 'Password salah';
-      case 'email-already-in-use':
-        return 'Email sudah digunakan akun lain';
-      case 'weak-password':
-        return 'Password minimal 6 karakter';
-      case 'invalid-email':
-        return 'Format email tidak valid';
-      case 'too-many-requests':
-        return 'Terlalu banyak percobaan. Coba beberapa menit lagi';
-      case 'network-request-failed':
-        return 'Tidak ada koneksi internet';
-      default:
-        return 'Terjadi kesalahan ($code)';
+    final controller = ref.read(authControllerProvider.notifier);
+    final success = await controller.sendPasswordReset(email);
+    if (!mounted) return;
+    setState(() { _isLoading = false; });
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Row(children: [
+          Container(
+            width: 24, height: 24,
+            decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                shape: BoxShape.circle,),
+            child: const Icon(Icons.check_rounded,
+                color: Colors.white, size: 14,),
+          ),
+          const SizedBox(width: 10),
+          Text('Link reset dikirim ke $email',
+              style: const TextStyle(
+                  fontSize: 13, fontWeight: FontWeight.w500,),),
+        ],),
+        backgroundColor: AppColors.income,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        elevation: 0,
+      ),);
+    } else {
+      final state = ref.read(authControllerProvider);
+      setState(() => _errorMsg = state.errorMessage ?? 'Gagal mengirim email reset.');
     }
   }
 
@@ -967,6 +915,7 @@ class _PrimaryButton extends StatefulWidget {
   final String label;
   final IconData icon;
   final VoidCallback? onTap;
+
   const _PrimaryButton({
     required this.isLoading,
     required this.label,
@@ -1056,6 +1005,7 @@ class _PrimaryButtonState extends State<_PrimaryButton>
 
 class _ErrorBanner extends StatelessWidget {
   final String message;
+
   const _ErrorBanner({required this.message});
 
   @override

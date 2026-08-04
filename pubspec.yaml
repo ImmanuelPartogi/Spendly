@@ -1,7 +1,7 @@
 name: spendly
 description: Personal finance tracker — smart, fast, and beautiful.
 publish_to: 'none'
-version: 1.0.0+6
+version: 1.0.0+7
 
 environment:
   sdk: '>=3.6.0 <4.0.0'
@@ -13,10 +13,6 @@ dependencies:
 
   # State Management
   flutter_riverpod: ^2.5.1
-  riverpod_annotation: ^2.3.5
-
-  # Navigation
-  go_router: ^13.2.0
 
   # Local Database
   drift: ^2.18.0
@@ -47,6 +43,7 @@ dependencies:
 
   # Notifications
   flutter_local_notifications: ^17.2.2
+  workmanager: ^0.7.0
 
   # ── Firebase (versi harus saling kompatibel satu FlutterFire release) ──────
   firebase_core: ^4.6.0
@@ -80,9 +77,6 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   build_runner: ^2.4.9
   drift_dev: ^2.18.0
-  riverpod_generator: ^2.4.0
-  custom_lint: ^0.6.4
-  riverpod_lint: ^2.3.10
   flutter_native_splash: ^2.4.0
 
 # ─────────────────────────────────────────────────────────────────────────────

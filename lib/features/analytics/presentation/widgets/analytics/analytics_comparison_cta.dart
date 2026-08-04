@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../screens/income_expense_comparison_screen.dart';
+import '../../../../../core/localization/app_strings.dart';
+import '../../../../../core/localization/locale_provider.dart';
 
-class AnalyticsComparisonCta extends StatelessWidget {
+class AnalyticsComparisonCta extends ConsumerWidget {
   final bool isDark;
 
   const AnalyticsComparisonCta({super.key, required this.isDark});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
@@ -53,14 +57,14 @@ class AnalyticsComparisonCta extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Analisis Perbandingan',
+                Text(AppStrings.get('comparison_analysis', locale),
                     style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: txtPrim,
                         letterSpacing: -0.2,),),
                 const SizedBox(height: 3),
-                Text('Lihat perbandingan lengkap pemasukan vs pengeluaran per periode, kategori, dan tren tabungan',
+                Text(AppStrings.get('comparison_analysis_sub', locale),
                     style: TextStyle(fontSize: 11, color: txtSec, height: 1.4),),
               ],
             ),

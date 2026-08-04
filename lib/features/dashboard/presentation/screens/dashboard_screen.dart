@@ -10,6 +10,8 @@ import '../../../../shared/widgets/spendly_motion.dart';
 import '../../../../shared/widgets/spendly_shimmer.dart';
 import '../../../../shared/widgets/transaction_tile.dart';
 import '../widgets/balance_card.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 import '../widgets/mini_expense_chart.dart';
 
 /// Dashboard screen with balance card, insights, spending chart,
@@ -147,7 +149,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
               sliver: SliverToBoxAdapter(
                 child: _SectionHeader(
-                  label: 'Transaksi Terbaru',
+                  label: AppStrings.get('recent_transactions', ref.watch(localeProvider)),
                   isDark: isDark,
                   onSeeAll: () {
                     ref.read(bottomNavIndexProvider.notifier).state = 1;
@@ -192,15 +194,16 @@ class _DashboardHeader extends ConsumerWidget {
     required this.topPadding,
   });
 
-  String get _greeting {
+  String _greeting(Locale locale) {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Selamat Pagi';
-    if (hour < 17) return 'Selamat Siang';
-    return 'Selamat Malam';
+    if (hour < 12) return AppStrings.get('good_morning', locale);
+    if (hour < 17) return AppStrings.get('good_afternoon', locale);
+    return AppStrings.get('good_evening', locale);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final userName = ref.watch(profileProvider).name;
     final isLoading = userName.isEmpty;
     final textPrimary =
@@ -247,7 +250,7 @@ class _DashboardHeader extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            _greeting,
+                            _greeting(locale),
                             style: TextStyle(fontSize: 13, color: textSec),
                           ),
                           const SizedBox(height: 2),
@@ -406,6 +409,7 @@ class _BudgetOverviewCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final budgets = ref.watch(budgetsWithSpentProvider);
 
     if (budgets.isEmpty) return const SizedBox.shrink();
@@ -426,7 +430,7 @@ class _BudgetOverviewCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionHeader(
-            label: 'Anggaran',
+            label: AppStrings.get('budget', locale),
             isDark: isDark,
             count: budgets.length,
             onSeeAll: () {
@@ -630,12 +634,13 @@ class _RecentTransactionsList extends ConsumerWidget {
   }
 }
 
-class _EmptyTransactions extends StatelessWidget {
+class _EmptyTransactions extends ConsumerWidget {
   final bool isDark;
   const _EmptyTransactions({required this.isDark});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 32),
       decoration: BoxDecoration(
@@ -665,7 +670,7 @@ class _EmptyTransactions extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Belum ada transaksi',
+              AppStrings.get('no_transactions', locale),
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -675,7 +680,7 @@ class _EmptyTransactions extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Tap + untuk mencatat pengeluaran pertama',
+              AppStrings.get('empty_transactions_sub', locale),
               style: TextStyle(
                 fontSize: 11.5,
                 color: isDark ? AppColors.textHintDark : AppColors.textHint,
@@ -690,7 +695,7 @@ class _EmptyTransactions extends StatelessWidget {
 
 // ─── Section header ───────────────────────────────────────────────────────────
 
-class _SectionHeader extends StatelessWidget {
+class _SectionHeader extends ConsumerWidget {
   final String label;
   final bool isDark;
   final int? count;
@@ -706,7 +711,8 @@ class _SectionHeader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -741,19 +747,19 @@ class _SectionHeader extends StatelessWidget {
         if (onSeeAll != null)
           GestureDetector(
             onTap: onSeeAll,
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Lihat Semua',
-                  style: TextStyle(
+                  AppStrings.get('see_all', locale),
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
                   ),
                 ),
-                SizedBox(width: 2),
-                Icon(
+                const SizedBox(width: 2),
+                const Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 10,
                   color: AppColors.primary,

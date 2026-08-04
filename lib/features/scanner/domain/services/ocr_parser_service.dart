@@ -62,6 +62,30 @@ class OcrParserService {
 
   // ─── Public API ──────────────────────────────────────────────────────────────
 
+  /// Merekomendasikan kategori transaksi berdasarkan tipe dokumen & keyword merchant/source.
+  static String suggestCategory({
+    required ScannedDocumentType type,
+    String? source,
+  }) {
+    if (type == ScannedDocumentType.salarySlip) return 'Gaji';
+
+    final src = (source ?? '').toLowerCase();
+    const shopKeywords = [
+      'indomaret', 'alfamart', 'alfamidi', 'lawson', 'circle k',
+      'giant', 'hypermart', 'carrefour', 'transmart', 'tokopedia',
+      'shopee', 'lazada', 'bukalapak',
+    ];
+    if (shopKeywords.any((k) => src.contains(k))) return 'Belanja';
+
+    const foodKeywords = ['restoran', 'kafe', 'cafe', 'makan', 'restaurant'];
+    if (foodKeywords.any((k) => src.contains(k))) return 'Makanan & Minuman';
+
+    const transportKeywords = ['gojek', 'grab', 'traveloka'];
+    if (transportKeywords.any((k) => src.contains(k))) return 'Transportasi';
+
+    return 'Lainnya';
+  }
+
   /// Parse teks OCR menjadi [ScannedTransactionResult].
   ///
   /// Bila [rawText] kosong / terlalu pendek, return hasil dengan

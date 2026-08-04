@@ -10,8 +10,11 @@ import '../../../../core/utils/currency_formatter.dart';
 import '../../../auth/domain/services/auth_service.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../auth/presentation/screens/pin_screen.dart';
+import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../widgets/profile_hero_card.dart';
 import 'edit_profile_screen.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/locale_provider.dart';
 
 // ─── Profile State Provider ───────────────────────────────────────────────────
 
@@ -61,6 +64,7 @@ class ProfileScreen extends ConsumerWidget {
     final txtPrim   = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final safeTop   = MediaQuery.of(context).padding.top;
 
+    final locale         = ref.watch(localeProvider);
     final profile        = ref.watch(profileProvider);
     final balance        = ref.watch(totalBalanceProvider);
     final isAnon         = ref.watch(isAnonymousProvider);
@@ -72,11 +76,11 @@ class ProfileScreen extends ConsumerWidget {
     String themeLabel; IconData themeIcon; Color themeIconColor;
     switch (themeMode) {
       case ThemeMode.dark:
-        themeLabel = 'Gelap'; themeIcon = Icons.dark_mode_rounded; themeIconColor = AppColors.accentPurple;
+        themeLabel = AppStrings.get('dark', locale); themeIcon = Icons.dark_mode_rounded; themeIconColor = AppColors.accentPurple;
       case ThemeMode.light:
-        themeLabel = 'Terang'; themeIcon = Icons.light_mode_rounded; themeIconColor = AppColors.warning;
+        themeLabel = AppStrings.get('light', locale); themeIcon = Icons.light_mode_rounded; themeIconColor = AppColors.warning;
       default:
-        themeLabel = 'Otomatis'; themeIcon = Icons.brightness_auto_rounded; themeIconColor = AppColors.primary;
+        themeLabel = AppStrings.get('auto', locale); themeIcon = Icons.brightness_auto_rounded; themeIconColor = AppColors.primary;
     }
 
     return Scaffold(
@@ -107,17 +111,17 @@ class ProfileScreen extends ConsumerWidget {
 
                 Row(children: [
                   Expanded(child: _MonthlyStatCard(
-                    label: 'Pemasukan', value: monthlyIncome,
+                    label: AppStrings.get('income', locale), value: monthlyIncome,
                     color: AppColors.income, icon: Icons.arrow_downward_rounded, isDark: isDark,),),
                   const SizedBox(width: 10),
                   Expanded(child: _MonthlyStatCard(
-                    label: 'Pengeluaran', value: monthlyExpense,
+                    label: AppStrings.get('expense', locale), value: monthlyExpense,
                     color: AppColors.expense, icon: Icons.arrow_upward_rounded, isDark: isDark,),),
                 ],),
                 const SizedBox(height: 24),
 
                 // ── Akun ──────────────────────────────────────────────────────
-                _SectionTitle(label: 'Akun', txtPrim: txtPrim),
+                _SectionTitle(label: AppStrings.get('account', locale), txtPrim: txtPrim),
                 const SizedBox(height: 10),
                 _SettingsGroup(
                   isDark: isDark,
@@ -125,9 +129,9 @@ class ProfileScreen extends ConsumerWidget {
                     _GroupItem(
                       icon: Icons.verified_user_rounded,
                       iconColor: isAnon ? AppColors.warning : AppColors.income,
-                      label: 'Status',
+                      label: AppStrings.get('status', locale),
                       trailing: _StatusPill(
-                        label: isAnon ? 'Tamu' : 'Terautentikasi',
+                        label: isAnon ? AppStrings.get('guest', locale) : AppStrings.get('authenticated', locale),
                         isActive: !isAnon, isDark: isDark,
                       ),
                     ),
@@ -135,7 +139,7 @@ class ProfileScreen extends ConsumerWidget {
                       _GroupItem(
                         icon: Icons.alternate_email_rounded,
                         iconColor: AppColors.primary,
-                        label: 'Email',
+                        label: AppStrings.get('email', locale),
                         trailing: Text(userEmail ?? '-',
                           style: TextStyle(fontSize: 12.5,
                             color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
@@ -147,13 +151,13 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: 20),
 
                 // ── Keamanan ──────────────────────────────────────────────────
-                _SectionTitle(label: 'Keamanan', txtPrim: txtPrim),
+                _SectionTitle(label: AppStrings.get('security', locale), txtPrim: txtPrim),
                 const SizedBox(height: 10),
                 _PinSection(isDark: isDark),
                 const SizedBox(height: 20),
 
                 // ── Pengaturan ────────────────────────────────────────────────
-                _SectionTitle(label: 'Pengaturan', txtPrim: txtPrim),
+                _SectionTitle(label: AppStrings.get('settings', locale), txtPrim: txtPrim),
                 const SizedBox(height: 10),
                 _SettingsGroup(
                   isDark: isDark,
@@ -161,7 +165,7 @@ class ProfileScreen extends ConsumerWidget {
                     _GroupItem(
                       icon: Icons.payments_rounded,
                       iconColor: AppColors.accentTeal,
-                      label: 'Mata Uang',
+                      label: AppStrings.get('currency', locale),
                       trailing: Text('IDR', style: TextStyle(
                         fontSize: 13,
                         color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
@@ -169,7 +173,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     _GroupItem(
                       icon: themeIcon, iconColor: themeIconColor,
-                      label: 'Tema',
+                      label: AppStrings.get('theme', locale),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text(themeLabel, style: TextStyle(fontSize: 13,
                           color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
@@ -178,12 +182,12 @@ class ProfileScreen extends ConsumerWidget {
                         Icon(Icons.chevron_right_rounded, size: 16,
                           color: isDark ? AppColors.textHintDark : AppColors.textHint,),
                       ],),
-                      onTap: () => _showThemeSheet(context, ref, themeMode, isDark),
+                      onTap: () => _showThemeSheet(context, ref, themeMode, isDark, locale),
                     ),
                     _GroupItem(
                       icon: Icons.info_outline_rounded,
                       iconColor: AppColors.textSecondary,
-                      label: 'Versi Aplikasi',
+                      label: AppStrings.get('version', locale),
                       trailing: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
@@ -201,7 +205,7 @@ class ProfileScreen extends ConsumerWidget {
 
                 _LogoutButton(
                   isAnon: isAnon, isDark: isDark,
-                  onTap: () => _confirmLogout(context),
+                  onTap: () => _confirmLogout(context, ref, locale),
                 ),
               ]),
             ),
@@ -212,7 +216,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   void _showThemeSheet(BuildContext context, WidgetRef ref,
-      ThemeMode current, bool isDark,) {
+      ThemeMode current, bool isDark, Locale locale) {
     final cardColor = isDark ? AppColors.cardDark     : AppColors.card;
     final txtPrim   = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
 
@@ -223,9 +227,9 @@ class ProfileScreen extends ConsumerWidget {
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),),
       builder: (_) {
         final options = [
-          (ThemeMode.light,  Icons.light_mode_rounded,      AppColors.warning,      'Terang'),
-          (ThemeMode.dark,   Icons.dark_mode_rounded,       AppColors.accentPurple, 'Gelap'),
-          (ThemeMode.system, Icons.brightness_auto_rounded, AppColors.primary,      'Ikuti Sistem'),
+          (ThemeMode.light,  Icons.light_mode_rounded,      AppColors.warning,      AppStrings.get('light', locale)),
+          (ThemeMode.dark,   Icons.dark_mode_rounded,       AppColors.accentPurple, AppStrings.get('dark', locale)),
+          (ThemeMode.system, Icons.brightness_auto_rounded, AppColors.primary,      AppStrings.get('follow_system', locale)),
         ];
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 36),
@@ -233,7 +237,7 @@ class ProfileScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Pilih Tema', style: TextStyle(fontSize: 17,
+              Text(AppStrings.get('select_theme', locale), style: TextStyle(fontSize: 17,
                   fontWeight: FontWeight.w800, color: txtPrim, letterSpacing: -0.3,),),
               const SizedBox(height: 16),
               ...options.map((opt) {
@@ -290,7 +294,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  void _confirmLogout(BuildContext context) {
+  void _confirmLogout(BuildContext context, WidgetRef ref, Locale locale) {
     final isDark    = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark ? AppColors.cardDark : AppColors.card;
     final txtPrim   = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
@@ -301,29 +305,29 @@ class ProfileScreen extends ConsumerWidget {
       builder: (_) => AlertDialog(
         backgroundColor: cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Keluar?', style: TextStyle(
+        title: Text(AppStrings.get('logout_question', locale), style: TextStyle(
             color: txtPrim, fontWeight: FontWeight.w700, letterSpacing: -0.3,),),
         content: Text(
-          'Kamu akan keluar dari akun ini. Data lokal tetap tersimpan di perangkat.',
+          AppStrings.get('logout_confirm_sub', locale),
           style: TextStyle(color: txtSec, fontSize: 13.5, height: 1.5),),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal', style: TextStyle(color: txtSec)),),
+            child: Text(AppStrings.get('cancel', locale), style: TextStyle(color: txtSec)),),
           Container(
             margin: const EdgeInsets.only(right: 4, bottom: 4),
             child: ElevatedButton(
               onPressed: () async {
                 Navigator.pop(context);
-                await FirebaseAuthService.signOut();
+                await ref.read(authControllerProvider.notifier).signOut();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.expense,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
-              child: const Text('Keluar',
-                  style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),),
+              child: Text(AppStrings.get('logout', locale),
+                  style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.white),),
             ),
           ),
         ],
@@ -334,15 +338,15 @@ class ProfileScreen extends ConsumerWidget {
 
 // ─── PIN Section ──────────────────────────────────────────────────────────────
 
-class _PinSection extends StatefulWidget {
+class _PinSection extends ConsumerStatefulWidget {
   final bool isDark;
   const _PinSection({required this.isDark});
 
   @override
-  State<_PinSection> createState() => _PinSectionState();
+  ConsumerState<_PinSection> createState() => _PinSectionState();
 }
 
-class _PinSectionState extends State<_PinSection> {
+class _PinSectionState extends ConsumerState<_PinSection> {
   bool _pinEnabled = false;
   bool _loading    = true;
 
@@ -426,6 +430,7 @@ class _PinSectionState extends State<_PinSection> {
 
   @override
   Widget build(BuildContext context) {
+    final locale    = ref.watch(localeProvider);
     final isDark    = widget.isDark;
     final cardColor = isDark ? AppColors.cardDark   : AppColors.card;
     final bdrColor  = isDark ? AppColors.borderDark : AppColors.border;
@@ -475,9 +480,9 @@ class _PinSectionState extends State<_PinSection> {
               Expanded(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('PIN Keamanan', style: TextStyle(
+                  Text(AppStrings.get('security_pin', locale), style: TextStyle(
                     fontSize: 14, fontWeight: FontWeight.w600, color: txtPrim,),),
-                  Text(_pinEnabled ? 'Aktif' : 'Tidak aktif',
+                  Text(_pinEnabled ? AppStrings.get('active', locale) : AppStrings.get('inactive', locale),
                     style: TextStyle(fontSize: 11.5, color: txtSec),),
                 ],
               ),),
@@ -499,7 +504,7 @@ class _PinSectionState extends State<_PinSection> {
                     ),
                   ),
                   child: Text(
-                    _pinEnabled ? 'Nonaktifkan' : 'Aktifkan',
+                    _pinEnabled ? AppStrings.get('disable', locale) : AppStrings.get('enable', locale),
                     style: TextStyle(
                       fontSize: 12, fontWeight: FontWeight.w700,
                       color: _pinEnabled ? AppColors.expense : AppColors.income,
@@ -532,7 +537,7 @@ class _PinSectionState extends State<_PinSection> {
                         size: 15, color: AppColors.primary,),),
                   ),
                   const SizedBox(width: 12),
-                  Expanded(child: Text('Ubah PIN', style: TextStyle(
+                  Expanded(child: Text(AppStrings.get('change_pin', locale), style: TextStyle(
                     fontSize: 14, fontWeight: FontWeight.w600, color: txtPrim,),),),
                   Icon(Icons.chevron_right_rounded, size: 16,
                       color: isDark ? AppColors.textHintDark : AppColors.textHint,),
@@ -548,14 +553,15 @@ class _PinSectionState extends State<_PinSection> {
 
 // ─── Sub-widgets (tidak berubah) ──────────────────────────────────────────────
 
-class _ProfileAppBar extends StatelessWidget {
+class _ProfileAppBar extends ConsumerWidget {
   final bool isDark;
   final double safeTop;
   final VoidCallback onEdit;
   const _ProfileAppBar({required this.isDark, required this.safeTop, required this.onEdit});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec  = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
@@ -578,9 +584,9 @@ class _ProfileAppBar extends StatelessWidget {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Akun &', style: TextStyle(fontSize: 13,
+                      Text(AppStrings.get('account_and', locale), style: TextStyle(fontSize: 13,
                           fontWeight: FontWeight.w500, color: txtSec,),),
-                      Text('Profil', style: TextStyle(fontSize: 26,
+                      Text(AppStrings.get('profile', locale), style: TextStyle(fontSize: 26,
                           fontWeight: FontWeight.w800, color: txtPrim,
                           letterSpacing: -0.8, height: 1.1,),),
                     ],),
@@ -593,7 +599,7 @@ class _ProfileAppBar extends StatelessWidget {
             child: Align(alignment: Alignment.bottomLeft,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
-                child: Text('Profil', style: TextStyle(fontSize: 22,
+                child: Text(AppStrings.get('profile', locale), style: TextStyle(fontSize: 22,
                     fontWeight: FontWeight.w800, color: txtPrim, letterSpacing: -0.6,),),
               ),),
           ),
@@ -607,7 +613,7 @@ class _ProfileAppBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: AppColors.primary.withValues(alpha: 0.20), width: 0.5),
                 ),
-                child: const Text('Edit', style: TextStyle(
+                child: Text(AppStrings.get('edit', locale), style: const TextStyle(
                     color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w700,),),
               ),
             ),),
@@ -617,12 +623,13 @@ class _ProfileAppBar extends StatelessWidget {
   }
 }
 
-class _UpgradeBanner extends StatelessWidget {
+class _UpgradeBanner extends ConsumerWidget {
   final bool isDark;
   const _UpgradeBanner({required this.isDark});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return GestureDetector(
       onTap: () => Navigator.push(context,
           MaterialPageRoute(builder: (_) => const LoginScreen()),),
@@ -644,13 +651,13 @@ class _UpgradeBanner extends StatelessWidget {
                 color: AppColors.warning, size: 18,),),
           ),
           const SizedBox(width: 12),
-          const Expanded(child: Column(
+          Expanded(child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Backup data ke cloud', style: TextStyle(
+              Text(AppStrings.get('backup_cloud', locale), style: const TextStyle(
                   fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.warning,),),
-              SizedBox(height: 2),
-              Text('Daftar atau masuk untuk menyimpan data', style: TextStyle(
+              const SizedBox(height: 2),
+              Text(AppStrings.get('backup_cloud_sub', locale), style: const TextStyle(
                   fontSize: 11.5, color: AppColors.warning, fontWeight: FontWeight.w400,),),
             ],
           ),),
@@ -832,20 +839,21 @@ class _StatusPill extends StatelessWidget {
   }
 }
 
-class _LogoutButton extends StatefulWidget {
+class _LogoutButton extends ConsumerStatefulWidget {
   final bool isAnon, isDark;
   final VoidCallback onTap;
   const _LogoutButton({required this.isAnon, required this.isDark, required this.onTap});
 
   @override
-  State<_LogoutButton> createState() => _LogoutButtonState();
+  ConsumerState<_LogoutButton> createState() => _LogoutButtonState();
 }
 
-class _LogoutButtonState extends State<_LogoutButton> {
+class _LogoutButtonState extends ConsumerState<_LogoutButton> {
   bool _pressed = false;
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(localeProvider);
     return GestureDetector(
       onTapDown: (_) => setState(() => _pressed = true),
       onTapUp:   (_) { setState(() => _pressed = false); widget.onTap(); },
@@ -864,7 +872,7 @@ class _LogoutButtonState extends State<_LogoutButton> {
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             const Icon(Icons.logout_rounded, size: 17, color: AppColors.expense),
             const SizedBox(width: 8),
-            Text(widget.isAnon ? 'Keluar (data lokal)' : 'Keluar',
+            Text(widget.isAnon ? AppStrings.get('logout_local', locale) : AppStrings.get('logout', locale),
               style: const TextStyle(color: AppColors.expense,
                   fontSize: 14.5, fontWeight: FontWeight.w700,),),
           ],),

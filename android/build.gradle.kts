@@ -16,7 +16,7 @@ subprojects {
 subprojects {
     afterEvaluate {
         extensions.findByType(com.android.build.gradle.LibraryExtension::class)?.apply {
-            compileSdk = 35
+            compileSdk = 36
         }
     }
 }
