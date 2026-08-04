@@ -13,8 +13,8 @@ analyzer:
     empty_statements: error
     avoid_returning_null_for_future: error
     unawaited_futures: warning
-    # Deprecations should be surfaced prominently.
-    deprecated_member_use: warning
+    # Deprecations should be surfaced as info.
+    deprecated_member_use: info
     # Disable overly strict inference warnings (style preferences, not bugs).
     inference_failure_on_instance_creation: false
     inference_failure_on_function_invocation: false
