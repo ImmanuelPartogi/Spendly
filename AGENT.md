@@ -34,7 +34,7 @@ Spendly/
 ├── android/
 │   ├── app/ (build.gradle.kts, AndroidManifest.xml, google-services.json)
 │   ├── build.gradle.kts
-│   └── key.properties (⚠️ Pending security alert)
+│   └── key.properties (Git-ignored local credentials)
 ├── assets/
 │   └── images/ (logo.png)
 ├── lib/
@@ -72,8 +72,7 @@ Spendly/
 │   └── main.dart
 ├── test/
 │   └── widget_test.dart
-├── pubspec.yaml
-└── spendly-release.jks (⚠️ Pending security alert)
+└── pubspec.yaml
 ```
 
 ---
@@ -132,7 +131,7 @@ Database dikelola menggunakan Drift ORM ([app_database.dart](file:///e:/Nero/Spe
 
 ### 🚨 BREAKING / CRITICAL
 1. ~~**Production Keystore & Plaintext Password di Git**~~ $\rightarrow$ ✅ **RESOLVED IN TRACK A**:
-   - File `spendly-release.jks` & `android/key.properties` dihapus secara permanen dari seluruh riwayat komit Git menggunakan `git filter-repo`. Keystore baru `spendly-release-new.jks` telah dibuat dengan password baru yang di-rotate, `.gitignore` diperbarui, dan riwayat yang telah dibersihkan di-force push ke remote repository (`GitHub`).
+   - File `spendly-release.jks` & `android/key.properties` dihapus secara permanen dari seluruh riwayat komit Git menggunakan `git filter-repo`. Keystore rilis final `spendly-release-final.jks` telah di-generate ulang dengan password aman yang di-rotate, `.gitignore` diperbarui, dan riwayat yang telah dibersihkan di-force push ke remote repository (`GitHub`). Berhasil diverifikasi via `flutter run --release` pada device fisik Android.
 2. ~~**Database SQLite Tanpa Indexing (Full Table Scan)**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 1**:
    - Indexed `date`, `walletId`, dan `category` di tabel `Transactions` (schema v4 migration).
 3. ~~**Infrastruktur Auth Dipanggil Langsung dari Presentation UI**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 2**:
