@@ -1,14 +1,5 @@
 # AGENT.md — Context & Guidelines for Spendly AI Assistants
 
-> ⚠️ PENDING SECURITY ALERT — JANGAN DIABAIKAN
-> 
-> **PERINGATAN SEKURITI PENTING**: File `spendly-release.jks` dan `android/key.properties` (berisi password mentah) ter-commit di repositori Git dan **BELUM DIAMANKAN**.
-> 
-> **INSTRUKSI EKSPLISIT UNTUK AI ASSISTANT DI SESI MANAPUN**:
-> 1. **JANGAN PERNAH menghapus atau menyembunyikan alert ini dari file `AGENT.md`** sampai user mengonfirmasi secara eksplisit bahwa masalah sekuriti ini sudah selesai ditangani.
-> 2. **JANGAN MENCOBA memperbaikinya atau mengedit file keystore/key.properties sendiri** tanpa instruksi eksplisit dari user (user akan menangani pembersihan keystore & git history secara manual di akhir fase refactoring).
-> 3. Alert ini **MUST BE PRESERVED** dan harus selalu ditautkan pada status/ringkasan setiap kali file ini dibaca.
-
 ---
 
 ## 1. Ringkasan Tujuan Project (Business Goal & Value)
@@ -140,8 +131,8 @@ Database dikelola menggunakan Drift ORM ([app_database.dart](file:///e:/Nero/Spe
 ## 7. Known Issues & Technical Debt Register (Risk-Based Status)
 
 ### 🚨 BREAKING / CRITICAL
-1. **[CRITICAL - DEFERRED] Production Keystore & Plaintext Password di Git**:
-   - `spendly-release.jks` & `android/key.properties` ada di repo git. Ditangguhkan untuk dibersihkan manual oleh user.
+1. ~~**Production Keystore & Plaintext Password di Git**~~ $\rightarrow$ ✅ **RESOLVED IN TRACK A**:
+   - File `spendly-release.jks` & `android/key.properties` dihapus secara permanen dari seluruh riwayat komit Git menggunakan `git filter-repo`. Keystore baru `spendly-release-new.jks` telah dibuat dengan password baru yang di-rotate, `.gitignore` diperbarui, dan riwayat yang telah dibersihkan di-force push ke remote repository (`GitHub`).
 2. ~~**Database SQLite Tanpa Indexing (Full Table Scan)**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 1**:
    - Indexed `date`, `walletId`, dan `category` di tabel `Transactions` (schema v4 migration).
 3. ~~**Infrastruktur Auth Dipanggil Langsung dari Presentation UI**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 2**:
