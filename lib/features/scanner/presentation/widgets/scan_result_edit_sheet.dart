@@ -185,7 +185,7 @@ class _ScanResultEditSheetState extends ConsumerState<ScanResultEditSheet> {
               _FieldLabel(AppStrings.get('doc_type', locale)),
               const SizedBox(height: 8),
               DropdownButtonFormField<ScannedDocumentType>(
-                initialValue: _docType,
+                value: _docType,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.description_rounded, size: 20),
