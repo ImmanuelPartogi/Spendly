@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spendly/core/localization/app_strings.dart';
+import 'package:spendly/core/localization/locale_provider.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('AppStrings Localization Unit Tests', () {
     test('key parity exists between ID and EN dictionaries', () {
       expect(AppStrings.hasKeyParity(), isTrue,
@@ -137,6 +141,18 @@ void main() {
         expect(idVal, isNot(equals(key)), reason: 'Key $key in ID should not fall back to key name');
         expect(enVal, isNot(equals(key)), reason: 'Key $key in EN should not fall back to key name');
       }
+    });
+
+    test('LocaleNotifier initial state is id and switches to en via setLocale', () async {
+      SharedPreferences.setMockInitialValues({});
+      final notifier = LocaleNotifier();
+      expect(notifier.state, const Locale('id'));
+
+      await notifier.setLocale('en');
+      expect(notifier.state, const Locale('en'));
+
+      await notifier.setLocale('id');
+      expect(notifier.state, const Locale('id'));
     });
   });
 }

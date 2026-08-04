@@ -35,7 +35,7 @@ class _ImageItem {
   _ImageStatus status;
   ScannedTransactionResult? result;
 
-  _ImageItem({required this.xfile, this.status = _ImageStatus.waiting});
+  _ImageItem({required this.xfile}) : status = _ImageStatus.waiting;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -227,7 +227,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
             ))
         .toList();
 
-    Navigator.pushReplacement(
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (_) => ProviderScope(

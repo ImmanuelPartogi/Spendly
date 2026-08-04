@@ -172,6 +172,7 @@ Database dikelola menggunakan Drift ORM ([app_database.dart](file:///e:/Nero/Spe
 - ✅ **FASE 5**: Dictionary `AppStrings` (ID & EN), `localeProvider` StateNotifier, dan pengubah bahasa interaktif di `settings_screen.dart`.
 - ✅ **FASE 6**: Penambahan `proguard-rules.pro` & konfigurasinya di `build.gradle.kts`, pengaktifan `edgeToEdge` SystemUiMode di `main.dart`, dan pembersihan legacy methods di `ocr_service.dart`.
 - ✅ **FASE 7**: AOT Release build APK (108.3MB), upgrade `workmanager` v0.7.0, perluasan `AppStrings` ke 158 kunci (100% key parity ID & EN), integrasi penuh 8 layar utama, native `WindowCompat.setDecorFitsSystemWindows` di `MainActivity.kt`, dan `SafeArea` pada `GoalsScreen` & `ExportScreen`. Seluruh 40 unit test passing 100%!
+- ✅ **FASE 8**: Pembuatan `README.md` berstandar produksi, penambahan 3 test suite baru (`add_transaction_test.dart`, `scan_review_flow_test.dart`, `budget_warning_test.dart`) & regresi `LocaleNotifier` (total 54 unit test passing 100%), dan setup otomatisasi GitHub Actions CI (`.github/workflows/ci.yml`).
 
 ---
 

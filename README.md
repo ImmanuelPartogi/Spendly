@@ -1,246 +1,160 @@
-# Spendly
+# Spendly — Smart, Fast, & Beautiful Personal Finance Tracker
 
-> Personal finance tracker — smart, fast, and beautiful.
-
-Spendly is a cross-platform personal finance application built with Flutter. It helps users track transactions, manage wallets, set budgets, save toward goals, and gain insights into their spending patterns — all secured with Firebase Authentication and a local PIN lock.
+Spendly is a modern, offline-first personal finance management application built with **Flutter**, **Riverpod**, **Drift (SQLite)**, and **Google ML Kit OCR**. It empowers users to track expenses, manage multi-currency/multi-wallet balances, monitor monthly budget limits, set savings goals, and automate receipt entry with smart OCR text extraction.
 
 ---
 
-## Features
+## 🌟 Key Features
 
-- **Transaction Management** — Record income and expenses with categories, notes, and dates.
-- **Multi-Wallet Support** — Track multiple accounts (cash, bank, e-wallet) with live balance updates.
-- **Budgets** — Set monthly spending limits per category with real-time progress tracking.
-- **Savings Goals** — Define financial goals and allocate funds toward them.
-- **Recurring Transactions** — Automate repeating income/expenses.
-- **Analytics & Insights** — Visualize spending by category, day, weekday, and month.
-- **OCR Receipt Scanner** — Extract amounts from receipts using ML Kit text recognition.
-- **PDF / CSV Export** — Export financial reports for external use.
-- **Cloud Sync** — Securely sync data across devices via Firebase Firestore.
-- **Security** — Firebase Auth + optional 6-digit local PIN (salted SHA-256 hash, stored in secure storage).
-- **Backup & Restore** — Export and import all data as a JSON file.
-- **Offline-First** — Full functionality without an internet connection; syncs when online.
+- **⚡ Offline-First & Lightning Fast**: Local storage powered by **Drift (SQLite)** with multi-index query optimizations for instant load times and zero network latency.
+- **📷 Smart OCR Receipt & Payslip Scanner**: On-device text recognition using **Google ML Kit** to automatically extract merchant names, document types (receipt/salary slip), amounts, dates, and category suggestions.
+- **💼 Multi-Wallet & Fund Transfers**: Manage multiple accounts (Cash, Bank, E-Wallet, Credit) and transfer balances seamlessly.
+- **📊 Interactive Analytics & Insights**: Visual financial breakdown charts using **FL Chart**, monthly comparisons, and automated saving rule calculations.
+- **🎯 Budgeting & Warning Alerts**: Set monthly budget caps per category with visual warning indicators at $\ge 80\%$ limit usage.
+- **🏆 Financial Goals & Savings**: Track progress toward long-term savings targets with automated deadline calculations.
+- **🔄 Recurring Transactions**: Schedule automated income and expense entries (daily, weekly, monthly, yearly).
+- **🌐 Dual Language Support (i18n)**: Instant runtime switching between **Bahasa Indonesia** and **English** powered by `AppStrings` and Riverpod state management.
+- **☁️ Firebase Dual Cloud Backup**: Seamless background data sync to Cloud Firestore and account restoration via Firebase Auth.
+- **🔒 PIN Security**: Optional app lock powered by local PIN authentication and Flutter Secure Storage.
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack & Key Libraries
 
-| Layer | Technology |
-|-------|-----------|
-| **Framework** | Flutter `>=3.10.0`, Dart `>=3.6.0` |
-| **State Management** | Riverpod 2.x |
-| **Navigation** | GoRouter |
-| **Local Database** | Drift (SQLite) |
-| **Cloud Backend** | Firebase (Auth, Firestore, Messaging) |
-| **Charts** | FL Chart |
-| **OCR** | Google ML Kit Text Recognition |
-| **Security** | flutter_secure_storage + crypto (SHA-256) |
-| **Export** | PDF, CSV, share_plus |
-
----
-
-## Prerequisites
-
-1. **Flutter SDK** `>=3.10.0` (stable channel)
-2. **Dart SDK** `>=3.6.0`
-3. A Firebase project with Authentication and Firestore enabled
-4. Platform-specific setup:
-   - **Android:** Android Studio / Android SDK (minSdk per Firebase requirements)
-   - **iOS:** Xcode 15+, CocoaPods
-   - **Web/Desktop:** See [Flutter's desktop guide](https://docs.flutter.dev/platform-integration)
+| Component | Library / Framework | Version |
+| :--- | :--- | :--- |
+| **Framework** | Flutter SDK (Dart 3.x) | `>=3.10.0` |
+| **State Management** | Flutter Riverpod | `^2.5.1` |
+| **Local Database** | Drift ORM (SQLite) | `^2.18.0` |
+| **OCR Scanner** | Google ML Kit Text Recognition | `^0.13.0` |
+| **Cloud Sync & Auth** | Firebase Core, Auth, Firestore | `^4.6.0` |
+| **Charts & Visualization**| FL Chart | `^0.68.0` |
+| **PDF & CSV Export** | PDF, Printing, CSV, Share Plus | `^3.11.1` |
+| **Local Notifications** | Flutter Local Notifications | `^17.2.2` |
+| **Background Tasks** | Workmanager | `^0.7.0` |
+| **Secure Storage** | Flutter Secure Storage | `^9.0.0` |
 
 ---
 
-## Getting Started
+## 🏗️ Architecture Overview
 
-### 1. Clone and install dependencies
-
-```bash
-git clone https://github.com/ImmanuelPartogi/Spendly.git
-cd Spendly
-flutter pub get
-```
-
-### 2. Configure Firebase
-
-This project requires a Firebase project. Add your platform-specific Firebase configuration files:
-
-- **Android:** `android/app/google-services.json`
-- **iOS:** `ios/Runner/GoogleService-Info.plist`
-
-> **⚠️ Security:** These files contain API keys and must **never** be committed to version control. They are listed in `.gitignore`. Use your CI/CD pipeline or a secure secrets manager to inject them during builds.
-
-The Dart-level Firebase configuration is generated via `flutterfire configure`:
-
-```bash
-dart pub global activate flutterfire_cli
-flutterfire configure
-```
-
-This generates `lib/firebase_options.dart`.
-
-### 3. Generate Drift code
-
-The database layer uses Drift code generation:
-
-```bash
-dart run build_runner build --delete-conflicting-outputs
-```
-
-### 4. Run the app
-
-```bash
-flutter run
-```
-
----
-
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `flutter pub get` | Install dependencies |
-| `flutter run` | Run the app in debug mode |
-| `flutter build apk --release` | Build a release APK |
-| `flutter build ios --release` | Build a release iOS app |
-| `flutter build web --release` | Build a release web bundle |
-| `flutter test` | Run unit and widget tests |
-| `flutter analyze` | Run static analysis and lint checks |
-| `dart run build_runner build --delete-conflicting-outputs` | Generate Drift/Riverpod code |
-| `dart run flutter_native_splash:create` | Generate splash screens |
-
----
-
-## Environment Variables
-
-Spendly does not use runtime environment variables directly. Firebase configuration is injected via generated code and platform config files.
-
-| Variable / File | Purpose | Required |
-|----------------|---------|----------|
-| `android/app/google-services.json` | Firebase config (Android) | Yes (Android) |
-| `ios/Runner/GoogleService-Info.plist` | Firebase config (iOS) | Yes (iOS) |
-| `lib/firebase_options.dart` | Dart-level Firebase options (generated) | Yes |
-| Android signing keystore (`*.jks` + `key.properties`) | Release build signing | Yes (release) |
-
-> **⚠️ Never commit secrets.** Keystores, `key.properties`, and Firebase config files are in `.gitignore`.
-
----
-
-## Project Structure
+Spendly follows a pragmatic **Hybrid Architecture** tailored for scalable, maintainable Flutter development:
 
 ```
 lib/
-├── main.dart                      # App entry point & initialization
-├── firebase_options.dart          # Generated Firebase config (do not edit manually)
-├── core/                          # App-wide infrastructure
-│   ├── database/                  # Drift database, DAOs, generated code
-│   ├── providers.dart             # Riverpod dependency graph (single source)
-│   ├── services/                  # SyncService, RestoreService
-│   ├── theme/                     # AppTheme, AppColors, design tokens
-│   └── router/                    # GoRouter route definitions
-├── features/                      # Feature modules (clean architecture)
-│   ├── auth/                      # Firebase Auth + local PIN
-│   ├── transactions/              # Transaction CRUD, entities, models
-│   ├── wallet/                    # Wallet management
-│   ├── budget/                    # Budget tracking
-│   ├── goals/                     # Savings goals
-│   ├── recurring/                 # Recurring transactions
-│   ├── insight/                   # Analytics & insights engine
-│   ├── settings/                  # App settings, backup/restore
-│   ├── home/                      # Dashboard & bottom navigation
-│   └── analytics/                 # Detailed analytics screens
-└── shared/                        # Shared widgets & utilities
-    └── widgets/                   # Reusable UI components
+├── core/                         # Shared kernel & infrastructure
+│   ├── auth/                     # Global Auth State & Controller
+│   ├── database/                 # Drift SQLite Database Schema & DAOs
+│   ├── localization/             # AppStrings (ID/EN) & LocaleProvider
+│   ├── navigation/               # Main Navigation Bar & Shell
+│   ├── services/                 # Firebase Sync, Restore, Notifications
+│   └── theme/                    # App Colors, Typography & Theme Manager
+└── features/                     # Feature Modules
+    ├── analytics/                # Report generation & spending breakdown
+    ├── auth/                     # Login & Anonymous authentication
+    ├── budget/                   # Category budget limits & warnings
+    ├── dashboard/                # Main dashboard summary & quick actions
+    ├── export/                   # PDF & CSV transaction exporter
+    ├── goals/                    # Savings goals & progress tracking
+    ├── insight/                  # Rule-based financial insight engine
+    ├── notification/             # Reminders & weekly recap notifications
+    ├── profile/                  # Account management & app settings
+    ├── recurring/                # Automated recurring transaction engine
+    ├── scanner/                  # Google ML Kit OCR scanner & review sheet
+    ├── transactions/             # Transaction CRUD, history & filtering
+    └── wallet/                   # Multi-wallet & balance transfer
 ```
 
-### Architecture
-
-Each feature follows a **clean architecture** pattern:
-
-```
-feature/
-├── data/          # Data layer (repositories, models, DAOs)
-├── domain/        # Business logic (entities, use cases, repository interfaces)
-└── presentation/  # UI layer (screens, widgets)
-```
-
-- **Data flows down:** UI → Use Case → Repository → DAO → SQLite
-- **Events flow up:** SQLite (Drift streams) → Repository → Riverpod providers → UI
-- **Wallet balances** are updated atomically inside DAO write operations to prevent inconsistency.
+- **Domain Core Modules** (`Auth`, `Transactions`, `Wallet`, `Scanner`) utilize Clean Architecture sub-layers (`domain/`, `data/`, `presentation/`).
+- **Thin Presentation Modules** (`Dashboard`, `Analytics`, `Export`, `Profile`) use direct Riverpod Provider consumption to prevent unnecessary boilerplate.
 
 ---
 
-## Testing
+## 🚀 Local Setup & Development Guide
 
+### Prerequisites
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) (`>=3.10.0`)
+- Android Studio / VS Code with Dart & Flutter plugins
+- JDK 17 (OpenJDK) for Android build support
+
+### Step 1: Clone Repository
 ```bash
-flutter test
+git clone https://github.com/ImmanuelPartogi/Spendly.git
+cd Spendly
 ```
 
-Tests cover domain entities, immutability contracts, and business logic. Run static analysis before submitting PRs:
+### Step 2: Install Dependencies
+```bash
+flutter pub get
+```
+
+### Step 3: Local Keystore & Credentials Setup
+> 🔒 **Security Notice**: Production keystores (`*.jks`) and `android/key.properties` are strictly Git-ignored.
+
+To build and run the release APK locally:
+1. Generate your local debug/release keystore:
+   ```bash
+   keytool -genkey -v -keystore android/app/spendly-release-final.jks \
+     -keyalg RSA -keysize 2048 -validity 10000 -alias spendly
+   ```
+2. Create `android/key.properties` in your local working directory:
+   ```ini
+   storePassword=YOUR_STORE_PASSWORD
+   keyPassword=YOUR_KEY_PASSWORD
+   keyAlias=spendly
+   storeFile=spendly-release-final.jks
+   ```
+
+### Step 4: Run the Application
+```bash
+# Debug Mode
+flutter run
+
+# Release Mode on Physical Device
+flutter run --release
+```
+
+---
+
+## 🧪 Testing & Code Quality
+
+Spendly includes comprehensive automated unit, widget, and regression test coverage:
 
 ```bash
+# Run all unit & widget tests
+flutter test
+
+# Run static code analysis
 flutter analyze
 ```
 
----
-
-## Contributing
-
-1. Create a feature branch: `git checkout -b feat/your-feature`
-2. Follow the existing code style — `flutter analyze` must pass with zero warnings.
-3. Add tests for new business logic.
-4. Ensure `dart run build_runner build --delete-conflicting-outputs` succeeds if you modify database schemas.
-5. Submit a pull request with a clear description of the change.
-
-### Coding Standards
-
-- **Linting:** Strict rules enforced via `analysis_options.yaml` (strict-casts, strict-inference, prefer_const, require_trailing_commas, and more).
-- **Imports:** Use relative imports within the project (`prefer_relative_imports`).
-- **Immutability:** All entities extend `Equatable` and are immutable. Never mutate entity fields directly.
-- **Error handling:** Never swallow exceptions silently (`empty_catches` is an error).
-- **State management:** Use Riverpod providers defined in `lib/core/providers.dart`.
+### Test Coverage Highlights:
+- **`localization_test.dart`**: Verifies dictionary completeness, non-empty key resolution, and 100% key parity across `id` and `en` locales.
+- **`category_utils_test.dart`**: Ensures every expense and income category has valid icons, colors, and short labels.
+- **`ocr_parser_service_test.dart`**: Tests smart category suggestions based on merchant keywords and document types.
+- **`auth_controller_test.dart`**: Tests Firebase Auth state transitions and friendly error mapping.
+- **`app_database_test.dart`**: Validates Drift SQLite schema version 4 and multi-column table indexes.
 
 ---
 
-## Security
+## 📦 Production Release & ProGuard/R8 Guide
 
-- **PIN Authentication:** The local PIN is stored as a **salted SHA-256 hash** in `flutter_secure_storage` (Android Keystore / iOS Keychain). The plaintext PIN is never persisted or transmitted.
-- **Secrets:** Keystores, API keys, and Firebase config files are excluded from version control via `.gitignore`.
-- **Cloud Sync:** Data is synced to the authenticated user's private Firestore document collection.
+Spendly is configured for AOT minification and code shrinking via **R8 / ProGuard**.
 
----
+Rules in [`android/app/proguard-rules.pro`](file:///e:/Nero/Spendly/android/app/proguard-rules.pro) preserve essential reflection data for:
+- Drift SQLite ORM & SQLite3 native C-bindings
+- Google ML Kit Vision & Text Recognition APIs
+- Firebase Core, Auth, Firestore & Cloud Messaging
 
-## Deployment
+To build a release APK bundle:
+```bash
+flutter build apk --release
+```
 
-### Android (Release)
-
-1. Generate or obtain your release keystore:
-   ```bash
-   keytool -genkey -v -keystore spendly-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias spendly
-   ```
-2. Create `android/key.properties` (gitignored):
-   ```properties
-   storePassword=*****
-   keyPassword=*****
-   keyAlias=spendly
-   storeFile=../../spendly-release.jks
-   ```
-3. Build:
-   ```bash
-   flutter build apk --release
-   ```
-
-### iOS
-
-1. Open `ios/Runner.xcworkspace` in Xcode.
-2. Configure signing & capabilities.
-3. Build:
-   ```bash
-   flutter build ipa --release
-   ```
+Output APK will be generated at `build/app/outputs/flutter-apk/app-release.apk`.
 
 ---
 
-## License
+## 📄 License
 
-This project is proprietary. All rights reserved.
+This project is maintained by **Immanuel Partogi**. Distributed under the MIT License.

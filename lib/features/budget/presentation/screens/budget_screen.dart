@@ -18,7 +18,6 @@ class BudgetScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale      = ref.watch(localeProvider);
-    final titleText   = AppStrings.get('monthly_budget', locale);
     final isDark      = Theme.of(context).brightness == Brightness.dark;
     final bgColor     = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim     = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
