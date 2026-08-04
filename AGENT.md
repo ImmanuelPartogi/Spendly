@@ -160,6 +160,8 @@ Database dikelola menggunakan Drift ORM ([app_database.dart](file:///e:/Nero/Spe
    - Folder kosong `lib/features/splash/` telah dihapus.
 2. ~~**Unused Legacy Helper Methods di `ocr_service.dart`**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 6**:
    - Method legacy (`extractTotal`, `extractDate`, `extractMerchant`) telah dibersihkan dari `ocr_service.dart`.
+3. **Cakupan Test Suite 8B (Unit Test vs Widget Test)**:
+   - File `add_transaction_test.dart`, `scan_review_flow_test.dart`, dan `budget_warning_test.dart` menguji logika bisnis entity, StateNotifier, dan OcrParserService (54 unit test passing 100%). Pengujian interaksi widget UI tingkat tinggi (`testWidgets` dengan gesture tap/input) tidak diimplementasikan dan ditangani secara manual oleh user pada device fisik.
 
 ---
 
