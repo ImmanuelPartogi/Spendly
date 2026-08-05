@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -216,9 +217,9 @@ class _TrendChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 100,
-        child: Center(child: Text('Belum ada data')),
+        child: Center(child: Text('no_data_yet'.tr())),
       );
     }
 
@@ -251,7 +252,7 @@ class _TrendChart extends StatelessWidget {
                     return const SizedBox.shrink();
                   }
                   return Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsetsDirectional.only(top: 4),
                     child: Text(
                       entries[i].key,
                       style: const TextStyle(

@@ -26,9 +26,20 @@ class BudgetDao extends DatabaseAccessor<AppDatabase> with _$BudgetDaoMixin {
       await into(budgets).insert(entry);
     } else {
       await (update(budgets)..where((b) => b.id.equals(existing.id)))
-          .write(BudgetsCompanion(limitAmount: entry.limitAmount));
+          .write(BudgetsCompanion(
+        limitAmount: entry.limitAmount,
+        period: entry.period,
+        synced: entry.synced,
+      ),);
     }
   }
+
+  Future<void> markAsSynced(List<String> categories) =>
+      (update(budgets)..where((b) => b.category.isIn(categories)))
+          .write(const BudgetsCompanion(synced: Value(true)));
+
+  Future<List<Budget>> getUnsyncedBudgets() =>
+      (select(budgets)..where((b) => b.synced.equals(false))).get();
 
   Future<void> deleteBudget(int id) =>
       (delete(budgets)..where((b) => b.id.equals(id))).go();

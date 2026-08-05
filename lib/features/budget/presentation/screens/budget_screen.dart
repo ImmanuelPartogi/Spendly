@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
@@ -7,8 +8,6 @@ import '../../domain/entities/budget_entity.dart';
 import '../widgets/budget_card.dart';
 import '../widgets/budget_summary_card.dart';
 import '../widgets/set_budget_sheet.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
 
 const double _kBottomPad = 108.0;
 
@@ -17,7 +16,6 @@ class BudgetScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale      = ref.watch(localeProvider);
     final isDark      = Theme.of(context).brightness == Brightness.dark;
     final bgColor     = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim     = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
@@ -57,11 +55,11 @@ class BudgetScreen extends ConsumerWidget {
 
                 if (budgets.isEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsetsDirectional.only(top: 20),
                     child: EmptyState(
-                      title: AppStrings.get('no_budgets', locale),
-                      subtitle: AppStrings.get('set_budget_sub', locale),
-                      actionLabel: AppStrings.get('create_budget', locale),
+                      title: 'no_budgets'.tr(),
+                      subtitle: 'set_budget_sub'.tr(),
+                      actionLabel: 'create_budget'.tr(),
                       onAction: () => _openSetBudget(context, ref, null),
                       icon: Icons.account_balance_wallet_outlined,
                     ),
@@ -75,7 +73,7 @@ class BudgetScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 14),
                   ...budgets.map((b) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsetsDirectional.only(bottom: 12),
                         child: BudgetCard(
                           budget: b,
                           isDark: isDark,
@@ -124,7 +122,6 @@ class _BudgetAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale  = ref.watch(localeProvider);
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec  = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
@@ -146,26 +143,26 @@ class _BudgetAppBar extends ConsumerWidget {
             opacity: isCollapsed ? 0.0 : 1.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               child: Padding(
                 padding:
                     EdgeInsets.fromLTRB(20, safeTop + 12, 60, 14),
                 child: OverflowBox(
-                  alignment: Alignment.bottomLeft,
+                  alignment: AlignmentDirectional.bottomStart,
                   maxHeight: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        AppStrings.get('manage_and', locale),
+                        'manage_and'.tr(),
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: txtSec,),
                       ),
                       Text(
-                        AppStrings.get('budget', locale),
+                        'budget'.tr(),
                         style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
@@ -185,11 +182,11 @@ class _BudgetAppBar extends ConsumerWidget {
             opacity: isCollapsed ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
                 child: Text(
-                  AppStrings.get('budget', locale),
+                  'budget'.tr(),
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -247,11 +244,10 @@ class _BudgetListHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     return Row(
       children: [
         Text(
-          AppStrings.get('active_budgets', locale),
+          'active_budgets'.tr(),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w700,
@@ -291,7 +287,7 @@ class _BudgetListHeader extends ConsumerWidget {
                   color: AppColors.error, size: 11,),
               const SizedBox(width: 3),
               Text(
-                '$exceededCount ${AppStrings.get('exceeded_count', locale)}',
+                '$exceededCount ${'exceeded_count'.tr()}',
                 style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,

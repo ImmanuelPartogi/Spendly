@@ -25,11 +25,12 @@ class BudgetRepositoryImpl implements BudgetRepository {
         category: budget.category,
         limitAmount: budget.limitAmount,
         period: Value(budget.period),
+        synced: const Value(false),
       ),
     );
 
-    // Sync ke Firebase
-    _uploadBudget(budget);
+    // Sync ke Firebase (await, update synced = true jika berhasil)
+    await _uploadBudget(budget);
   }
 
   @override
@@ -48,14 +49,18 @@ class BudgetRepositoryImpl implements BudgetRepository {
     });
   }
 
-  void _uploadBudget(BudgetEntity budget) {
-    SyncService.uploadBudget({
-      'category': budget.category,
-      'limitAmount': budget.limitAmount,
-      'period': budget.period,
-    }).catchError((e) {
-      debugPrint('[BudgetRepo] Upload budget error: $e');
-    });
+  Future<void> _uploadBudget(BudgetEntity budget) async {
+    try {
+      await SyncService.uploadBudget({
+        'category': budget.category,
+        'limitAmount': budget.limitAmount,
+        'period': budget.period,
+      });
+      await _dao.markAsSynced([budget.category]);
+      debugPrint('[BudgetRepo] Synced budget to Firebase: ${budget.category}');
+    } catch (e) {
+      debugPrint('[BudgetRepo] Firebase budget sync failed (will retry when online): $e');
+    }
   }
 
   BudgetEntity _fromBudget(Budget b) => BudgetEntity(

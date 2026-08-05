@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
@@ -96,7 +97,7 @@ class _SmartBudgetSuggestionSheetState
     final budgetsAsync = ref.watch(budgetsWithSpentProvider);
 
     return Container(
-      margin: const EdgeInsets.only(top: 60),
+      margin: const EdgeInsetsDirectional.only(top: 60),
       decoration: const BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
@@ -135,9 +136,9 @@ class _SmartBudgetSuggestionSheetState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Budget Cerdas',
+                      Text('smart_budget'.tr(),
                           style: Theme.of(context).textTheme.titleLarge,),
-                      const Text(
+                      Text(
                         'Berdasarkan rata-rata 3 bulan terakhir',
                         style: TextStyle(
                             fontSize: 12, color: AppColors.textSecondary,),
@@ -158,17 +159,17 @@ class _SmartBudgetSuggestionSheetState
           Expanded(
             child: spendingAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => const Center(
+              error: (e, _) => Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.bar_chart_rounded,
                         size: 48, color: AppColors.border,),
                     SizedBox(height: 12),
-                    Text('Belum ada data pengeluaran',
+                    Text('no_expense_data'.tr(),
                         style: TextStyle(color: AppColors.textSecondary),),
                     SizedBox(height: 4),
-                    Text('Tambah beberapa transaksi dulu',
+                    Text('add_some_transactions_first'.tr(),
                         style: TextStyle(
                             fontSize: 12, color: AppColors.textSecondary,),),
                   ],
@@ -232,7 +233,7 @@ class _SmartBudgetSuggestionSheetState
                               ? null
                               : () => _applyAll(suggestions),
                           icon: const Icon(Icons.check_circle_rounded),
-                          label: const Text('Terapkan Semua'),
+                          label: Text('apply_all'.tr()),
                         ),
                       ),
                     ),
@@ -261,7 +262,7 @@ class _SuggestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsetsDirectional.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isApplied ? AppColors.income.withValues(alpha: 0.06) : AppColors.card,
@@ -323,7 +324,7 @@ class _SuggestionCard extends StatelessWidget {
               ? const Icon(Icons.check_circle_rounded, color: AppColors.income)
               : TextButton(
                   onPressed: onApply,
-                  child: const Text('Terapkan'),
+                  child: Text('Terapkan'),
                 ),
         ],
       ),

@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/utils/date_formatter.dart';
 
 class AnalyticsDateHeader extends StatelessWidget {
   final int weekOffset;
@@ -17,47 +19,44 @@ class AnalyticsDateHeader extends StatelessWidget {
     required this.canGoNext,
   });
 
-  ({String title, String subtitle}) _labels() {
+  ({String title, String subtitle}) _labels(BuildContext context) {
     if (weekOffset == -1) {
-      return (title: 'Bulan Ini', subtitle: _monthLabel());
+      return (title: 'this_month'.tr(), subtitle: _monthLabel(context));
     }
     if (weekOffset < 0) {
-      return (title: 'Rentang Kustom', subtitle: 'Filter kustom diterapkan');
+      return (title: 'custom_range'.tr(), subtitle: 'custom_filter_applied'.tr());
     }
     if (weekOffset == 0) {
-      return (title: 'Minggu Ini', subtitle: _weekLabel(0));
+      return (title: 'this_week'.tr(), subtitle: _weekLabel(context, 0));
     }
     return (
-      title: '$weekOffset Minggu Lalu',
-      subtitle: _weekLabel(weekOffset),
+      title: 'weeks_ago'.tr(namedArgs: {'count': '$weekOffset'}),
+      subtitle: _weekLabel(context, weekOffset),
     );
   }
 
-  static const _months = [
-    'Jan','Feb','Mar','Apr','Mei','Jun',
-    'Jul','Agt','Sep','Okt','Nov','Des',
-  ];
-
-  String _weekLabel(int offset) {
+  String _weekLabel(BuildContext context, int offset) {
     final now = DateTime.now();
     final mon = now.subtract(Duration(days: now.weekday - 1 + offset * 7));
     final sun = mon.add(const Duration(days: 6));
+    final loc = context.locale.languageCode;
     if (mon.month == sun.month) {
-      return '${mon.day}–${sun.day} ${_months[mon.month - 1]} ${mon.year}';
+      final monthStr = DateFormatter.formatMonthYear(mon, locale: loc);
+      return '${mon.day}–${sun.day} $monthStr';
     }
-    return '${mon.day} ${_months[mon.month - 1]} – '
-        '${sun.day} ${_months[sun.month - 1]}';
+    final monStr = DateFormatter.formatDayMonth(mon, locale: loc);
+    final sunStr = DateFormatter.formatDayMonth(sun, locale: loc);
+    return '$monStr – $sunStr';
   }
 
-  String _monthLabel() {
+  String _monthLabel(BuildContext context) {
     final now = DateTime.now();
-    final lastDay = DateTime(now.year, now.month + 1, 0).day;
-    return '1–$lastDay ${_months[now.month - 1]} ${now.year}';
+    return DateFormatter.formatMonthYear(now, locale: context.locale.languageCode);
   }
 
   @override
   Widget build(BuildContext context) {
-    final labels = _labels();
+    final labels = _labels(context);
     final surf = isDark ? AppColors.surfaceDark : AppColors.surface;
     final bdr = isDark ? AppColors.borderDark : AppColors.border;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;

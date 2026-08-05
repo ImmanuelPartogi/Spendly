@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/insight_card.dart';
@@ -5,13 +6,12 @@ import '../../../profile/presentation/screens/profile_screen.dart';
 import '../../../transactions/presentation/screens/add_transaction_screen.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/category_utils.dart';
 import '../../../../core/utils/haptic_utils.dart';
 import '../../../../shared/widgets/spendly_motion.dart';
 import '../../../../shared/widgets/spendly_shimmer.dart';
 import '../../../../shared/widgets/transaction_tile.dart';
 import '../widgets/balance_card.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
 import '../widgets/mini_expense_chart.dart';
 
 /// Dashboard screen with balance card, insights, spending chart,
@@ -116,7 +116,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ),
 
             SliverPadding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsetsDirectional.only(top: 20),
               sliver: SliverToBoxAdapter(
                 child: SpendlyStaggeredItem(
                   index: 1,
@@ -149,7 +149,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
               sliver: SliverToBoxAdapter(
                 child: _SectionHeader(
-                  label: AppStrings.get('recent_transactions', ref.watch(localeProvider)),
+                  label: 'recent_transactions'.tr(),
                   isDark: isDark,
                   onSeeAll: () {
                     ref.read(bottomNavIndexProvider.notifier).state = 1;
@@ -171,7 +171,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       ),
 
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(
+        padding: EdgeInsetsDirectional.only(
           bottom: _fabBottomOffset + MediaQuery.of(context).padding.bottom,
         ),
         child: _SpendlyFAB(onTap: _openAddSheet),
@@ -194,16 +194,15 @@ class _DashboardHeader extends ConsumerWidget {
     required this.topPadding,
   });
 
-  String _greeting(Locale locale) {
+  String _greeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return AppStrings.get('good_morning', locale);
-    if (hour < 17) return AppStrings.get('good_afternoon', locale);
-    return AppStrings.get('good_evening', locale);
+    if (hour < 12) return 'good_morning'.tr();
+    if (hour < 17) return 'good_afternoon'.tr();
+    return 'good_evening'.tr();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final userName = ref.watch(profileProvider).name;
     final isLoading = userName.isEmpty;
     final textPrimary =
@@ -231,7 +230,7 @@ class _DashboardHeader extends ConsumerWidget {
               child: (isCollapsed || isLoading)
                   ? Align(
                       key: const ValueKey('title'),
-                      alignment: Alignment.centerLeft,
+                      alignment: AlignmentDirectional.centerStart,
                       child: Text(
                         'Spendly',
                         style: TextStyle(
@@ -244,13 +243,13 @@ class _DashboardHeader extends ConsumerWidget {
                     )
                   : Align(
                       key: const ValueKey('greeting'),
-                      alignment: Alignment.centerLeft,
+                      alignment: AlignmentDirectional.centerStart,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            _greeting(locale),
+                            _greeting(),
                             style: TextStyle(fontSize: 13, color: textSec),
                           ),
                           const SizedBox(height: 2),
@@ -331,7 +330,7 @@ class _SpendingChartCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Pengeluaran Harian',
+                    'daily_expense'.tr(),
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
@@ -343,7 +342,7 @@ class _SpendingChartCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Minggu ini',
+                    'this_week'.tr(),
                     style: TextStyle(
                       fontSize: 11,
                       color:
@@ -359,14 +358,14 @@ class _SpendingChartCard extends ConsumerWidget {
                   color: AppColors.expense.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _ExpenseDot(),
-                    SizedBox(width: 5),
+                    const _ExpenseDot(),
+                    const SizedBox(width: 5),
                     Text(
-                      'Bulan ini',
-                      style: TextStyle(
+                      'this_month'.tr(),
+                      style: const TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         color: AppColors.expense,
@@ -409,7 +408,6 @@ class _BudgetOverviewCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final budgets = ref.watch(budgetsWithSpentProvider);
 
     if (budgets.isEmpty) return const SizedBox.shrink();
@@ -430,7 +428,7 @@ class _BudgetOverviewCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionHeader(
-            label: AppStrings.get('budget', locale),
+            label: 'budget'.tr(),
             isDark: isDark,
             count: budgets.length,
             onSeeAll: () {
@@ -450,7 +448,7 @@ class _BudgetOverviewCard extends ConsumerWidget {
 
             return Padding(
               padding:
-                  EdgeInsets.only(bottom: e.key < shown.length - 1 ? 14 : 0),
+                  EdgeInsetsDirectional.only(bottom: e.key < shown.length - 1 ? 14 : 0),
               child: _BudgetProgressRow(
                 category: b.category,
                 spent: b.spent,
@@ -493,7 +491,7 @@ class _BudgetProgressRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              category,
+              CategoryUtils.getLocalizedName(category),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -640,7 +638,6 @@ class _EmptyTransactions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 32),
       decoration: BoxDecoration(
@@ -670,7 +667,7 @@ class _EmptyTransactions extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              AppStrings.get('no_transactions', locale),
+              'no_transactions'.tr(),
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -680,7 +677,7 @@ class _EmptyTransactions extends ConsumerWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              AppStrings.get('empty_transactions_sub', locale),
+              'empty_transactions_sub'.tr(),
               style: TextStyle(
                 fontSize: 11.5,
                 color: isDark ? AppColors.textHintDark : AppColors.textHint,
@@ -712,7 +709,6 @@ class _SectionHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -751,7 +747,7 @@ class _SectionHeader extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  AppStrings.get('see_all', locale),
+                  'see_all'.tr(),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

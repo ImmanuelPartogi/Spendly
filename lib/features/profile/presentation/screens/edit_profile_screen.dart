@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,7 +95,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
             ),
             const SizedBox(height: 16),
             Text(
-              'Ganti Foto Profil',
+              'change_profile_photo'.tr(),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -106,7 +107,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
             _BottomSheetTile(
               icon: Icons.camera_alt_rounded,
               iconColor: AppColors.primary,
-              label: 'Ambil Foto',
+              label: 'take_photo'.tr(),
               txtPrim: txtPrim,
               isDark: isDark,
               onTap: () async {
@@ -120,7 +121,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
             _BottomSheetTile(
               icon: Icons.photo_library_rounded,
               iconColor: AppColors.accentPurple,
-              label: 'Dari Galeri',
+              label: 'choose_from_gallery'.tr(),
               txtPrim: txtPrim,
               isDark: isDark,
               onTap: () async {
@@ -135,7 +136,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
               _BottomSheetTile(
                 icon: Icons.delete_outline_rounded,
                 iconColor: AppColors.expense,
-                label: 'Hapus Foto',
+                label: 'delete_photo'.tr(),
                 txtPrim: AppColors.expense,
                 isDark: isDark,
                 onTap: () => Navigator.pop(context, null),
@@ -162,7 +163,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Nama tidak boleh kosong'),
+          content: Text('name_cannot_be_empty'.tr()),
           behavior: SnackBarBehavior.floating,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -181,7 +182,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Profil berhasil diperbarui'),
+          content: Text('profile_updated_successfully'.tr()),
           backgroundColor: AppColors.income,
           behavior: SnackBarBehavior.floating,
           shape:
@@ -240,7 +241,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
               const SizedBox(width: 12),
               // ── Title ────────────────────────────────────────────────
               Text(
-                'Edit Profil',
+                'edit_profile'.tr(),
                 style: TextStyle(
                   color: txtPrim,
                   fontWeight: FontWeight.w800,
@@ -255,7 +256,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
         actions: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsetsDirectional.only(end: 16),
               child: _isLoading
                   ? const SizedBox(
                       width: 20,
@@ -281,9 +282,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                             ),
                           ],
                         ),
-                        child: const Text(
-                          'Simpan',
-                          style: TextStyle(
+                        child: Text(
+                          'save'.tr(),
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
@@ -318,7 +319,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
               const SizedBox(height: 8),
               Center(
                 child: Text(
-                  'Tap untuk ganti foto',
+                  'tap_to_change_photo'.tr(),
                   style: TextStyle(
                     fontSize: 12,
                     color: txtSec,
@@ -330,7 +331,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
 
               // ── Name field ───────────────────────────────────────────────
               _FieldLabel(
-                label: 'Nama',
+                label: 'name'.tr(),
                 color: isFocused ? AppColors.primary : txtSec,
               ),
               const SizedBox(height: 8),
@@ -363,10 +364,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                     fontWeight: FontWeight.w500,
                   ),
                   decoration: InputDecoration(
-                    hintText: 'Masukkan nama kamu',
+                    hintText: 'enter_your_name'.tr(),
                     hintStyle: TextStyle(color: txtHint, fontSize: 14),
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.only(left: 4),
+                      padding: const EdgeInsetsDirectional.only(start: 4),
                       child: Icon(
                         Icons.person_outline_rounded,
                         size: 18,
@@ -388,7 +389,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
               // ── Avatar grid ──────────────────────────────────────────────
               if (_photoPath == null) ...[
                 const SizedBox(height: 28),
-                _FieldLabel(label: 'Pilih Avatar', color: txtSec),
+                _FieldLabel(label: 'choose_avatar'.tr(), color: txtSec),
                 const SizedBox(height: 12),
                 GridView.count(
                   crossAxisCount: 6,
@@ -414,8 +415,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
                                     AppColors.accentPurple
                                         .withValues(alpha: isDark ? 0.14 : 0.08),
                                   ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
+                                  begin: AlignmentDirectional.topStart,
+                                  end: AlignmentDirectional.bottomEnd,
                                 )
                               : null,
                           color: sel ? null : surfColor,
@@ -640,8 +641,8 @@ class _SaveButtonState extends State<_SaveButton> {
                       Color.lerp(
                           AppColors.primary, AppColors.accentPurple, 0.4,)!,
                     ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    begin: AlignmentDirectional.topStart,
+                    end: AlignmentDirectional.bottomEnd,
                   ),
             color: widget.isLoading ? AppColors.primary.withValues(alpha: 0.5) : null,
             borderRadius: BorderRadius.circular(14),
@@ -666,9 +667,9 @@ class _SaveButtonState extends State<_SaveButton> {
                       strokeWidth: 2.5,
                     ),
                   )
-                : const Text(
-                    'Simpan Profil',
-                    style: TextStyle(
+                : Text(
+                    'save_profile'.tr(),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15.5,
                       fontWeight: FontWeight.w700,

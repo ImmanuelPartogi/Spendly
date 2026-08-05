@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
@@ -43,21 +44,21 @@ class ComparisonChartCard extends StatelessWidget {
         Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Pemasukan vs Pengeluaran',
+              Text('income_vs_expense'.tr(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: txtPrim,
                       letterSpacing: -0.3,),),
               const SizedBox(height: 3),
-              Text('Tap bar untuk detail periode',
+              Text('tap_bar_for_period'.tr(),
                   style: TextStyle(fontSize: 11, color: txtSec),),
             ],),
           ),
-          const Row(children: [
-            _LegendPill(color: AppColors.income, label: 'Masuk'),
-            SizedBox(width: 6),
-            _LegendPill(color: AppColors.expense, label: 'Keluar'),
+          Row(children: [
+            _LegendPill(color: AppColors.income, label: 'income'.tr()),
+            const SizedBox(width: 6),
+            _LegendPill(color: AppColors.expense, label: 'expense'.tr()),
           ],),
         ],),
 
@@ -224,7 +225,7 @@ class _GroupedBarChart extends StatelessWidget {
                   if (i < 0 || i >= data.length) return const SizedBox.shrink();
                   final isSel = i == touchedIndex;
                   return Padding(
-                    padding: const EdgeInsets.only(top: 6),
+                    padding: const EdgeInsetsDirectional.only(top: 6),
                     child: Text(data[i].label,
                         style: TextStyle(
                             fontSize: 9,
@@ -299,7 +300,7 @@ class _Empty extends StatelessWidget {
                 size: 22,),
           ),
           const SizedBox(height: 10),
-          Text('Belum ada data untuk periode ini',
+          Text('no_data_for_period'.tr(),
               style: TextStyle(
                   fontSize: 12,
                   color: isDark

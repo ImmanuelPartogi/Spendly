@@ -289,7 +289,7 @@ class _PinScreenState extends State<PinScreen> with TickerProviderStateMixin {
                         Icon(Icons.lock_reset_rounded,
                             size: 13, color: AppColors.primary.withValues(alpha: 0.8),),
                         const SizedBox(width: 6),
-                        const Text(
+                        Text(
                           'Lupa PIN? Gunakan password',
                           style: TextStyle(
                             fontSize: 13,
@@ -493,8 +493,8 @@ class _PinHeaderSection extends StatelessWidget {
               AppColors.primary,
               Color.lerp(AppColors.primary, AppColors.accentPurple, 0.45)!,
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: AlignmentDirectional.topStart,
+            end: AlignmentDirectional.bottomEnd,
           ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
@@ -686,7 +686,7 @@ class _Numpad extends StatelessWidget {
     return Column(
       children: _rows.map((row) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 6),
+          padding: const EdgeInsetsDirectional.only(bottom: 6),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: row.map((key) {

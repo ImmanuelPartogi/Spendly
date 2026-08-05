@@ -1,4 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/utils/financial_health_calculator.dart';
+import '../../../budget/domain/providers/budget_providers.dart';
 import '../../../transactions/domain/entities/transaction_entity.dart';
 import '../../../transactions/domain/providers/transaction_providers.dart';
 
@@ -71,17 +74,17 @@ extension AnalyticsPeriodLabel on AnalyticsPeriod {
   String get label {
     switch (this) {
       case AnalyticsPeriod.thisWeek:
-        return 'Minggu ini';
+        return 'period_this_week'.tr();
       case AnalyticsPeriod.thisMonth:
-        return 'Bulan ini';
+        return 'period_this_month'.tr();
       case AnalyticsPeriod.threeMonths:
-        return '3 Bulan';
+        return 'period_3months'.tr();
       case AnalyticsPeriod.sixMonths:
-        return '6 Bulan';
+        return 'period_6months'.tr();
       case AnalyticsPeriod.thisYear:
-        return 'Tahun ini';
+        return 'period_this_year'.tr();
       case AnalyticsPeriod.custom:
-        return 'Custom';
+        return 'period_custom'.tr();
     }
   }
 }
@@ -179,5 +182,33 @@ final analyticsWeekdaySpendingProvider = Provider<Map<int, double>>((ref) {
   for (final tx in txs.where((t) => t.isExpense)) {
     result[tx.date.weekday] = (result[tx.date.weekday] ?? 0) + tx.amount;
   }
+  return result;
+});
+
+final financialHealthScoreProvider = Provider<FinancialHealthResult>((ref) {
+  final income = ref.watch(monthlyIncomeProvider);
+  final expense = ref.watch(monthlyExpenseProvider);
+  final budgets = ref.watch(budgetsWithSpentProvider);
+  return FinancialHealthCalculator.calculate(
+    income: income,
+    expense: expense,
+    budgets: budgets,
+  );
+});
+
+final sixMonthsTrendProvider =
+    FutureProvider<List<({DateTime date, double income, double expense})>>((ref) async {
+  ref.watch(monthlyTransactionsProvider);
+  final now = DateTime.now();
+  final repo = ref.read(transactionRepositoryProvider);
+  final result = <({DateTime date, double income, double expense})>[];
+
+  for (int i = 5; i >= 0; i--) {
+    final d = DateTime(now.year, now.month - i, 1);
+    final totalIncome = await repo.getTotalByTypeAndMonth('income', d.year, d.month);
+    final totalExpense = await repo.getTotalByTypeAndMonth('expense', d.year, d.month);
+    result.add((date: d, income: totalIncome, expense: totalExpense));
+  }
+
   return result;
 });

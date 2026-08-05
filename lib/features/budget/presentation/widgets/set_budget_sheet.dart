@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -54,7 +55,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
     final amount = ThousandSeparatorInputFormatter.parse(_amountCtrl.text);
     if (amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Masukkan jumlah yang valid')),);
+          SnackBar(content: Text('valid_amount_error'.tr())),);
       return;
     }
     FocusScope.of(context).unfocus();
@@ -84,7 +85,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
     final parsedAmt = ThousandSeparatorInputFormatter.parse(_amountCtrl.text);
 
     return Container(
-      margin: const EdgeInsets.only(top: 60),
+      margin: const EdgeInsetsDirectional.only(top: 60),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
@@ -97,14 +98,14 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.only(bottom: bottomPad),
+        padding: EdgeInsetsDirectional.only(bottom: bottomPad),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // ── Drag handle ──────────────────────────────────────────────
               Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 4),
+                padding: const EdgeInsetsDirectional.only(top: 12, bottom: 4),
                 child: Center(
                   child: Container(
                     width: 36, height: 4,
@@ -147,8 +148,8 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                     children: [
                       Text(
                         widget.existing == null
-                            ? 'Atur Anggaran'
-                            : 'Perbarui Anggaran',
+                            ? 'set_budget'.tr()
+                            : 'edit_budget'.tr(),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
@@ -158,7 +159,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Atur batas pengeluaran bulanan',
+                        'set_budget_desc'.tr(),
                         style: TextStyle(fontSize: 12, color: txtSec),
                       ),
                     ],
@@ -187,7 +188,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SectionLabel('Batas Bulanan', txtSec),
+                    _SectionLabel('monthly_limit'.tr(), txtSec),
                     const SizedBox(height: 10),
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
@@ -214,7 +215,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                       ),
                       child: Row(children: [
                         Text(
-                          'Rp',
+                          CurrencyFormatter.format(0, locale: context.locale.languageCode).replaceAll(RegExp(r'[0-9.,\s]'), ''),
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
@@ -264,7 +265,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
-                              CurrencyFormatter.formatCompact(parsedAmt),
+                              CurrencyFormatter.formatCompact(parsedAmt, locale: context.locale.languageCode),
                               style: TextStyle(
                                 fontSize: 10.5,
                                 color: selColor.withValues(alpha: 0.8),
@@ -285,7 +286,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SectionLabel('Kategori Pengeluaran', txtSec),
+                    _SectionLabel('expense_categories'.tr(), txtSec),
                     const SizedBox(height: 10),
                     GridView.builder(
                       shrinkWrap: true,
@@ -342,7 +343,7 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
-                                    CategoryUtils.getShortLabel(cat),
+                                    CategoryUtils.getLocalizedName(cat),
                                     style: TextStyle(
                                       fontSize: 10,
                                       fontWeight: selected
@@ -393,8 +394,8 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                                 selColor,
                                 Color.lerp(selColor, Colors.white, 0.12)!,
                               ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                              begin: AlignmentDirectional.topStart,
+                              end: AlignmentDirectional.bottomEnd,
                             ),
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [
@@ -408,8 +409,8 @@ class _SetBudgetSheetState extends ConsumerState<SetBudgetSheet> {
                           child: Center(
                             child: Text(
                               widget.existing == null
-                                  ? 'Simpan Anggaran'
-                                  : 'Perbarui Anggaran',
+                                  ? 'save_budget'.tr()
+                                  : 'update_budget'.tr(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15.5,

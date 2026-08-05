@@ -130,8 +130,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [page.gradientStart, page.gradientEnd],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              begin: AlignmentDirectional.topStart,
+              end: AlignmentDirectional.bottomEnd,
             ),
           ),
         ),
@@ -174,7 +174,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         // ── Skip ──────────────────────────────────────────────────────────
         SafeArea(
           child: Align(
-            alignment: Alignment.topRight,
+            alignment: AlignmentDirectional.topEnd,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: AnimatedOpacity(
@@ -190,7 +190,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.white.withValues(alpha: 0.30)),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Lewati',
                       style: TextStyle(
                         color: Colors.white,
@@ -441,7 +441,7 @@ class _OnboardingPageViewState extends State<_OnboardingPageView>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: page.features
                     .map((f) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsetsDirectional.only(bottom: 10),
                           child: Row(children: [
                             Container(
                               width: 22,

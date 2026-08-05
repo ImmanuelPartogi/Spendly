@@ -1,8 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CategoryUtils — semua ikon menggunakan Material Icons, TANPA emoji
-// Key kategori disesuaikan dengan AppConstants (Bahasa Indonesia)
+// Dukungan ganda: ID immutable (contoh: 'cat_makanan_minuman') & Legacy Raw String
 // ─────────────────────────────────────────────────────────────────────────────
 
 class CategoryUtils {
@@ -11,44 +12,152 @@ class CategoryUtils {
   // ── Ikon ──────────────────────────────────────────────────────────────────
 
   static IconData getIcon(String category) {
-    return _iconMap[category] ?? Icons.receipt_long_rounded;
+    return _iconMap[category] ??
+        _iconMap[_translationKeyMap[category]] ??
+        Icons.receipt_long_rounded;
   }
 
   // ── Warna ─────────────────────────────────────────────────────────────────
 
   static Color getColor(String category) {
-    return _colorMap[category] ?? const Color(0xFF6B7280);
+    return _colorMap[category] ??
+        _colorMap[_translationKeyMap[category]] ??
+        const Color(0xFF6B7280);
+  }
+
+  // ── Nama Terlokalisasi ───────────────────────────────────────────────────
+
+  static String getLocalizedName(String category) {
+    if (category.startsWith('cat_')) {
+      return category.tr();
+    }
+    final key = _translationKeyMap[category];
+    return key != null ? key.tr() : category;
   }
 
   // ── Label pendek untuk grid 3 kolom ───────────────────────────────────────
 
   static String getShortLabel(String category) {
-    const m = {
-      'Makanan & Minuman':  'Makanan',
-      'Tagihan & Utilitas': 'Tagihan',
-      'Perawatan Diri':     'Perawatan',
-      'Rumah & Perabot':    'Rumah',
-      'Rumah Tangga':       'Tangga',
-      'Anak & Bayi':        'Anak',
-      'Pajak & Retribusi':  'Pajak',
-      'Utang & Cicilan':    'Cicilan',
-      'Transfer/Kirim Uang':'Transfer',
-      'Bahan Bakar':        'BBM',
-      'Restoran & Kafe':    'Restoran',
-      'Hadiah & Amal':      'Hadiah',
-      'Hewan Peliharaan':   'Hewan',
-      'Kerja Sampingan':    'Sampingan',
-      'Uang Saku/THR':      'THR',
-      'Pinjaman Diterima':  'Pinjaman',
-      'Hasil Jual Barang':  'Jual Barang',
-    };
-    return m[category] ?? category;
+    return getLocalizedName(category);
   }
+
+  static const Map<String, String> _translationKeyMap = {
+    'Makanan & Minuman':  'cat_makanan_minuman',
+    'Restoran & Kafe':    'cat_restoran_kafe',
+    'Transportasi':       'cat_transportasi',
+    'Bahan Bakar':        'cat_bahan_bakar',
+    'Belanja':            'cat_belanja',
+    'Hiburan':            'cat_hiburan',
+    'Kesehatan':          'cat_kesehatan',
+    'Tagihan & Utilitas': 'cat_tagihan_utilitas',
+    'Pendidikan':         'cat_pendidikan',
+    'Perawatan Diri':     'cat_perawatan_diri',
+    'Rumah & Perabot':    'cat_rumah_perabot',
+    'Rumah Tangga':       'cat_rumah_tangga',
+    'Anak & Bayi':        'cat_anak_bayi',
+    'Pajak & Retribusi':  'cat_pajak_retribusi',
+    'Utang & Cicilan':    'cat_utang_cicilan',
+    'Transfer/Kirim Uang':'cat_transfer_kirim_uang',
+    'Elektronik':         'cat_elektronik',
+    'Olahraga':           'cat_olahraga',
+    'Hadiah & Amal':      'cat_hadiah_amal',
+    'Perjalanan':         'cat_perjalanan',
+    'Langganan':          'cat_langganan',
+    'Asuransi':           'cat_asuransi',
+    'Hewan Peliharaan':   'cat_hewan_peliharaan',
+    'Pulsa & Kuota':      'cat_pulsa_kuota',
+    'Parkir & Tol':       'cat_parkir_tol',
+    'Pakaian & Aksesoris':'cat_pakaian_aksesoris',
+    'Donasi & Zakat':     'cat_donasi_zakat',
+    'Hobi & Komunitas':   'cat_hobi_komunitas',
+    'Skincare & Kosmetik':'cat_skincare_kosmetik',
+    'Lainnya':            'cat_lainnya',
+
+    'Gaji':              'cat_gaji',
+    'Freelance':         'cat_freelance',
+    'Bisnis':            'cat_bisnis',
+    'Investasi':         'cat_investasi',
+    'Hadiah':            'cat_hadiah',
+    'Uang Saku/THR':     'cat_uang_saku_thr',
+    'Refund':            'cat_refund',
+    'Pinjaman Diterima': 'cat_pinjaman_diterima',
+    'Hasil Jual Barang': 'cat_hasil_jual_barang',
+    'Sewa':              'cat_sewa',
+    'Dividen':           'cat_dividen',
+    'Bonus':             'cat_bonus',
+    'Kerja Sampingan':   'cat_kerja_sampingan',
+    'Cashback & Reward': 'cat_cashback_reward',
+    'Komisi & Affiliate':'cat_komisi_affiliate',
+    'Warisan & Hibah':    'cat_warisan_hibah',
+    'Tunjangan & Insentif':'cat_tunjangan_insentif',
+    'Royalti & Hak Cipta':'cat_royalti_hak_cipta',
+    'Beasiswa & Gran':    'cat_beasiswa_gran',
+    'Klaim Asuransi':     'cat_klaim_asuransi',
+    'Kripto & Trading':   'cat_kripto_trading',
+    'Pengembalian Pajak': 'cat_pengembalian_pajak',
+    'Subsidi & Bantuan':  'cat_subsidi_bantuan',
+  };
 
   // ─── Maps ─────────────────────────────────────────────────────────────────
 
   static const Map<String, IconData> _iconMap = {
-    // Pengeluaran
+    // ID Immutable & Legacy Keys
+    'cat_makanan_minuman': Icons.local_cafe_rounded,
+    'cat_restoran_kafe': Icons.restaurant_rounded,
+    'cat_transportasi': Icons.directions_car_rounded,
+    'cat_bahan_bakar': Icons.local_gas_station_rounded,
+    'cat_belanja': Icons.shopping_bag_rounded,
+    'cat_hiburan': Icons.movie_rounded,
+    'cat_kesehatan': Icons.local_hospital_rounded,
+    'cat_tagihan_utilitas': Icons.receipt_rounded,
+    'cat_pendidikan': Icons.school_rounded,
+    'cat_perawatan_diri': Icons.spa_rounded,
+    'cat_rumah_perabot': Icons.home_rounded,
+    'cat_rumah_tangga': Icons.family_restroom_rounded,
+    'cat_anak_bayi': Icons.child_friendly_rounded,
+    'cat_pajak_retribusi': Icons.request_quote_rounded,
+    'cat_utang_cicilan': Icons.credit_card_rounded,
+    'cat_transfer_kirim_uang': Icons.swap_horiz_rounded,
+    'cat_elektronik': Icons.devices_rounded,
+    'cat_olahraga': Icons.fitness_center_rounded,
+    'cat_hadiah_amal': Icons.card_giftcard_rounded,
+    'cat_perjalanan': Icons.flight_rounded,
+    'cat_langganan': Icons.subscriptions_rounded,
+    'cat_asuransi': Icons.security_rounded,
+    'cat_hewan_peliharaan': Icons.pets_rounded,
+    'cat_pulsa_kuota': Icons.cell_tower_rounded,
+    'cat_parkir_tol': Icons.local_parking_rounded,
+    'cat_pakaian_aksesoris': Icons.checkroom_rounded,
+    'cat_donasi_zakat': Icons.volunteer_activism_rounded,
+    'cat_hobi_komunitas': Icons.palette_rounded,
+    'cat_skincare_kosmetik': Icons.brush_rounded,
+    'cat_lainnya': Icons.more_horiz_rounded,
+
+    'cat_gaji': Icons.account_balance_wallet_rounded,
+    'cat_freelance': Icons.laptop_rounded,
+    'cat_bisnis': Icons.business_center_rounded,
+    'cat_investasi': Icons.trending_up_rounded,
+    'cat_hadiah': Icons.redeem_rounded,
+    'cat_uang_saku_thr': Icons.card_giftcard_rounded,
+    'cat_refund': Icons.replay_rounded,
+    'cat_pinjaman_diterima': Icons.handshake_rounded,
+    'cat_hasil_jual_barang': Icons.storefront_rounded,
+    'cat_sewa': Icons.apartment_rounded,
+    'cat_dividen': Icons.savings_rounded,
+    'cat_bonus': Icons.star_rounded,
+    'cat_kerja_sampingan': Icons.work_outline_rounded,
+    'cat_cashback_reward': Icons.savings_rounded,
+    'cat_komisi_affiliate': Icons.groups_rounded,
+    'cat_warisan_hibah': Icons.account_balance_rounded,
+    'cat_tunjangan_insentif': Icons.card_membership_rounded,
+    'cat_royalti_hak_cipta': Icons.auto_stories_rounded,
+    'cat_beasiswa_gran': Icons.school_rounded,
+    'cat_klaim_asuransi': Icons.health_and_safety_rounded,
+    'cat_kripto_trading': Icons.currency_bitcoin_rounded,
+    'cat_pengembalian_pajak': Icons.assignment_return_rounded,
+    'cat_subsidi_bantuan': Icons.real_estate_agent_rounded,
+
+    // Legacy Indonesian Raw Strings Fallback
     'Makanan & Minuman':  Icons.local_cafe_rounded,
     'Restoran & Kafe':    Icons.restaurant_rounded,
     'Transportasi':       Icons.directions_car_rounded,
@@ -72,9 +181,14 @@ class CategoryUtils {
     'Langganan':          Icons.subscriptions_rounded,
     'Asuransi':           Icons.security_rounded,
     'Hewan Peliharaan':   Icons.pets_rounded,
+    'Pulsa & Kuota':      Icons.cell_tower_rounded,
+    'Parkir & Tol':       Icons.local_parking_rounded,
+    'Pakaian & Aksesoris':Icons.checkroom_rounded,
+    'Donasi & Zakat':     Icons.volunteer_activism_rounded,
+    'Hobi & Komunitas':   Icons.palette_rounded,
+    'Skincare & Kosmetik':Icons.brush_rounded,
     'Lainnya':            Icons.more_horiz_rounded,
 
-    // Pemasukan
     'Gaji':              Icons.account_balance_wallet_rounded,
     'Freelance':         Icons.laptop_rounded,
     'Bisnis':            Icons.business_center_rounded,
@@ -88,10 +202,76 @@ class CategoryUtils {
     'Dividen':           Icons.savings_rounded,
     'Bonus':             Icons.star_rounded,
     'Kerja Sampingan':   Icons.work_outline_rounded,
+    'Cashback & Reward': Icons.savings_rounded,
+    'Komisi & Affiliate':Icons.groups_rounded,
+    'Warisan & Hibah':    Icons.account_balance_rounded,
+    'Tunjangan & Insentif':Icons.card_membership_rounded,
+    'Royalti & Hak Cipta':Icons.auto_stories_rounded,
+    'Beasiswa & Gran':    Icons.school_rounded,
+    'Klaim Asuransi':     Icons.health_and_safety_rounded,
+    'Kripto & Trading':   Icons.currency_bitcoin_rounded,
+    'Pengembalian Pajak': Icons.assignment_return_rounded,
+    'Subsidi & Bantuan':  Icons.real_estate_agent_rounded,
   };
 
   static const Map<String, Color> _colorMap = {
-    // Pengeluaran — warna hangat/netral
+    // ID Immutable & Legacy Keys
+    'cat_makanan_minuman': Color(0xFFEF6C00),
+    'cat_restoran_kafe': Color(0xFFE53935),
+    'cat_transportasi': Color(0xFF1E88E5),
+    'cat_bahan_bakar': Color(0xFFD84315),
+    'cat_belanja': Color(0xFF8E24AA),
+    'cat_hiburan': Color(0xFFD81B60),
+    'cat_kesehatan': Color(0xFF00ACC1),
+    'cat_tagihan_utilitas': Color(0xFF546E7A),
+    'cat_pendidikan': Color(0xFF3949AB),
+    'cat_perawatan_diri': Color(0xFFEC407A),
+    'cat_rumah_perabot': Color(0xFF6D4C41),
+    'cat_rumah_tangga': Color(0xFF795548),
+    'cat_anak_bayi': Color(0xFFF06292),
+    'cat_pajak_retribusi': Color(0xFF455A64),
+    'cat_utang_cicilan': Color(0xFFC62828),
+    'cat_transfer_kirim_uang': Color(0xFF0288D1),
+    'cat_elektronik': Color(0xFF1565C0),
+    'cat_olahraga': Color(0xFF43A047),
+    'cat_hadiah_amal': Color(0xFFFF7043),
+    'cat_perjalanan': Color(0xFF00897B),
+    'cat_langganan': Color(0xFF5C6BC0),
+    'cat_asuransi': Color(0xFF78909C),
+    'cat_hewan_peliharaan': Color(0xFF8D6E63),
+    'cat_pulsa_kuota': Color(0xFF00838F),
+    'cat_parkir_tol': Color(0xFF455A64),
+    'cat_pakaian_aksesoris': Color(0xFFAD1457),
+    'cat_donasi_zakat': Color(0xFF2E7D32),
+    'cat_hobi_komunitas': Color(0xFF6A1B9A),
+    'cat_skincare_kosmetik': Color(0xFFD81B60),
+    'cat_lainnya': Color(0xFF757575),
+
+    'cat_gaji': Color(0xFF2E7D32),
+    'cat_freelance': Color(0xFF00695C),
+    'cat_bisnis': Color(0xFF1565C0),
+    'cat_investasi': Color(0xFF283593),
+    'cat_hadiah': Color(0xFFC62828),
+    'cat_uang_saku_thr': Color(0xFFFBC02D),
+    'cat_refund': Color(0xFF009688),
+    'cat_pinjaman_diterima': Color(0xFF673AB7),
+    'cat_hasil_jual_barang': Color(0xFF3F51B5),
+    'cat_sewa': Color(0xFF4527A0),
+    'cat_dividen': Color(0xFF00838F),
+    'cat_bonus': Color(0xFFF57F17),
+    'cat_kerja_sampingan': Color(0xFF37474F),
+    'cat_cashback_reward': Color(0xFF009688),
+    'cat_komisi_affiliate': Color(0xFF1565C0),
+    'cat_warisan_hibah': Color(0xFF4A148C),
+    'cat_tunjangan_insentif': Color(0xFF00796B),
+    'cat_royalti_hak_cipta': Color(0xFFD81B60),
+    'cat_beasiswa_gran': Color(0xFF1565C0),
+    'cat_klaim_asuransi': Color(0xFF0288D1),
+    'cat_kripto_trading': Color(0xFFFF8F00),
+    'cat_pengembalian_pajak': Color(0xFF2E7D32),
+    'cat_subsidi_bantuan': Color(0xFF558B2F),
+
+    // Legacy Indonesian Raw Strings Fallback
     'Makanan & Minuman':  Color(0xFFEF6C00),
     'Restoran & Kafe':    Color(0xFFE53935),
     'Transportasi':       Color(0xFF1E88E5),
@@ -115,9 +295,14 @@ class CategoryUtils {
     'Langganan':          Color(0xFF5C6BC0),
     'Asuransi':           Color(0xFF78909C),
     'Hewan Peliharaan':   Color(0xFF8D6E63),
+    'Pulsa & Kuota':      Color(0xFF00838F),
+    'Parkir & Tol':       Color(0xFF455A64),
+    'Pakaian & Aksesoris':Color(0xFFAD1457),
+    'Donasi & Zakat':     Color(0xFF2E7D32),
+    'Hobi & Komunitas':   Color(0xFF6A1B9A),
+    'Skincare & Kosmetik':Color(0xFFD81B60),
     'Lainnya':            Color(0xFF757575),
 
-    // Pemasukan — warna hijau/biru segar
     'Gaji':              Color(0xFF2E7D32),
     'Freelance':         Color(0xFF00695C),
     'Bisnis':            Color(0xFF1565C0),
@@ -131,5 +316,15 @@ class CategoryUtils {
     'Dividen':           Color(0xFF00838F),
     'Bonus':             Color(0xFFF57F17),
     'Kerja Sampingan':   Color(0xFF37474F),
+    'Cashback & Reward': Color(0xFF009688),
+    'Komisi & Affiliate':Color(0xFF1565C0),
+    'Warisan & Hibah':    Color(0xFF4A148C),
+    'Tunjangan & Insentif':Color(0xFF00796B),
+    'Royalti & Hak Cipta':Color(0xFFD81B60),
+    'Beasiswa & Gran':    Color(0xFF1565C0),
+    'Klaim Asuransi':     Color(0xFF0288D1),
+    'Kripto & Trading':   Color(0xFFFF8F00),
+    'Pengembalian Pajak': Color(0xFF2E7D32),
+    'Subsidi & Bantuan':  Color(0xFF558B2F),
   };
 }

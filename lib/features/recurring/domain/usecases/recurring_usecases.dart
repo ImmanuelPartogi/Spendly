@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/database/app_database.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../data/daos/recurring_dao.dart';
 import '../entities/recurring_entity.dart';
 
@@ -45,42 +46,63 @@ class AddRecurringUseCase {
   final RecurringDao _dao;
   AddRecurringUseCase(this._dao);
 
-  Future<void> call(RecurringEntity entity) => _dao.insertRecurring(
-        RecurringsCompanion.insert(
-          id: entity.id.isEmpty ? const Uuid().v4() : entity.id,
-          title: entity.title,
-          amount: entity.amount,
-          type: entity.type,
-          category: entity.category,
-          frequency: Value(entity.frequency.name),
-          dayOfMonth: Value(entity.dayOfMonth),
-          dayOfWeek: Value(entity.dayOfWeek),
-          isActive: Value(entity.isActive),
-          nextDue: entity.nextDue,
-          note: Value(entity.note),
-        ),
+  Future<void> call(RecurringEntity entity) async {
+    final id = entity.id.isEmpty ? const Uuid().v4() : entity.id;
+    await _dao.insertRecurring(
+      RecurringsCompanion.insert(
+        id: id,
+        title: entity.title,
+        amount: entity.amount,
+        type: entity.type,
+        category: entity.category,
+        frequency: Value(entity.frequency.name),
+        dayOfMonth: Value(entity.dayOfMonth),
+        dayOfWeek: Value(entity.dayOfWeek),
+        isActive: Value(entity.isActive),
+        nextDue: entity.nextDue,
+        note: Value(entity.note),
+      ),
+    );
+    if (entity.isActive) {
+      await NotificationService().scheduleRecurringNotification(
+        recurringId: id,
+        title: entity.title,
+        amount: entity.amount,
+        nextDue: entity.nextDue,
       );
+    }
+  }
 }
 
 class UpdateRecurringUseCase {
   final RecurringDao _dao;
   UpdateRecurringUseCase(this._dao);
 
-  Future<void> call(RecurringEntity entity) => _dao.updateRecurring(
-        entity.id,
-        RecurringsCompanion(
-          title: Value(entity.title),
-          amount: Value(entity.amount),
-          type: Value(entity.type),
-          category: Value(entity.category),
-          frequency: Value(entity.frequency.name),
-          dayOfMonth: Value(entity.dayOfMonth),
-          dayOfWeek: Value(entity.dayOfWeek),
-          isActive: Value(entity.isActive),
-          nextDue: Value(entity.nextDue),
-          note: Value(entity.note),
-        ),
+  Future<void> call(RecurringEntity entity) async {
+    await _dao.updateRecurring(
+      entity.id,
+      RecurringsCompanion(
+        title: Value(entity.title),
+        amount: Value(entity.amount),
+        type: Value(entity.type),
+        category: Value(entity.category),
+        frequency: Value(entity.frequency.name),
+        dayOfMonth: Value(entity.dayOfMonth),
+        dayOfWeek: Value(entity.dayOfWeek),
+        isActive: Value(entity.isActive),
+        nextDue: Value(entity.nextDue),
+        note: Value(entity.note),
+      ),
+    );
+    if (entity.isActive) {
+      await NotificationService().scheduleRecurringNotification(
+        recurringId: entity.id,
+        title: entity.title,
+        amount: entity.amount,
+        nextDue: entity.nextDue,
       );
+    }
+  }
 }
 
 class DeleteRecurringUseCase {

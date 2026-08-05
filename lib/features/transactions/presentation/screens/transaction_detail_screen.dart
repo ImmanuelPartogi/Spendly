@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/category_utils.dart';
 import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/utils/date_formatter.dart';
 import '../../domain/entities/transaction_entity.dart';
 import 'add_transaction_screen.dart';
 
@@ -62,7 +64,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                 actions: [
                   // Edit — disabled saat locked
                   Padding(
-                    padding: const EdgeInsets.only(right: 4),
+                    padding: const EdgeInsetsDirectional.only(end: 4),
                     child: IconButton(
                       icon: Container(
                         width: 34, height: 34,
@@ -83,7 +85,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                   ),
                   // Delete / Lock
                   Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsetsDirectional.only(end: 8),
                     child: IconButton(
                       icon: Container(
                         width: 34, height: 34,
@@ -160,10 +162,9 @@ class TransactionDetailScreen extends ConsumerWidget {
 
   void _showLockedInfo(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-            'Transaksi > 3 hari tidak dapat dihapus untuk menjaga akurasi data',),
-        duration: Duration(seconds: 3),
+      SnackBar(
+        content: Text('locked_transaction_info'.tr()),
+        duration: const Duration(seconds: 3),
       ),
     );
   }
@@ -176,7 +177,7 @@ class TransactionDetailScreen extends ConsumerWidget {
         backgroundColor: isDark ? AppColors.cardDark : AppColors.card,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          'Hapus Transaksi?',
+          'delete_transaction_question'.tr(),
           style: TextStyle(
             color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
             fontWeight: FontWeight.w700,
@@ -184,7 +185,7 @@ class TransactionDetailScreen extends ConsumerWidget {
           ),
         ),
         content: Text(
-          'Transaksi ini akan dihapus permanen dan saldo wallet akan dikembalikan.',
+          'delete_transaction_confirm_desc'.tr(),
           style: TextStyle(
             color: isDark
                 ? AppColors.textSecondaryDark
@@ -197,7 +198,7 @@ class TransactionDetailScreen extends ConsumerWidget {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Batal',
+              'cancel'.tr(),
               style: TextStyle(
                 color: isDark
                     ? AppColors.textSecondaryDark
@@ -206,7 +207,7 @@ class TransactionDetailScreen extends ConsumerWidget {
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(right: 4, bottom: 4),
+            margin: const EdgeInsetsDirectional.only(end: 4, bottom: 4),
             child: ElevatedButton(
               onPressed: () async {
                 Navigator.pop(context);
@@ -217,13 +218,13 @@ class TransactionDetailScreen extends ConsumerWidget {
                   if (context.mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Transaksi dihapus')),
+                      SnackBar(content: Text('transaction_deleted'.tr())),
                     );
                   }
                 } catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Gagal menghapus: $e')),
+                      SnackBar(content: Text('delete_failed'.tr(namedArgs: {'error': e.toString()}))),
                     );
                   }
                 }
@@ -235,9 +236,9 @@ class TransactionDetailScreen extends ConsumerWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
-              child: const Text(
-                'Hapus',
-                style: TextStyle(
+              child: Text(
+                'delete'.tr(),
+                style: const TextStyle(
                     fontWeight: FontWeight.w700, color: Colors.white,),
               ),
             ),
@@ -354,7 +355,7 @@ class _HeroBackground extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          isExpense ? 'Pengeluaran' : 'Pemasukan',
+                          isExpense ? 'expense'.tr() : 'income'.tr(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11.5,
@@ -379,7 +380,7 @@ class _HeroBackground extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    category,
+                    CategoryUtils.getLocalizedName(category),
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.80),
                       fontSize: 13.5,
@@ -397,15 +398,15 @@ class _HeroBackground extends StatelessWidget {
                         color: Colors.black.withValues(alpha: 0.22),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.lock_rounded,
+                          const Icon(Icons.lock_rounded,
                               color: Colors.white70, size: 11,),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text(
-                            'Terkunci · lebih dari 3 hari',
-                            style: TextStyle(
+                            'locked_over_3_days'.tr(),
+                            style: const TextStyle(
                               color: Colors.white70,
                               fontSize: 11,
                               fontWeight: FontWeight.w500,
@@ -470,8 +471,8 @@ class _DetailCard extends StatelessWidget {
           _Row(
             icon: Icons.category_rounded,
             iconColor: catColor,
-            label: 'Kategori',
-            value: transaction.category,
+            label: 'category'.tr(),
+            value: CategoryUtils.getLocalizedName(transaction.category),
             valueColor: catColor,
             isDark: isDark,
           ),
@@ -481,8 +482,8 @@ class _DetailCard extends StatelessWidget {
                 ? Icons.arrow_upward_rounded
                 : Icons.arrow_downward_rounded,
             iconColor: color,
-            label: 'Tipe',
-            value: isExpense ? 'Pengeluaran' : 'Pemasukan',
+            label: 'type'.tr(),
+            value: isExpense ? 'expense'.tr() : 'income'.tr(),
             valueColor: color,
             isDark: isDark,
           ),
@@ -490,15 +491,15 @@ class _DetailCard extends StatelessWidget {
           _Row(
             icon: Icons.calendar_today_rounded,
             iconColor: AppColors.primary,
-            label: 'Tanggal',
-            value: _formatDate(transaction.date),
+            label: 'date'.tr(),
+            value: _formatDate(context, transaction.date),
             isDark: isDark,
           ),
           _Divider(color: divColor),
           _Row(
             icon: Icons.access_time_rounded,
             iconColor: AppColors.accentTeal,
-            label: 'Waktu',
+            label: 'time'.tr(),
             value: _formatTime(transaction.date),
             isDark: isDark,
           ),
@@ -507,7 +508,7 @@ class _DetailCard extends StatelessWidget {
             _Row(
               icon: Icons.edit_note_rounded,
               iconColor: AppColors.accentOrange,
-              label: 'Catatan',
+              label: 'note'.tr(),
               value: transaction.note!,
               isDark: isDark,
             ),
@@ -521,13 +522,8 @@ class _DetailCard extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime d) {
-    const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des',
-    ];
-    return '${days[d.weekday - 1]}, ${d.day} ${months[d.month - 1]} ${d.year}';
+  String _formatDate(BuildContext context, DateTime d) {
+    return DateFormatter.formatDate(d, locale: context.locale.languageCode);
   }
 
   String _formatTime(DateTime d) =>
@@ -541,7 +537,7 @@ class _Divider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 56),
+      padding: const EdgeInsetsDirectional.only(start: 56),
       child: Divider(height: 1, color: color),
     );
   }
@@ -636,7 +632,7 @@ class _LockedRow extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'Transaksi ini sudah > 3 hari dan tidak dapat dihapus.',
+              'locked_transaction_detail_note'.tr(),
               style: TextStyle(
                   fontSize: 12.5, color: txtSec, height: 1.4,),
             ),

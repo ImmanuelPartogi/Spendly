@@ -5,7 +5,7 @@ class AppConstants {
   static const String typeIncome = 'income';
   static const String typeExpense = 'expense';
 
-  // ── Kategori Pengeluaran (24) ─────────────────────────────────────────────
+  // ── Kategori Pengeluaran (30) ─────────────────────────────────────────────
   static const List<String> expenseCategories = [
     'Makanan & Minuman',
     'Transportasi',
@@ -30,10 +30,16 @@ class AppConstants {
     'Olahraga',
     'Hadiah & Amal',
     'Hewan Peliharaan',
+    'Pulsa & Kuota',
+    'Parkir & Tol',
+    'Pakaian & Aksesoris',
+    'Donasi & Zakat',
+    'Hobi & Komunitas',
+    'Skincare & Kosmetik',
     'Lainnya',
   ];
 
-  // ── Kategori Pemasukan (14) ───────────────────────────────────────────────
+  // ── Kategori Pemasukan (16) ───────────────────────────────────────────────
   static const List<String> incomeCategories = [
     'Gaji',
     'Freelance',
@@ -48,6 +54,16 @@ class AppConstants {
     'Sewa',
     'Dividen',
     'Kerja Sampingan',
+    'Cashback & Reward',
+    'Komisi & Affiliate',
+    'Warisan & Hibah',
+    'Tunjangan & Insentif',
+    'Royalti & Hak Cipta',
+    'Beasiswa & Gran',
+    'Klaim Asuransi',
+    'Kripto & Trading',
+    'Pengembalian Pajak',
+    'Subsidi & Bantuan',
     'Lainnya',
   ];
 

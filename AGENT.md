@@ -136,6 +136,9 @@ Database dikelola menggunakan Drift ORM ([app_database.dart](file:///e:/Nero/Spe
    - Indexed `date`, `walletId`, dan `category` di tabel `Transactions` (schema v4 migration).
 3. ~~**Infrastruktur Auth Dipanggil Langsung dari Presentation UI**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 2**:
    - Memindahkan direct `FirebaseAuth.instance` calls dari `login_screen.dart` dan `profile_screen.dart` ke `AuthController` & `AuthUIState` Notifier.
+4. ~~**Data Budget Hilang Setelah App Restart (Cold Start)**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 8B**:
+   - **Root Cause**: `_activeUid` di `main.dart` bernilai `null` saat cold-start sehingga memicu `restoreFromFirebase()` pada setiap launch app. `restoreFromFirebase()` memanggil `clearLocalData()` sebelum mengunduh data Firestore, serta `BudgetRepositoryImpl` mengunggah budget secara fire-and-forget tanpa offline queue & `synced` flag tracking.
+   - **Fix**: Inisialisasi `_activeUid` dari user aktif sebelum auth listener terdaftar di `main.dart`, unduh data Firestore terlebih dahulu di `restoreFromFirebase()` sebelum menghapus cache lokal, `await` upload budget serta update `synced` flag di `BudgetDao`, dan tambahkan `SyncService.syncPendingBudgets()` pada event pemulihan koneksi internet.
 
 ### ⚠️ HIGH
 1. ~~**Hardcoded Business Mapping di Screen OCR**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 2**:
@@ -160,12 +163,14 @@ Database dikelola menggunakan Drift ORM ([app_database.dart](file:///e:/Nero/Spe
    - Folder kosong `lib/features/splash/` telah dihapus.
 2. ~~**Unused Legacy Helper Methods di `ocr_service.dart`**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 6**:
    - Method legacy (`extractTotal`, `extractDate`, `extractMerchant`) telah dibersihkan dari `ocr_service.dart`.
-3. **Cakupan Test Suite 8B (Unit Test vs Widget Test)**:
+3. ~~**Lint Cosmetic Cleanup (`prefer_const_constructors` & `require_trailing_commas`)**~~ $\rightarrow$ ✅ **RESOLVED IN FASE 9E**:
+   - Pembersihan 100% lint cosmetic pada `goals_screen.dart`, `profile_screen.dart`, dan `scanner_screen.dart` (diverifikasi `flutter analyze` 0 issues).
+4. **Cakupan Test Suite 8B (Unit Test vs Widget Test)**:
    - File `add_transaction_test.dart`, `scan_review_flow_test.dart`, dan `budget_warning_test.dart` menguji logika bisnis entity, StateNotifier, dan OcrParserService (54 unit test passing 100%). Pengujian interaksi widget UI tingkat tinggi (`testWidgets` dengan gesture tap/input) tidak diimplementasikan dan ditangani secara manual oleh user pada device fisik.
 
 ---
 
-## 8. Ringkasan Eksekusi Refactoring & Fitur Baru (Fase 1 - 7)
+## 8. Ringkasan Eksekusi Refactoring & Fitur Baru (Fase 1 - 9)
 
 - ✅ **FASE 1**: SQLite indexing (schema v4), pembersihan dead dependencies (`go_router`, `riverpod_annotation`, dll), penghapusan folder `splash/`, dan modularisasi `providers.dart` menjadi 10 provider per-fitur.
 - ✅ **FASE 2**: Auth Controller Notifier (`auth_controller.dart` & `auth_state.dart`), eliminasi direct Firebase SDK call di UI, dan pemindahan merchant category mapping ke `OcrParserService.suggestCategory()`.
@@ -175,10 +180,36 @@ Database dikelola menggunakan Drift ORM ([app_database.dart](file:///e:/Nero/Spe
 - ✅ **FASE 6**: Penambahan `proguard-rules.pro` & konfigurasinya di `build.gradle.kts`, pengaktifan `edgeToEdge` SystemUiMode di `main.dart`, dan pembersihan legacy methods di `ocr_service.dart`.
 - ✅ **FASE 7**: AOT Release build APK (108.3MB), upgrade `workmanager` v0.7.0, perluasan `AppStrings` ke 158 kunci (100% key parity ID & EN), integrasi penuh 8 layar utama, native `WindowCompat.setDecorFitsSystemWindows` di `MainActivity.kt`, dan `SafeArea` pada `GoalsScreen` & `ExportScreen`. Seluruh 40 unit test passing 100%!
 - ✅ **FASE 8**: Pembuatan `README.md` berstandar produksi, penambahan 3 test suite baru (`add_transaction_test.dart`, `scan_review_flow_test.dart`, `budget_warning_test.dart`) & regresi `LocaleNotifier` (total 54 unit test passing 100%), dan setup otomatisasi GitHub Actions CI (`.github/workflows/ci.yml`).
+- ✅ **FASE 9A**: Perluasan master kategori transaksi & anggaran (30 pengeluaran, 16 pemasukan) mencakup kebutuhan finansial lokal Indonesia (Pulsa & Kuota, Parkir & Tol, Pakaian & Aksesoris, Donasi & Zakat, Hobi & Komunitas, Skincare & Kosmetik, Cashback & Reward, Komisi & Affiliate), diselaraskan di `CategoryUtils` (ikon, warna, label) & `InsightEngine` (emoji).
+- ✅ **FASE 9B**: Perluasan dukungan bahasa di `AppStrings` ke 4 bahasa (Bahasa Indonesia `id`, English `en`, Bahasa Melayu `ms`, Español `es`) dengan 100% key parity (173 kunci UI), serta penambahan modal pengubah bahasa di layar Profile (`profile_screen.dart`) memanfaatkan `localeProvider` yang sama dengan Settings.
+- ✅ **FASE 9C**: Analitik Ditingkatkan (`AnalyticsScreen`):
+  - **C1**: Kartu *PieChart / Donut Chart* (`fl_chart`) distribusi pengeluaran per kategori yang terhubung ke warna `CategoryUtils._colorMap` & filter periode aktif, disertai *legend* persentase & nominal.
+  - **C2**: Kartu *BarChart* tren 6-bulan terakhir membandingkan total pengeluaran vs pemasukan per bulan (`sixMonthsTrendProvider`).
+  - **C3**: Kartu *Financial Health Score* (0-100) murni via `FinancialHealthCalculator` (menggabungkan rasio kas 60% + kepatuhan budget 40%), lengkap dengan lencana status ramah (Sehat / Waspada / Boros) terjemahan 4 bahasa.
+- ✅ **FASE 9D**: Notifikasi Ditingkatkan (`NotificationService`):
+  - **D1**: Peringatan budget instan saat pengeluaran kategori mencapai $\ge 80\%$ ("Budget [kategori] sudah 80% terpakai") atau $\ge 100\%$ ("Budget [kategori] sudah terlampaui"), terintegrasi di `TransactionRepositoryImpl`, dilindungi anti-spam per threshold per periode budget via `SharedPreferences`.
+  - **D2**: Reminder transaksi berulang jatuh tempo H-1 & Hari H memanfaatkan `zonedSchedule` (timezone `tz.TZDateTime`) dengan pembersihan notifikasi lama otomatis di `recurring_usecases.dart`.
+  - **D3**: Selebrasi instan saat alokasi dana menyebabkan target tabungan (*goal*) pertama kali mencapai 100% di `GoalDao.allocateFunds()`.
+- ✅ **FASE 9E**: Pembersihan lint kosmetik (`prefer_const_constructors`, `require_trailing_commas`) di 3 layar (`GoalsScreen`, `ProfileScreen`, `ScannerScreen`).
+- ✅ **FASE 10C**: Modernisasi UI Glassmorphism Soft & Vibrant Neo-Card:
+  - **Fondasi Theme & Dynamic Token**: Pembaruan `app_colors.dart`, `app_theme.dart`, dan `spendly_card.dart` dengan corner radius 16–24px, soft multi-layered shadows, gradient depth borders, dan micro-interaction snappy.
+  - **Floating Glassmorphic Bottom Nav**: Integrasi `BackdropFilter` (blur 12px), active tab indicator glow, dan label terjemahan dinamis `.tr()` di `main_navigation.dart`.
+  - **Modernisasi Seluruh 9 Modul**:
+    - **Dashboard**: Redesigned `BalanceCard` (savings rate bar, gradient background, dot-grid painter, localized `.tr()`), `InsightCarousel`, `MiniExpenseChart`, dan `TransactionTile`.
+    - **Transactions**: Modern `TransactionTile` staggered list (soft category icon depth, amount pill chip), `AddTransactionSheet`, dan `TransactionDetailScreen`.
+    - **Budget**: Redesigned `BudgetSummaryCard`, progress bar threshold indicators (80% warning / 100% exceeded), dan `SetBudgetSheet`.
+    - **Analytics**: `AnalyticsCategoryDonutCard` (`fl_chart`), `AnalyticsSixMonthTrendCard`, `AnalyticsHealthScoreCard`, dan `AnalyticsComparisonCta`.
+    - **Goals**: `GoalsScreen`, `_GoalCard` progress bar & daily savings calculator, `AddGoalSheet`, dan modal alokasi dana.
+    - **Profile**: `ProfileHeroCard`, `_MonthlyStatCard`, `_SettingsGroup`, modal pengubah bahasa (`_showLanguageSheet`), dan `EditProfileScreen`.
+    - **Settings**: `SettingsScreen`, `_DropdownTile`, toggle switches, dan dialog konfirmasi PIN/lokalisasi.
+    - **Scanner**: `ScanReviewScreen` receipt items, `ScanResultEditSheet`, dan `_DocumentTypeChip`.
+    - **Auth & Onboarding**: `LoginScreen` & `PinScreen` dengan background radial gradient, dot-grid painter, step transitions, dan pin keypads.
+
+🎉 **SELURUH RANGKAIAN FASE 10 (10A, 10B, 10C) TELAH SELESAI SEPENUHNYA!**
 
 ---
 
-## 8. Instruksi Eksplisit untuk AI Assistant di Sesi Berikutnya
+## 9. Instruksi Eksplisit untuk AI Assistant di Sesi Berikutnya
 
 > ✋ **PERHATIAN UNTUK AI ASSISTANT / AGENT**:
 > 1. **JANGAN PERNAH melakukan full-scan seluruh repo (`lib/`, `android/`, `pubspec.yaml`, dsb) lagi pada sesi berikutnya.** Full scan PERTAMA dan TERAKHIR sudah selesai dilakukan di sesi audit awal.

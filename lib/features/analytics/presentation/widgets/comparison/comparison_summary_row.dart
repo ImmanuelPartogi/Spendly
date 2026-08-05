@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/currency_formatter.dart';
 
+import 'package:easy_localization/easy_localization.dart';
+
 class ComparisonSummaryRow extends StatelessWidget {
   final double income;
   final double expense;
@@ -27,19 +29,19 @@ class ComparisonSummaryRow extends StatelessWidget {
 
     return Row(children: [
       Expanded(child: _Tile(
-        label: 'Total Masuk', value: income,
+        label: 'total_income'.tr(), value: income,
         color: AppColors.income, icon: Icons.south_rounded,
         card: card, bdr: bdr, sec: sec,
       ),),
       const SizedBox(width: 10),
       Expanded(child: _Tile(
-        label: 'Total Keluar', value: expense,
+        label: 'total_expense'.tr(), value: expense,
         color: AppColors.expense, icon: Icons.north_rounded,
         card: card, bdr: bdr, sec: sec,
       ),),
       const SizedBox(width: 10),
       Expanded(child: _Tile(
-        label: isDeficit ? 'Defisit' : 'Surplus',
+        label: isDeficit ? 'deficit'.tr() : 'surplus'.tr(),
         value: savings.abs(), color: savColor,
         icon: isDeficit ? Icons.trending_down_rounded : Icons.trending_up_rounded,
         badge: '${rate.toStringAsFixed(0)}%',

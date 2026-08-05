@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
@@ -46,14 +47,14 @@ class ComparisonSavingsCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Tren Tabungan',
+                Text('savings_trend'.tr(),
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: txtPrim,
                         letterSpacing: -0.3,),),
                 const SizedBox(height: 3),
-                Text('Surplus = Pemasukan − Pengeluaran',
+                Text('surplus_formula'.tr(),
                     style: TextStyle(fontSize: 11, color: txtSec),),
               ],
             ),
@@ -66,7 +67,7 @@ class ComparisonSavingsCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              'Rata-rata ${CurrencyFormatter.formatCompact(avg.abs())}',
+              '${'average'.tr()} ${CurrencyFormatter.formatCompact(avg.abs(), locale: context.locale.languageCode)}',
               style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -84,7 +85,7 @@ class ComparisonSavingsCard extends StatelessWidget {
           Row(children: [
             Expanded(
               child: _PeriodStat(
-                label: 'Terbaik', period: best.label,
+                label: 'best_period'.tr(), period: best.label,
                 value: best.savings, color: AppColors.income,
                 icon: Icons.emoji_events_rounded, isDark: isDark,
               ),
@@ -92,7 +93,7 @@ class ComparisonSavingsCard extends StatelessWidget {
             Container(width: 0.5, height: 40, color: div),
             Expanded(
               child: _PeriodStat(
-                label: 'Terburuk', period: worst.label,
+                label: 'worst_period'.tr(), period: worst.label,
                 value: worst.savings, color: AppColors.expense,
                 icon: Icons.warning_amber_rounded, isDark: isDark,
               ),
@@ -149,7 +150,7 @@ class _SavingsLineChart extends StatelessWidget {
                 final i = v.toInt();
                 if (i < 0 || i >= data.length) return const SizedBox.shrink();
                 return Padding(
-                  padding: const EdgeInsets.only(top: 6),
+                  padding: const EdgeInsetsDirectional.only(top: 6),
                   child: Text(data[i].label,
                       style: TextStyle(fontSize: 9, color: sec),),
                 );

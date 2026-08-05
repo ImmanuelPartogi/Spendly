@@ -1,11 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../domain/entities/goal_entity.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Goals Screen
@@ -16,75 +15,86 @@ class GoalsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final goalsAsync = ref.watch(goalListProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: Text(AppStrings.get('financial_goals', locale))),
+      appBar: AppBar(title: Text('financial_goals'.tr())),
       body: SafeArea(
         child: goalsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.error_outline_rounded,
-                  size: 48, color: AppColors.expense,),
-              const SizedBox(height: 12),
-              Text(AppStrings.get('load_goals_failed', locale),
-                  style: Theme.of(context).textTheme.bodyLarge,),
-            ],
-          ),
-        ),
-        data: (goals) {
-          if (goals.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('🏆', style: TextStyle(fontSize: 48)),
-                  const SizedBox(height: 12),
-                  Text(AppStrings.get('no_goals', locale),
-                      style: const TextStyle(color: AppColors.textSecondary),),
-                ],
-              ),
-            );
-          }
-
-          final active = goals.where((g) => !g.isCompleted).toList();
-          final completed = goals.where((g) => g.isCompleted).toList();
-
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              if (active.isNotEmpty) ...[
-                _SectionTitle(AppStrings.get('active_goals', locale)),
-                const SizedBox(height: 10),
-                ...active.map((g) => _GoalCard(
-                      goal: g,
-                      onAddFunds: () => _showAddFundsDialog(context, ref, g, locale),
-                      onEdit: () => _openAddEdit(context, existing: g),
-                      onDelete: () => _confirmDelete(context, ref, g, locale),
-                    ),),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.error_outline_rounded,
+                  size: 48,
+                  color: AppColors.expense,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'load_goals_failed'.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ],
-              if (completed.isNotEmpty) ...[
-                const SizedBox(height: 16),
-                _SectionTitle('🎉 ${AppStrings.get('achieved_goals', locale)}'),
-                const SizedBox(height: 10),
-                ...completed.map((g) => _GoalCard(
+            ),
+          ),
+          data: (goals) {
+            if (goals.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('🏆', style: TextStyle(fontSize: 48)),
+                    const SizedBox(height: 12),
+                    Text(
+                      'no_goals'.tr(),
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            final active = goals.where((g) => !g.isCompleted).toList();
+            final completed = goals.where((g) => g.isCompleted).toList();
+
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                if (active.isNotEmpty) ...[
+                  _SectionTitle('active_goals'.tr()),
+                  const SizedBox(height: 10),
+                  ...active.map(
+                    (g) => _GoalCard(
+                      goal: g,
+                      onAddFunds: () =>
+                          _showAddFundsDialog(context, ref, g),
+                      onEdit: () => _openAddEdit(context, existing: g),
+                      onDelete: () => _confirmDelete(context, ref, g),
+                    ),
+                  ),
+                ],
+                if (completed.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  _SectionTitle('🎉 ${'achieved_goals'.tr()}'),
+                  const SizedBox(height: 10),
+                  ...completed.map(
+                    (g) => _GoalCard(
                       goal: g,
                       onAddFunds: () {},
                       onEdit: () {},
-                      onDelete: () => _confirmDelete(context, ref, g, locale),
-                    ),),
+                      onDelete: () => _confirmDelete(context, ref, g),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 80),
               ],
-              const SizedBox(height: 80),
-            ],
-          );
-        },
+            );
+          },
+        ),
       ),
-    ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openAddEdit(context),
         backgroundColor: AppColors.primary,
@@ -94,23 +104,28 @@ class GoalsScreen extends ConsumerWidget {
   }
 
   void _showAddFundsDialog(
-      BuildContext context, WidgetRef ref, GoalEntity goal, Locale locale) {
+    BuildContext context,
+    WidgetRef ref,
+    GoalEntity goal,
+  ) {
     final ctrl = TextEditingController();
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('${AppStrings.get('allocate_to', locale)} "${goal.title}"'),
+        title: Text('${'allocate_to'.tr()} "${goal.title}"'),
         content: TextField(
           controller: ctrl,
           keyboardType: TextInputType.number,
-          decoration:
-              InputDecoration(hintText: AppStrings.get('amount', locale), prefixText: 'Rp '),
+          decoration: InputDecoration(
+            hintText: 'amount'.tr(),
+            prefixText: 'Rp ',
+          ),
           autofocus: true,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(AppStrings.get('cancel', locale)),
+            child: Text('cancel'.tr()),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -122,23 +137,29 @@ class GoalsScreen extends ConsumerWidget {
               }
               if (context.mounted) Navigator.pop(context);
             },
-            child: Text(AppStrings.get('allocate', locale)),
+            child: Text('allocate'.tr()),
           ),
         ],
       ),
     );
   }
 
-  void _confirmDelete(BuildContext context, WidgetRef ref, GoalEntity goal, Locale locale) {
+  void _confirmDelete(
+    BuildContext context,
+    WidgetRef ref,
+    GoalEntity goal,
+  ) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(AppStrings.get('delete_goal_confirm', locale)),
-        content: Text('"${goal.title}" ${AppStrings.get('delete_goal_sub', locale)}'),
+        title: Text('delete_goal_confirm'.tr()),
+        content: Text(
+          '"${goal.title}" ${'delete_goal_sub'.tr()}',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(AppStrings.get('cancel', locale)),
+            child: Text('cancel'.tr()),
           ),
           ElevatedButton(
             onPressed: () {
@@ -146,7 +167,7 @@ class GoalsScreen extends ConsumerWidget {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.expense),
-            child: Text(AppStrings.get('delete', locale)),
+            child: Text('delete'.tr()),
           ),
         ],
       ),
@@ -195,16 +216,18 @@ class _GoalCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsetsDirectional.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: goal.isCompleted ? goal.color.withValues(alpha: 0.05) : AppColors.card,
+        color: goal.isCompleted
+            ? goal.color.withValues(alpha: 0.05)
+            : AppColors.card,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color:
-              goal.isCompleted ? goal.color.withValues(alpha: 0.3) : AppColors.border,
+          color: goal.isCompleted
+              ? goal.color.withValues(alpha: 0.3)
+              : AppColors.border,
           width: goal.isCompleted ? 1.5 : 1,
         ),
       ),
@@ -242,18 +265,21 @@ class _GoalCard extends ConsumerWidget {
                         ),
                         if (goal.isCompleted)
                           const Padding(
-                            padding: EdgeInsets.only(left: 6),
-                            child: Icon(Icons.check_circle_rounded,
-                                color: AppColors.income, size: 16,),
+                            padding: EdgeInsetsDirectional.only(start: 6),
+                            child: Icon(
+                              Icons.check_circle_rounded,
+                              color: AppColors.income,
+                              size: 16,
+                            ),
                           ),
                       ],
                     ),
                     Text(
                       goal.isCompleted
-                          ? AppStrings.get('goal_achieved_status', locale)
+                          ? 'goal_achieved_status'.tr()
                           : goal.isOverdue
-                              ? AppStrings.get('deadline_overdue', locale)
-                              : '${goal.daysLeft} ${AppStrings.get('days_left', locale)}',
+                              ? 'deadline_overdue'.tr()
+                              : '${goal.daysLeft} ${'days_left'.tr()}',
                       style: TextStyle(
                         fontSize: 12,
                         color: goal.isCompleted
@@ -272,11 +298,16 @@ class _GoalCard extends ConsumerWidget {
                   if (v == 'delete') onDelete();
                 },
                 itemBuilder: (_) => [
-                  PopupMenuItem(value: 'edit', child: Text(AppStrings.get('edit', locale))),
+                  PopupMenuItem(
+                    value: 'edit',
+                    child: Text('edit'.tr()),
+                  ),
                   PopupMenuItem(
                     value: 'delete',
-                    child: Text(AppStrings.get('delete', locale),
-                        style: const TextStyle(color: AppColors.expense),),
+                    child: Text(
+                      'delete'.tr(),
+                      style: const TextStyle(color: AppColors.expense),
+                    ),
                   ),
                 ],
               ),
@@ -302,7 +333,9 @@ class _GoalCard extends ConsumerWidget {
               Text(
                 CurrencyFormatter.format(goal.targetAmount),
                 style: const TextStyle(
-                    fontSize: 12, color: AppColors.textSecondary,),
+                  fontSize: 12,
+                  color: AppColors.textSecondary,
+                ),
               ),
             ],
           ),
@@ -326,7 +359,7 @@ class _GoalCard extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${(goal.progress * 100).toStringAsFixed(0)}% ${AppStrings.get('achieved_percent', locale)}',
+                '${(goal.progress * 100).toStringAsFixed(0)}% ${'achieved_percent'.tr()}',
                 style: TextStyle(
                   fontSize: 11,
                   color: goal.color,
@@ -335,9 +368,11 @@ class _GoalCard extends ConsumerWidget {
               ),
               if (!goal.isCompleted && goal.dailySavingsNeeded > 0)
                 Text(
-                  '${AppStrings.get('need_per_day', locale)} ${CurrencyFormatter.formatCompact(goal.dailySavingsNeeded)}${AppStrings.get('per_day', locale)}',
+                  '${'need_per_day'.tr()} ${CurrencyFormatter.formatCompact(goal.dailySavingsNeeded)}${'per_day'.tr()}',
                   style: const TextStyle(
-                      fontSize: 11, color: AppColors.textSecondary,),
+                    fontSize: 11,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
             ],
           ),
@@ -348,13 +383,14 @@ class _GoalCard extends ConsumerWidget {
               child: OutlinedButton.icon(
                 onPressed: onAddFunds,
                 icon: const Icon(Icons.add_rounded, size: 16),
-                label: Text(AppStrings.get('allocate_funds', locale)),
+                label: Text('allocate_funds'.tr()),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: goal.color,
                   side: BorderSide(color: goal.color),
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
             ),
@@ -467,18 +503,17 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = ref.watch(localeProvider);
 
     return Container(
-      margin: const EdgeInsets.only(top: 60),
+      margin: const EdgeInsetsDirectional.only(top: 60),
       decoration: const BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      padding: EdgeInsets.only(
+      padding: EdgeInsetsDirectional.only(
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        left: 20,
-        right: 20,
+        start: 20,
+        end: 20,
         top: 16,
       ),
       child: SingleChildScrollView(
@@ -491,18 +526,24 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),),
+                  color: AppColors.border,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              widget.existing == null ? AppStrings.get('create_new_goal', locale) : AppStrings.get('edit_goal', locale),
+              widget.existing == null
+                  ? 'create_new_goal'.tr()
+                  : 'edit_goal'.tr(),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
             // Emoji picker
-            Text(AppStrings.get('icon', locale), style: Theme.of(context).textTheme.titleSmall),
+            Text(
+              'icon'.tr(),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -516,8 +557,9 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                      color:
-                          isSel ? _color.withValues(alpha: 0.15) : AppColors.surface,
+                      color: isSel
+                          ? _color.withValues(alpha: 0.15)
+                          : AppColors.surface,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: isSel ? _color : AppColors.border,
@@ -525,14 +567,18 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                       ),
                     ),
                     child: Center(
-                        child: Text(e, style: const TextStyle(fontSize: 20)),),
+                      child: Text(e, style: const TextStyle(fontSize: 20)),
+                    ),
                   ),
                 );
               }).toList(),
             ),
             const SizedBox(height: 16),
             // Color picker
-            Text(AppStrings.get('color', locale), style: Theme.of(context).textTheme.titleSmall),
+            Text(
+              'color'.tr(),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
             const SizedBox(height: 8),
             Row(
               children: _colors.map((c) {
@@ -542,7 +588,7 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                   child: Container(
                     width: 32,
                     height: 32,
-                    margin: const EdgeInsets.only(right: 8),
+                    margin: const EdgeInsetsDirectional.only(end: 8),
                     decoration: BoxDecoration(
                       color: c,
                       shape: BoxShape.circle,
@@ -560,14 +606,16 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
             const SizedBox(height: 16),
             TextField(
               controller: _titleCtrl,
-              decoration: InputDecoration(labelText: AppStrings.get('goal_name', locale)),
+              decoration: InputDecoration(
+                labelText: 'goal_name'.tr(),
+              ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _targetCtrl,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: AppStrings.get('target_amount', locale),
+                labelText: 'target_amount'.tr(),
                 prefixText: 'Rp ',
               ),
             ),
@@ -592,13 +640,18 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.flag_rounded,
-                        size: 18, color: AppColors.textSecondary,),
+                    const Icon(
+                      Icons.flag_rounded,
+                      size: 18,
+                      color: AppColors.textSecondary,
+                    ),
                     const SizedBox(width: 10),
                     Text(
-                      '${AppStrings.get('deadline', locale)}: ${_deadline.day}/${_deadline.month}/${_deadline.year}',
+                      '${'deadline'.tr()}: ${_deadline.day}/${_deadline.month}/${_deadline.year}',
                       style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600,),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -615,8 +668,11 @@ class _AddGoalSheetState extends ConsumerState<AddGoalSheet> {
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2,),)
-                    : Text(AppStrings.get('save_goal', locale)),
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text('save_goal'.tr()),
               ),
             ),
           ],

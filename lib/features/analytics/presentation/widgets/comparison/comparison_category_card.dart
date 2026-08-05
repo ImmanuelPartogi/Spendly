@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_theme.dart';
@@ -55,14 +56,14 @@ class ComparisonCategoryCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Rincian Kategori',
+              Text('category_details'.tr(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: txtPrim,
                       letterSpacing: -0.3,),),
               const SizedBox(height: 3),
-              Text('Tap kategori untuk filter grafik utama',
+              Text('tap_category_to_filter'.tr(),
                   style: TextStyle(fontSize: 11, color: txtSec),),
               const SizedBox(height: 14),
               Container(
@@ -92,9 +93,9 @@ class ComparisonCategoryCard extends StatelessWidget {
                   dividerColor: Colors.transparent,
                   overlayColor:
                       WidgetStateProperty.all(Colors.transparent),
-                  tabs: const [
-                    Tab(text: 'Pemasukan'),
-                    Tab(text: 'Pengeluaran'),
+                  tabs: [
+                    Tab(text: 'income'.tr()),
+                    Tab(text: 'expense'.tr()),
                   ],
                 ),
               ),
@@ -165,7 +166,7 @@ class _CatList extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-              'Tidak ada data ${isExpense ? "pengeluaran" : "pemasukan"}',
+              'no_transactions'.tr(),
               style: TextStyle(color: txtSec, fontSize: 12),),
         ],),
       );
@@ -185,8 +186,8 @@ class _CatList extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
               selected.isEmpty
-                  ? 'Semua kategori'
-                  : '${selected.length} kategori aktif',
+                  ? 'all_categories'.tr()
+                  : '${selected.length} ${'categories'.tr()}',
               style: TextStyle(
                   fontSize: 11, color: txtSec, fontWeight: FontWeight.w500,),),
           const Spacer(),
@@ -200,7 +201,7 @@ class _CatList extends StatelessWidget {
                   color: accent.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: Text('Atur Ulang',
+                child: Text('reset'.tr(),
                     style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -232,7 +233,7 @@ class _CatList extends StatelessWidget {
                 child: AnimatedContainer(
                   duration: kDurationFast,
                   curve: kCurveDefault,
-                  margin: const EdgeInsets.only(bottom: 8),
+                  margin: const EdgeInsetsDirectional.only(bottom: 8),
                   padding: const EdgeInsets.fromLTRB(12, 11, 12, 11),
                   decoration: BoxDecoration(
                     color: isPinned ? catColor.withValues(alpha: 0.07) : surf,
@@ -258,7 +259,7 @@ class _CatList extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(cat,
+                          Text(CategoryUtils.getLocalizedName(cat),
                               style: TextStyle(
                                   fontSize: 12.5,
                                   fontWeight: FontWeight.w600,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
@@ -71,7 +72,7 @@ class BalanceCard extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'TOTAL SALDO',
+                              'total_balance'.tr().toUpperCase(),
                               style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.60),
                                 fontSize: 10,
@@ -85,7 +86,7 @@ class BalanceCard extends ConsumerWidget {
                                 : _AnimatedBalance(value: balance),
                           ],
                         ),
-                        _MonthBadge(label: DateFormatter.formatMonthYear(now)),
+                        _MonthBadge(label: DateFormatter.formatMonthYear(now, locale: context.locale.languageCode)),
                       ],
                     ),
 
@@ -112,7 +113,7 @@ class BalanceCard extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: _StatPill(
-                            label: 'Pemasukan',
+                            label: 'income'.tr(),
                             icon: Icons.south_rounded,
                             value: income,
                             isLoading: txLoading,
@@ -122,7 +123,7 @@ class BalanceCard extends ConsumerWidget {
                         _VerticalDivider(),
                         Expanded(
                           child: _StatPill(
-                            label: 'Pengeluaran',
+                            label: 'expense'.tr(),
                             icon: Icons.north_rounded,
                             value: expense,
                             isLoading: txLoading,
@@ -132,7 +133,7 @@ class BalanceCard extends ConsumerWidget {
                         _VerticalDivider(),
                         Expanded(
                           child: _StatPill(
-                            label: 'Selisih',
+                            label: 'net_difference'.tr(),
                             icon: isDeficit
                                 ? Icons.trending_down_rounded
                                 : Icons.trending_up_rounded,
@@ -254,7 +255,7 @@ class _SavingsBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              isDeficit ? 'Deficit bulan ini' : 'Tingkat tabungan',
+              isDeficit ? 'monthly_deficit'.tr() : 'savings_rate'.tr(),
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.60),
                 fontSize: 10.5,
@@ -329,7 +330,7 @@ class _StatPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -344,13 +345,17 @@ class _StatPill extends StatelessWidget {
                 ),
                 child: Icon(icon, color: color, size: 11),
               ),
-              const SizedBox(width: 5),
-              Text(
-                label,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.65),
-                  fontSize: 10.5,
-                  fontWeight: FontWeight.w500,
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.65),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -363,13 +368,19 @@ class _StatPill extends StatelessWidget {
                   tween: Tween(begin: 0, end: value),
                   duration: const Duration(milliseconds: 700),
                   curve: Curves.easeOutQuart,
-                  builder: (_, val, __) => Text(
-                    '$prefix${CurrencyFormatter.formatCompact(val)}',
-                    style: TextStyle(
-                      color: label == 'Net' ? color : Colors.white,
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.3,
+                  builder: (_, val, __) => FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '$prefix${CurrencyFormatter.formatCompact(val)}',
+                      style: TextStyle(
+                        color: prefix.isNotEmpty ? color : Colors.white,
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.3,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),

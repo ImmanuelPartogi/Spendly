@@ -1,11 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/currency_formatter.dart';
 import '../../../../../shared/widgets/spendly_card.dart';
-import '../../../../../core/localization/app_strings.dart';
-import '../../../../../core/localization/locale_provider.dart';
 
 class ProfileHeroCard extends ConsumerWidget {
   final String name;
@@ -27,8 +26,7 @@ class ProfileHeroCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
-    final displayName = name.isEmpty ? AppStrings.get('my_account', locale) : name;
+    final displayName = name.isEmpty ? 'my_account'.tr() : name;
 
     return SpendlyCard(
       gradient: AppColors.primaryGradient,
@@ -97,7 +95,7 @@ class ProfileHeroCard extends ConsumerWidget {
                       const SizedBox(width: 5),
                       Flexible(
                         child: Text(
-                          isAnon ? AppStrings.get('guest_mode', locale) : (userEmail ?? ''),
+                          isAnon ? 'guest_mode'.tr() : (userEmail ?? ''),
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.75),
                             fontSize: 12.5,
@@ -117,7 +115,7 @@ class ProfileHeroCard extends ConsumerWidget {
             Row(children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  AppStrings.get('total_balance', locale),
+                  'total_balance'.tr(),
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.65),
                     fontSize: 11.5,
@@ -155,7 +153,7 @@ class ProfileHeroCard extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 5),
-                  Text(AppStrings.get('active', locale),
+                  Text('active'.tr(),
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.90),
                         fontSize: 12,

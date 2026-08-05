@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,8 +14,6 @@ import '../../../../core/utils/haptic_utils.dart';
 import '../../../scanner/presentation/screens/scanner_screen.dart';
 import '../../data/models/transaction_model.dart';
 import '../../domain/entities/transaction_entity.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AddTransactionSheet — Bottom sheet tambah / edit transaksi
@@ -120,13 +119,12 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
 
   // ── Simpan ────────────────────────────────────────────────────────────────
   Future<void> _save() async {
-    final locale = ref.read(localeProvider);
     final amount = ThousandSeparatorInputFormatter.parse(_amountCtrl.text);
     if (amount <= 0) {
       await HapticUtils.error();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppStrings.get('amount_required', locale))),);
+          SnackBar(content: Text('amount_required'.tr())),);
       return;
     }
 
@@ -182,9 +180,8 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
       debugPrint('[AddTransaction] Stack: $stack');
       await HapticUtils.error();
       if (mounted) {
-        final locale = ref.read(localeProvider);
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${AppStrings.get('error_occurred', locale)}: $e')),);
+            SnackBar(content: Text('${'error_occurred'.tr()}: $e')),);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -230,7 +227,6 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
 
   @override
   Widget build(BuildContext context) {
-    final locale      = ref.watch(localeProvider);
     final isDark      = Theme.of(context).brightness == Brightness.dark;
     final bgColor     = isDark ? AppColors.backgroundDark : AppColors.background;
     final surfColor   = isDark ? AppColors.surfaceDark    : AppColors.surface;
@@ -242,7 +238,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
     final bottomPad   = MediaQuery.of(context).viewInsets.bottom;
 
     return Container(
-      margin: const EdgeInsets.only(top: 60),
+      margin: const EdgeInsetsDirectional.only(top: 60),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
@@ -252,7 +248,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
         ),],
       ),
       child: Padding(
-        padding: EdgeInsets.only(bottom: bottomPad),
+        padding: EdgeInsetsDirectional.only(bottom: bottomPad),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -358,7 +354,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SectionLabel(AppStrings.get('quick_amounts', locale), txtSec),
+                    _SectionLabel('quick_amounts'.tr(), txtSec),
                     const SizedBox(height: 10),
                     Wrap(
                       spacing: 7, runSpacing: 7,
@@ -381,8 +377,8 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                                       accentColor.withValues(alpha: 0.15),
                                       accentColor.withValues(alpha: 0.08),
                                     ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,)
+                                    begin: AlignmentDirectional.topStart,
+                                    end: AlignmentDirectional.bottomEnd,)
                                   : null,
                               color: selected ? null : surfColor,
                               borderRadius: BorderRadius.circular(10),
@@ -418,7 +414,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SectionLabel(AppStrings.get('category', locale), txtSec),
+                    _SectionLabel('category'.tr(), txtSec),
                     const SizedBox(height: 10),
                     GridView.builder(
                       shrinkWrap: true,
@@ -509,7 +505,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                             controller: _noteCtrl,
                             style: TextStyle(color: txtPrim, fontSize: 13.5),
                             decoration: InputDecoration(
-                              hintText: AppStrings.get('write_note', locale),
+                              hintText: 'write_note'.tr(),
                               hintStyle:
                                   TextStyle(color: txtHint, fontSize: 13.5),
                               border: InputBorder.none,
@@ -584,8 +580,8 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                                 accentColor,
                                 Color.lerp(accentColor, Colors.white, 0.12)!,
                               ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                              begin: AlignmentDirectional.topStart,
+                              end: AlignmentDirectional.bottomEnd,
                             ),
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [BoxShadow(
@@ -596,8 +592,8 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                           ),
                           child: Center(child: Text(
                             widget.existing == null
-                                ? AppStrings.get('save_transaction', locale)
-                                : AppStrings.get('edit_transaction', locale),
+                                ? 'save_transaction'.tr()
+                                : 'edit_transaction'.tr(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 15.5,
@@ -628,7 +624,7 @@ class _DragHandle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 12, bottom: 4),
+      padding: const EdgeInsetsDirectional.only(top: 12, bottom: 4),
       child: Center(
         child: Container(
           width: 36, height: 4,
@@ -663,15 +659,14 @@ class _SheetHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 8, 0),
       child: Row(children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             existing == null
-                ? AppStrings.get('add_transaction', locale)
-                : AppStrings.get('edit_transaction', locale),
+                ? 'add_transaction'.tr()
+                : 'edit_transaction'.tr(),
             style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.w800,
               color: txtPrim, letterSpacing: -0.4,
@@ -680,8 +675,8 @@ class _SheetHeader extends ConsumerWidget {
           const SizedBox(height: 2),
           Text(
             isExpense
-                ? AppStrings.get('expense', locale)
-                : AppStrings.get('income', locale),
+                ? 'expense'.tr()
+                : 'income'.tr(),
             style: TextStyle(fontSize: 12, color: txtSec),
           ),
         ],),
@@ -692,7 +687,7 @@ class _SheetHeader extends ConsumerWidget {
           GestureDetector(
             onTap: onScan,
             child: Container(
-              margin: const EdgeInsets.only(right: 6),
+              margin: const EdgeInsetsDirectional.only(end: 6),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.10),
@@ -706,7 +701,7 @@ class _SheetHeader extends ConsumerWidget {
                   const Icon(Icons.document_scanner_rounded,
                       color: AppColors.primary, size: 16,),
                   const SizedBox(width: 5),
-                  Text(AppStrings.get('scan', locale), style: const TextStyle(
+                  Text('scan'.tr(), style: TextStyle(
                     fontSize: 12, fontWeight: FontWeight.w700,
                     color: AppColors.primary,
                   ),),
@@ -748,7 +743,6 @@ class _TabSwitcher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -767,7 +761,7 @@ class _TabSwitcher extends ConsumerWidget {
                 accentColor,
                 Color.lerp(accentColor, Colors.white, 0.1)!,
               ],
-              begin: Alignment.topLeft, end: Alignment.bottomRight,
+              begin: AlignmentDirectional.topStart, end: AlignmentDirectional.bottomEnd,
             ),
             borderRadius: BorderRadius.circular(10),
             boxShadow: [BoxShadow(
@@ -784,8 +778,8 @@ class _TabSwitcher extends ConsumerWidget {
               fontWeight: FontWeight.w500, fontSize: 13.5,),
           dividerColor: Colors.transparent,
           tabs: [
-            Tab(text: AppStrings.get('expense', locale)),
-            Tab(text: AppStrings.get('income', locale)),
+            Tab(text: 'expense'.tr()),
+            Tab(text: 'income'.tr()),
           ],
         ),
       ),

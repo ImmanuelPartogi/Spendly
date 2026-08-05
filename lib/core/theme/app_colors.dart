@@ -57,26 +57,26 @@ class AppColors {
   // ── Gradients ────────────────────────────────────────────────────────────────
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [Color(0xFF4F6EF7), Color(0xFF8B6BED)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+    begin: AlignmentDirectional.topStart,
+    end: AlignmentDirectional.bottomEnd,
   );
 
   static const LinearGradient incomeGradient = LinearGradient(
     colors: [Color(0xFF10C27A), Color(0xFF00E5A0)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+    begin: AlignmentDirectional.topStart,
+    end: AlignmentDirectional.bottomEnd,
   );
 
   static const LinearGradient expenseGradient = LinearGradient(
     colors: [Color(0xFFFF5B79), Color(0xFFFF8FA0)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+    begin: AlignmentDirectional.topStart,
+    end: AlignmentDirectional.bottomEnd,
   );
 
   static const LinearGradient darkCardGradient = LinearGradient(
     colors: [Color(0xFF1A1D2E), Color(0xFF161820)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+    begin: AlignmentDirectional.topStart,
+    end: AlignmentDirectional.bottomEnd,
   );
 }
 

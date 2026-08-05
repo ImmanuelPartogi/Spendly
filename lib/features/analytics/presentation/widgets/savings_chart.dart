@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -91,11 +92,11 @@ class _SavingsChartState extends State<SavingsChart> {
           const SizedBox(height: 16),
         ] else
           Align(
-            alignment: Alignment.centerRight,
+            alignment: AlignmentDirectional.centerEnd,
             child: TextButton.icon(
               onPressed: widget.onSetTarget,
               icon: const Icon(Icons.flag_rounded, size: 14),
-              label: const Text('Atur Target'),
+              label: Text('set_target'.tr()),
               style: TextButton.styleFrom(
                   foregroundColor: AppColors.primary,),
             ),
@@ -122,7 +123,7 @@ class _SavingsChartState extends State<SavingsChart> {
                         return const SizedBox.shrink();
                       }
                       return Padding(
-                        padding: const EdgeInsets.only(top: 4),
+                        padding: const EdgeInsetsDirectional.only(top: 4),
                         child: Text(
                           entries[i].key,
                           style: const TextStyle(
@@ -205,7 +206,7 @@ class _SavingsChartState extends State<SavingsChart> {
         ),
         const SizedBox(height: 8),
         Align(
-          alignment: Alignment.centerRight,
+          alignment: AlignmentDirectional.centerEnd,
           child: Text(
             'Total tabungan: ${CurrencyFormatter.format(latestSavings)}',
             style: const TextStyle(

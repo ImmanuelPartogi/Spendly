@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../screens/income_expense_comparison_screen.dart';
-import '../../../../../core/localization/app_strings.dart';
-import '../../../../../core/localization/locale_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AnalyticsComparisonCta extends ConsumerWidget {
   final bool isDark;
@@ -12,7 +11,6 @@ class AnalyticsComparisonCta extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
@@ -31,8 +29,8 @@ class AnalyticsComparisonCta extends ConsumerWidget {
               AppColors.primary.withValues(alpha: isDark ? 0.14 : 0.08),
               AppColors.accentPurple.withValues(alpha: isDark ? 0.10 : 0.05),
             ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
+            begin: AlignmentDirectional.centerStart,
+            end: AlignmentDirectional.centerEnd,
           ),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -57,14 +55,14 @@ class AnalyticsComparisonCta extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(AppStrings.get('comparison_analysis', locale),
+                Text('comparison_analysis'.tr(),
                     style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: txtPrim,
                         letterSpacing: -0.2,),),
                 const SizedBox(height: 3),
-                Text(AppStrings.get('comparison_analysis_sub', locale),
+                Text('comparison_analysis_sub'.tr(),
                     style: TextStyle(fontSize: 11, color: txtSec, height: 1.4),),
               ],
             ),

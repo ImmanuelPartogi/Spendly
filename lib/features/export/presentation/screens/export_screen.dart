@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
@@ -150,7 +151,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-appBar: AppBar(title: const Text('Ekspor Data')),
+appBar: AppBar(title: Text('export_data'.tr())),
       body: SafeArea(
         child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -158,7 +159,7 @@ appBar: AppBar(title: const Text('Ekspor Data')),
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ── Format selector ───────────────────────────────────────────
-            Text('Format Export',
+            Text('export_format'.tr(),
                 style: Theme.of(context).textTheme.titleMedium,),
             const SizedBox(height: 12),
             Row(
@@ -277,7 +278,7 @@ appBar: AppBar(title: const Text('Ekspor Data')),
                     const Spacer(),
                     GestureDetector(
                       onTap: _pickCustomRange,
-                      child: const Text('Ubah',
+                      child: Text('Ubah',
                           style: TextStyle(
                               fontSize: 12,
                               color: AppColors.primary,),),

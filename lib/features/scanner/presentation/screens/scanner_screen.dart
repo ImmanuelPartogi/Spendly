@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -158,8 +159,10 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
         // Step 4: parse teks.
         ScannedTransactionResult parsed;
         try {
-          parsed = OcrParserService.parse(rawText,
-              imagePath: _images[i].xfile.path);
+          parsed = OcrParserService.parse(
+            rawText,
+            imagePath: _images[i].xfile.path,
+          );
         } catch (e) {
           // Step 5: parse gagal → hasil gagal.
           if (mounted) {
@@ -172,8 +175,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
                 description: '',
                 rawText: rawText,
                 success: false,
-                errorMessage:
-                    'Gagal memproses gambar ini. Coba lagi atau lewati.',
+                errorMessage: 'process_failed_hint'.tr(),
                 imagePath: _images[i].xfile.path,
               );
               _images[i].status = _ImageStatus.failed;
@@ -204,7 +206,8 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
               description: '',
               rawText: '',
               success: false,
-              errorMessage: 'Gagal memproses gambar ini. Coba lagi atau lewati.',
+              errorMessage:
+                  'Gagal memproses gambar ini. Coba lagi atau lewati.',
               imagePath: _images[i].xfile.path,
             );
             _images[i].status = _ImageStatus.failed;
@@ -220,11 +223,13 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
 
     final reviewItems = _images
         .where((e) => e.result != null)
-        .map((e) => ScanResultItem(
-              result: e.result!,
-              imagePath: e.xfile.path,
-              isSelected: e.result!.success,
-            ))
+        .map(
+          (e) => ScanResultItem(
+            result: e.result!,
+            imagePath: e.xfile.path,
+            isSelected: e.result!.success,
+          ),
+        )
         .toList();
 
     await Navigator.pushReplacement(
@@ -247,19 +252,18 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Perhatian'),
+        title: Text('notice_title'.tr()),
         content: Text(
-          'Anda memilih $count gambar. Proses scan mungkin membutuhkan '
-          'waktu lebih lama. Lanjutkan?',
+          '${plural('images_selected_count', count)}. ${'batch_scan_duration_notice'.tr()}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Batal'),
+            child: Text('cancel'.tr()),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Lanjutkan'),
+            child: Text('continue_button'.tr()),
           ),
         ],
       ),
@@ -278,7 +282,8 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     return PopScope(
       canPop: _step != _ScannerStep.scanning,
       child: Scaffold(
-        backgroundColor: isDark ? AppColors.backgroundDark : AppColors.background,
+        backgroundColor:
+            isDark ? AppColors.backgroundDark : AppColors.background,
         appBar: AppBar(
           title: Text(_appBarTitle()),
           leading: _step == _ScannerStep.scanning
@@ -290,7 +295,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
           actions: _step == _ScannerStep.select && _images.isNotEmpty
               ? [
                   IconButton(
-                    tooltip: 'Hapus Semua',
+                    tooltip: 'delete_all'.tr(),
                     icon: const Icon(Icons.delete_sweep_rounded, size: 20),
                     onPressed: _clearAll,
                   ),
@@ -305,9 +310,9 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   String _appBarTitle() {
     switch (_step) {
       case _ScannerStep.select:
-        return 'Scan Struk / Slip Gaji';
+        return 'scan_receipt_salary'.tr();
       case _ScannerStep.scanning:
-        return 'Memproses...';
+        return 'processing'.tr();
     }
   }
 
@@ -364,51 +369,55 @@ class _SelectStep extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ── Source buttons ──────────────────────────────────────────
-                Row(children: [
-                  Expanded(
-                    child: _SourceButton(
-                      icon: Icons.camera_alt_rounded,
-                      label: 'Ambil Foto',
-                      onTap: onPickCamera,
+                Row(
+                  children: [
+                    Expanded(
+                      child: _SourceButton(
+                        icon: Icons.camera_alt_rounded,
+                        label: 'take_photo'.tr(),
+                        onTap: onPickCamera,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _SourceButton(
-                      icon: Icons.photo_library_rounded,
-                      label: 'Pilih dari Galeri',
-                      onTap: onPickGallery,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _SourceButton(
+                        icon: Icons.photo_library_rounded,
+                        label: 'choose_from_gallery'.tr(),
+                        onTap: onPickGallery,
+                      ),
                     ),
-                  ),
-                ]),
+                  ],
+                ),
                 const SizedBox(height: 16),
 
                 if (images.isEmpty) ...[
                   const SizedBox(height: 8),
                   _EmptyHint(txtSec: txtSec),
                 ] else ...[
-                  Row(children: [
-                    Text(
-                      '${images.length} gambar dipilih',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: txtSec,
-                      ),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: onPickGallery,
-                      child: Text(
-                        '+ Tambah',
+                  Row(
+                    children: [
+                      Text(
+                        'images_selected_count'.tr(namedArgs: {'count': '${images.length}'}),
                         style: TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                          color: txtSec,
                         ),
                       ),
-                    ),
-                  ]),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: onPickGallery,
+                        child: Text(
+                          'add_more'.tr(),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 12),
                   GridView.builder(
                     shrinkWrap: true,
@@ -450,7 +459,7 @@ class _SelectStep extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: onScan,
                 icon: const Icon(Icons.document_scanner_rounded, size: 20),
-                label: Text('Scan Semua (${images.length} gambar)'),
+                label: Text('scan_all_count'.tr(namedArgs: {'count': '${images.length}'})),
               ),
             ),
           ),
@@ -511,9 +520,9 @@ class _EmptyHint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final steps = [
-      ('📸', 'Foto / pilih struk atau slip gaji'),
-      ('🔍', 'ML Kit membaca teks tiap gambar'),
-      ('✅', 'Tinjau hasil & tambah transaksi sekaligus'),
+      ('📸', 'scan_step_1'.tr()),
+      ('🔍', 'scan_step_2'.tr()),
+      ('✅', 'scan_step_3'.tr()),
     ];
 
     return Column(
@@ -528,49 +537,60 @@ class _EmptyHint extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.08),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.document_scanner_rounded,
-                size: 32, color: AppColors.primary),
+            child: const Icon(
+              Icons.document_scanner_rounded,
+              size: 32,
+              color: AppColors.primary,
+            ),
           ),
         ),
         const SizedBox(height: 16),
         Center(
           child: Text(
-            'Pilih struk atau slip gaji untuk dipindai',
+            'scan_subtitle_hint'.tr(),
             style: TextStyle(color: txtSec, fontSize: 13),
             textAlign: TextAlign.center,
           ),
         ),
         const SizedBox(height: 28),
-        Text('Cara Kerja', style: Theme.of(context).textTheme.titleSmall),
+        Text('how_it_works'.tr(), style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 12),
-        ...steps.asMap().entries.map((e) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(children: [
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text('${e.key + 1}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
-                        )),
-                  ),
+        ...steps.asMap().entries.map(
+              (e) => Padding(
+                padding: const EdgeInsetsDirectional.only(bottom: 10),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${e.key + 1}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(e.value.$1, style: const TextStyle(fontSize: 16)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        e.value.$2,
+                        style: TextStyle(fontSize: 13, color: txtSec),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Text(e.value.$1, style: const TextStyle(fontSize: 16)),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(e.value.$2,
-                      style: TextStyle(fontSize: 13, color: txtSec)),
-                ),
-              ]),
-            )),
+              ),
+            ),
       ],
     );
   }
@@ -589,51 +609,56 @@ class _ImageThumbCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(14),
-        child: Image.file(
-          File(item.xfile.path),
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.cover,
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Image.file(
+            File(item.xfile.path),
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
         ),
-      ),
-      Positioned(
-        top: 6,
-        right: 6,
-        child: GestureDetector(
-          onTap: onRemove,
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.7),
-              shape: BoxShape.circle,
+        Positioned(
+          top: 6,
+          right: 6,
+          child: GestureDetector(
+            onTap: onRemove,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.7),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.close_rounded,
+                color: Colors.white,
+                size: 16,
+              ),
             ),
-            child: const Icon(Icons.close_rounded,
-                color: Colors.white, size: 16),
           ),
         ),
-      ),
-      Positioned(
-        left: 6,
-        bottom: 6,
-        right: 6,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.6),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            item.xfile.name,
-            style: const TextStyle(color: Colors.white, fontSize: 10),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+        Positioned(
+          left: 6,
+          bottom: 6,
+          right: 6,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              item.xfile.name,
+              style: const TextStyle(color: Colors.white, fontSize: 10),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
 
@@ -655,55 +680,59 @@ class _ScanningStep extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final progress = images.isEmpty ? 0.0 : scannedCount / images.length;
 
-    return Column(children: [
-      // Progress bar
-      Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(children: [
-              const SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(strokeWidth: 2.5),
+    return Column(
+      children: [
+        // Progress bar
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2.5),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    '$scannedCount / ${images.length} selesai',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 10),
-              Text(
-                '$scannedCount / ${images.length} selesai',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
+              const SizedBox(height: 10),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 8,
+                  backgroundColor:
+                      isDark ? AppColors.surfaceDark : AppColors.surface,
                 ),
               ),
-            ]),
-            const SizedBox(height: 10),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 8,
-                backgroundColor:
-                    isDark ? AppColors.surfaceDark : AppColors.surface,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
 
-      // List
-      Expanded(
-        child: ListView.separated(
-          padding: const EdgeInsets.all(20),
-          itemCount: images.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemBuilder: (_, i) {
-            final item = images[i];
-            return _ScanningRow(item: item, index: i + 1);
-          },
+        // List
+        Expanded(
+          child: ListView.separated(
+            padding: const EdgeInsets.all(20),
+            itemCount: images.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            itemBuilder: (_, i) {
+              final item = images[i];
+              return _ScanningRow(item: item, index: i + 1);
+            },
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
 
@@ -726,27 +755,29 @@ class _ScanningRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: bdrColor),
       ),
-      child: Row(children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.file(
-            File(item.xfile.path),
-            width: 48,
-            height: 48,
-            fit: BoxFit.cover,
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.file(
+              File(item.xfile.path),
+              width: 48,
+              height: 48,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            item.xfile.name,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              item.xfile.name,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
-        _StatusChip(status: item.status),
-      ]),
+          _StatusChip(status: item.status),
+        ],
+      ),
     );
   }
 }
@@ -761,14 +792,23 @@ class _StatusChip extends StatelessWidget {
       case _ImageStatus.waiting:
         return _chip('Menunggu', AppColors.textHint, Colors.transparent);
       case _ImageStatus.scanning:
-        return _chip('Memindai...', AppColors.primary,
-            AppColors.primary.withValues(alpha: 0.1));
+        return _chip(
+          'Memindai...',
+          AppColors.primary,
+          AppColors.primary.withValues(alpha: 0.1),
+        );
       case _ImageStatus.done:
-        return _chip('Selesai ✓', AppColors.income,
-            AppColors.income.withValues(alpha: 0.1));
+        return _chip(
+          'Selesai ✓',
+          AppColors.income,
+          AppColors.income.withValues(alpha: 0.1),
+        );
       case _ImageStatus.failed:
-        return _chip('Gagal ✗', AppColors.error,
-            AppColors.error.withValues(alpha: 0.1));
+        return _chip(
+          'Gagal ✗',
+          AppColors.error,
+          AppColors.error.withValues(alpha: 0.1),
+        );
     }
   }
 
@@ -784,7 +824,7 @@ class _StatusChip extends StatelessWidget {
         children: [
           if (status == _ImageStatus.scanning)
             Padding(
-              padding: const EdgeInsets.only(right: 5),
+              padding: const EdgeInsetsDirectional.only(end: 5),
               child: SizedBox(
                 width: 10,
                 height: 10,
@@ -794,12 +834,14 @@ class _StatusChip extends StatelessWidget {
                 ),
               ),
             ),
-          Text(label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: fg,
-              )),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: fg,
+            ),
+          ),
         ],
       ),
     );

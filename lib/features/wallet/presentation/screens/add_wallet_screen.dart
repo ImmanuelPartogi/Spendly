@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -44,7 +45,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nama wallet tidak boleh kosong')),
+        SnackBar(content: Text('error_wallet_name_required'.tr())),
       );
       return;
     }
@@ -92,14 +93,14 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Tambah Wallet')),
+      appBar: AppBar(title: Text('add_wallet'.tr())),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ── Preset chips ─────────────────────────────────────────────────
-            Text('Pilih Cepat',
+            Text('quick_select'.tr(),
                 style: Theme.of(context).textTheme.titleMedium,),
             const SizedBox(height: 12),
             Wrap(
@@ -150,7 +151,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
             const SizedBox(height: 28),
 
             // ── Name ─────────────────────────────────────────────────────────
-            Text('Nama Wallet',
+            Text('wallet_name'.tr(),
                 style: Theme.of(context).textTheme.titleSmall,),
             const SizedBox(height: 8),
             TextField(
@@ -162,7 +163,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
             const SizedBox(height: 20),
 
             // ── Initial balance ───────────────────────────────────────────────
-            Text('Saldo Awal',
+            Text('initial_balance'.tr(),
                 style: Theme.of(context).textTheme.titleSmall,),
             const SizedBox(height: 8),
             TextField(
@@ -176,7 +177,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
             const SizedBox(height: 20),
 
             // ── Type ─────────────────────────────────────────────────────────
-            Text('Tipe', style: Theme.of(context).textTheme.titleSmall),
+            Text('wallet_type'.tr(), style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -204,7 +205,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
             const SizedBox(height: 20),
 
             // ── Color ─────────────────────────────────────────────────────────
-            Text('Warna', style: Theme.of(context).textTheme.titleSmall),
+            Text('wallet_color'.tr(), style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 12),
             Row(
               children: _colors.map((c) {
@@ -214,7 +215,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
                   child: Container(
                     width: 36,
                     height: 36,
-                    margin: const EdgeInsets.only(right: 10),
+                    margin: const EdgeInsetsDirectional.only(end: 10),
                     decoration: BoxDecoration(
                       color: c,
                       shape: BoxShape.circle,
@@ -245,7 +246,7 @@ class _AddWalletScreenState extends ConsumerState<AddWalletScreen> {
                         child: CircularProgressIndicator(
                             color: Colors.white, strokeWidth: 2,),
                       )
-                    : const Text('Simpan Wallet'),
+                    : Text('save_wallet'.tr()),
               ),
             ),
           ],

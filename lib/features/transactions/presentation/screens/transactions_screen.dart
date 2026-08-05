@@ -10,8 +10,7 @@ import '../../../../shared/widgets/transaction_tile.dart';
 import 'add_transaction_screen.dart';
 import 'search_screen.dart';
 import 'transaction_detail_screen.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 const double _kBottomPad = 108.0;
 
@@ -20,7 +19,6 @@ class TransactionsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
@@ -70,9 +68,9 @@ class TransactionsScreen extends ConsumerWidget {
                     child: SpendlyCard(
                       child: EmptyState(
                         icon: Icons.receipt_long_rounded,
-                        title: AppStrings.get('no_transactions', locale),
-                        subtitle: AppStrings.get('empty_transactions_sub_alt', locale),
-                        actionLabel: AppStrings.get('add_transaction', locale),
+                        title: 'no_transactions'.tr(),
+                        subtitle: 'empty_transactions_sub_alt'.tr(),
+                        actionLabel: 'add_transaction'.tr(),
                         onAction: () => _openAdd(context),
                       ),
                     ),
@@ -91,7 +89,7 @@ class TransactionsScreen extends ConsumerWidget {
                   EdgeInsets.fromLTRB(16, 8, 16, _kBottomPad + safeBottom),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  SectionHeader(title: AppStrings.get('all_transactions', locale), titleColor: txtPrim),
+                  SectionHeader(title: 'all_transactions'.tr(), titleColor: txtPrim),
                   const SizedBox(height: 12),
                   SpendlyCard(
                     padding: const EdgeInsets.symmetric(vertical: 4),
@@ -120,7 +118,7 @@ class TransactionsScreen extends ConsumerWidget {
         },
       ),
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: safeBottom + 10),
+        padding: EdgeInsetsDirectional.only(bottom: safeBottom + 10),
         child: GestureDetector(
           onTap: () => _openAdd(context),
           child: Container(
@@ -194,7 +192,6 @@ class _TransactionsAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
@@ -216,22 +213,22 @@ class _TransactionsAppBar extends ConsumerWidget {
             opacity: isCollapsed ? 0.0 : 1.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, safeTop + 12, 60, 14),
                 child: OverflowBox(
-                  alignment: Alignment.bottomLeft,
+                  alignment: AlignmentDirectional.bottomStart,
                   maxHeight: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(AppStrings.get('records_and', locale),
+                       Text('records_and'.tr(),
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                               color: txtSec,),),
-                      Text(AppStrings.get('transactions', locale),
+                       Text('transactions'.tr(),
                           style: TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.w800,
@@ -248,10 +245,10 @@ class _TransactionsAppBar extends ConsumerWidget {
             opacity: isCollapsed ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
-                child: Text(AppStrings.get('transactions', locale),
+                 child: Text('transactions'.tr(),
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,

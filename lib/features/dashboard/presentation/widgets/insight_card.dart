@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
@@ -19,22 +20,22 @@ _InsightStyle _styleFor(String type, bool isWarning) {
   if (isWarning) {
     return _InsightStyle(
       accentColor: type == 'budget_warning' ? AppColors.expense : AppColors.warning,
-      label: type == 'budget_warning' ? 'Peringatan Budget' : 'Perhatian',
+      label: type == 'budget_warning' ? 'insight_title_budget_warning'.tr() : 'insight_title_attention'.tr(),
     );
   }
   switch (type) {
     case 'category_spend':
-      return const _InsightStyle(accentColor: AppColors.primary,         label: 'Kategori Terbesar');
+      return _InsightStyle(accentColor: AppColors.primary, label: 'insight_title_top_category'.tr());
     case 'highest_day':
-      return const _InsightStyle(accentColor: Color(0xFF7C5DFA),   label: 'Hari Favorit');
+      return _InsightStyle(accentColor: const Color(0xFF7C5DFA), label: 'insight_title_favorite_day'.tr());
     case 'spend_trend':
-      return const _InsightStyle(accentColor: Color(0xFF06B6D4),   label: 'Tren Pengeluaran');
+      return _InsightStyle(accentColor: const Color(0xFF06B6D4), label: 'insight_title_spending_trend'.tr());
     case 'savings':
-      return const _InsightStyle(accentColor: Color(0xFF22C55E),   label: 'Tabungan');
+      return _InsightStyle(accentColor: const Color(0xFF22C55E), label: 'insight_title_savings'.tr());
     case 'balance_warning':
-      return const _InsightStyle(accentColor: AppColors.warning,         label: 'Saldo');
+      return _InsightStyle(accentColor: AppColors.warning, label: 'insight_title_balance'.tr());
     default:
-      return const _InsightStyle(accentColor: AppColors.primary,         label: 'Insight');
+      return _InsightStyle(accentColor: AppColors.primary, label: 'insight_title_default'.tr());
   }
 }
 
@@ -168,7 +169,7 @@ class _InsightCard extends StatelessWidget {
     final accent      = style.accentColor;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 6),
+      padding: const EdgeInsetsDirectional.only(start: 16, end: 6),
       child: Container(
         decoration: BoxDecoration(
           color: insight.isWarning

@@ -1,20 +1,19 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/utils/date_formatter.dart';
 import '../../../../core/utils/haptic_utils.dart';
 import '../../../transactions/data/models/transaction_model.dart';
 import '../../../wallet/domain/entities/wallet_entity.dart';
 import '../../domain/models/scanned_transaction_result.dart';
 import '../../domain/services/ocr_parser_service.dart';
 import '../widgets/scan_result_edit_sheet.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Model — ScanResultItem
@@ -114,7 +113,6 @@ class ScanReviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final allItems = ref.watch(scanReviewProvider);
 
@@ -127,11 +125,11 @@ class ScanReviewScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.get('review_scan_results', locale)),
+        title: Text('review_scan_results'.tr()),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            tooltip: AppStrings.get('select_all', locale),
+            tooltip: 'select_all'.tr(),
             icon: const Icon(Icons.select_all_rounded, size: 20),
             onPressed: () =>
                 ref.read(scanReviewProvider.notifier).selectAll(),
@@ -208,7 +206,6 @@ class ScanReviewScreen extends ConsumerWidget {
     WidgetRef ref,
     List<ScanResultItem> allItems,
   ) async {
-    final locale = ref.read(localeProvider);
     final selected = allItems.where((e) => e.isSelected).toList();
     if (selected.isEmpty) return;
 
@@ -216,18 +213,18 @@ class ScanReviewScreen extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(AppStrings.get('confirm_save', locale)),
+        title: Text('confirm_save'.tr()),
         content: Text(
-          '${selected.length} ${AppStrings.get('save_transactions_confirm_sub', locale)}',
+          '${selected.length} ${'save_transactions_confirm_sub'.tr()}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(AppStrings.get('check_again', locale)),
+            child: Text('check_again'.tr()),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(AppStrings.get('save_now', locale)),
+            child: Text('save_now'.tr()),
           ),
         ],
       ),
@@ -248,7 +245,7 @@ class ScanReviewScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppStrings.get('no_wallets_warning', locale)),
+            content: Text('no_wallets_warning'.tr()),
           ),
         );
       }
@@ -265,7 +262,7 @@ class ScanReviewScreen extends ConsumerWidget {
         );
         return StatefulBuilder(
           builder: (ctx, setSt) => AlertDialog(
-            title: Text(AppStrings.get('select_wallet', locale)),
+            title: Text('select_wallet'.tr()),
             content: DropdownButtonFormField<WalletEntity>(
               value: selected,
               decoration: const InputDecoration(
@@ -284,11 +281,11 @@ class ScanReviewScreen extends ConsumerWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text(AppStrings.get('cancel', locale)),
+                child: Text('cancel'.tr()),
               ),
               FilledButton(
                 onPressed: () => Navigator.pop(ctx, selected),
-                child: Text(AppStrings.get('save', locale)),
+                child: Text('save'.tr()),
               ),
             ],
           ),
@@ -337,8 +334,8 @@ class ScanReviewScreen extends ConsumerWidget {
 
     // ── Snackbar hasil ──────────────────────────────────────────────────────────
     final snackbarMsg = failCount > 0
-        ? '$successCount ${AppStrings.get('save_transaction', locale)}'
-        : '$successCount ${AppStrings.get('save_transaction', locale)}';
+        ? '$successCount ${'save_transaction'.tr()}'
+        : '$successCount ${'save_transaction'.tr()}';
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(snackbarMsg)),
@@ -372,7 +369,6 @@ class _SummaryBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -380,7 +376,7 @@ class _SummaryBar extends ConsumerWidget {
           Expanded(
             child: _SummaryChip(
               count: selectedCount,
-              label: AppStrings.get('will_be_saved', locale),
+              label: 'will_be_saved'.tr(),
               color: AppColors.income,
             ),
           ),
@@ -388,7 +384,7 @@ class _SummaryBar extends ConsumerWidget {
           Expanded(
             child: _SummaryChip(
               count: failedCount,
-              label: AppStrings.get('failed', locale),
+              label: 'failed'.tr(),
               color: AppColors.error,
             ),
           ),
@@ -396,7 +392,7 @@ class _SummaryBar extends ConsumerWidget {
           Expanded(
             child: _SummaryChip(
               count: editedCount,
-              label: AppStrings.get('edited', locale),
+              label: 'edited'.tr(),
               color: Colors.orange,
             ),
           ),
@@ -466,32 +462,31 @@ class _SuccessResultCard extends ConsumerWidget {
     required this.onEdit,
   });
 
-  String _typeLabel(Locale locale) {
+  String _typeLabel() {
     switch (item.result.type) {
       case ScannedDocumentType.receipt:
-        return AppStrings.get('receipt', locale);
+        return 'receipt'.tr();
       case ScannedDocumentType.salarySlip:
-        return AppStrings.get('salary_slip', locale);
+        return 'salary_slip'.tr();
       case ScannedDocumentType.unknown:
-        return AppStrings.get('unknown', locale);
+        return 'unknown'.tr();
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final cardColor = isDark ? AppColors.cardDark : AppColors.card;
     final bdrColor = isDark ? AppColors.borderDark : AppColors.border;
     final txtSec =
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
     final dateStr = item.result.date != null
-        ? DateFormat('dd MMM yyyy').format(item.result.date!)
-        : AppStrings.get('date_not_detected', locale);
+        ? DateFormatter.formatDate(item.result.date!, locale: context.locale.languageCode)
+        : 'date_not_detected'.tr();
 
     final amountStr = item.result.amount != null
         ? CurrencyFormatter.format(item.result.amount!)
-        : AppStrings.get('amount_not_detected', locale);
+        : 'amount_not_detected'.tr();
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -531,7 +526,7 @@ class _SuccessResultCard extends ConsumerWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        item.result.source ?? AppStrings.get('unknown', locale),
+                        item.result.source ?? 'unknown'.tr(),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -550,7 +545,7 @@ class _SuccessResultCard extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          AppStrings.get('edited', locale),
+                          'edited'.tr(),
                           style: const TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w700,
@@ -571,7 +566,7 @@ class _SuccessResultCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    _typeLabel(locale),
+                    _typeLabel(),
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
@@ -598,7 +593,7 @@ class _SuccessResultCard extends ConsumerWidget {
                 const SizedBox(height: 6),
                 // Edit button
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: TextButton(
                     onPressed: onEdit,
                     style: TextButton.styleFrom(
@@ -607,7 +602,7 @@ class _SuccessResultCard extends ConsumerWidget {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      AppStrings.get('edit', locale),
+                      'edit'.tr(),
                       style: const TextStyle(fontSize: 12),
                     ),
                   ),
@@ -618,7 +613,7 @@ class _SuccessResultCard extends ConsumerWidget {
 
           // Checkbox
           Padding(
-            padding: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsetsDirectional.only(top: 4),
             child: GestureDetector(
               onTap: onToggle,
               child: Container(
@@ -664,7 +659,6 @@ class _FailedResultCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final cardColor = isDark ? AppColors.cardDark : AppColors.card;
     final bdrColor = isDark ? AppColors.borderDark : AppColors.border;
 
@@ -717,7 +711,7 @@ class _FailedResultCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppStrings.get('scan_failed', locale),
+                  'scan_failed'.tr(),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -727,7 +721,7 @@ class _FailedResultCard extends ConsumerWidget {
                 const SizedBox(height: 4),
                 Text(
                   item.result.errorMessage ??
-                      AppStrings.get('scan_failed_sub', locale),
+                      'scan_failed_sub'.tr(),
                   style: TextStyle(
                     fontSize: 12,
                     color: AppColors.textSecondary,
@@ -737,7 +731,7 @@ class _FailedResultCard extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: TextButton(
                     onPressed: onEdit,
                     style: TextButton.styleFrom(
@@ -746,7 +740,7 @@ class _FailedResultCard extends ConsumerWidget {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      AppStrings.get('try_edit', locale),
+                      'try_edit'.tr(),
                       style: const TextStyle(fontSize: 12),
                     ),
                   ),
@@ -757,7 +751,7 @@ class _FailedResultCard extends ConsumerWidget {
 
           // Checkbox
           Padding(
-            padding: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsetsDirectional.only(top: 4),
             child: GestureDetector(
               onTap: onToggle,
               child: Container(
@@ -799,7 +793,6 @@ class _BottomActionBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -819,7 +812,7 @@ class _BottomActionBar extends ConsumerWidget {
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              child: Text(AppStrings.get('cancel', locale)),
+              child: Text('cancel'.tr()),
             ),
           ),
           const SizedBox(width: 12),
@@ -829,7 +822,7 @@ class _BottomActionBar extends ConsumerWidget {
               style: FilledButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              child: Text('${AppStrings.get('save', locale)} $selectedCount ${AppStrings.get('transactions', locale)}'),
+              child: Text('${'save'.tr()} $selectedCount ${'transactions'.tr()}'),
             ),
           ),
         ],

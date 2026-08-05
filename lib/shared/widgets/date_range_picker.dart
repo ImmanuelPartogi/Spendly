@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
@@ -166,7 +167,7 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
     final txtSec    = isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
     return Container(
-      margin: const EdgeInsets.only(top: 60),
+      margin: const EdgeInsetsDirectional.only(top: 60),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
@@ -184,7 +185,7 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
             child: Row(
               children: [
-                Text('Pilih Periode',
+                Text('select_period'.tr(),
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700,
                       color: txtPrim, letterSpacing: -0.3,),),
                 const Spacer(),
@@ -207,7 +208,7 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
                   onTap: () => _applyPreset(p),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 180),
-                    margin: const EdgeInsets.only(right: 8),
+                    margin: const EdgeInsetsDirectional.only(end: 8),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 8,),
                     decoration: BoxDecoration(
@@ -258,7 +259,7 @@ class _SpendlyDateRangePickerState extends State<SpendlyDateRangePicker> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _apply,
-                child: const Text('Terapkan Periode'),
+                child: Text('apply_period'.tr()),
               ),
             ),
           ),

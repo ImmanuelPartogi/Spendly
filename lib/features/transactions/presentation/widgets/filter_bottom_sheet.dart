@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -112,7 +113,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 60),
+      margin: const EdgeInsetsDirectional.only(top: 60),
       decoration: const BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
@@ -124,11 +125,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             padding: const EdgeInsets.fromLTRB(20, 16, 12, 0),
             child: Row(
               children: [
-                Text('Filter & Urutkan',
+                Text('filter_sort_title'.tr(),
                     style: Theme.of(context).textTheme.headlineSmall,),
                 const Spacer(),
                 TextButton(
-                    onPressed: _reset, child: const Text('Atur Ulang'),),
+                    onPressed: _reset, child: Text('reset_filter'.tr()),),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close_rounded),
@@ -185,7 +186,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               : 'Pemasukan';
                       final isSelected = _filter.type == t;
                       return Padding(
-                        padding: const EdgeInsets.only(right: 8),
+                        padding: const EdgeInsetsDirectional.only(end: 8),
                         child: ChoiceChip(
                           label: Text(label),
                           selected: isSelected,
@@ -240,7 +241,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     mainAxisAlignment:
                         MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Rentang Nominal',
+                      Text('amount_range'.tr(),
                           style:
                               Theme.of(context).textTheme.titleMedium,),
                       Text(
@@ -268,7 +269,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   const SizedBox(height: 24),
 
                   // ── Date range ────────────────────────────────────────────
-                  Text('Rentang Tanggal',
+                  Text('date_range'.tr(),
                       style: Theme.of(context).textTheme.titleMedium,),
                   const SizedBox(height: 10),
                   Row(
@@ -327,7 +328,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _apply,
-                child: const Text('Terapkan Filter'),
+                child: Text('apply_filter'.tr()),
               ),
             ),
           ),

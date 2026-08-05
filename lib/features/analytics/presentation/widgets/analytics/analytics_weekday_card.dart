@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/currency_formatter.dart';
+import '../../../../../core/utils/date_formatter.dart';
 
 class AnalyticsWeekdayCard extends StatelessWidget {
   final Map<int, double> weekday;
@@ -24,7 +26,10 @@ class AnalyticsWeekdayCard extends StatelessWidget {
     final maxDay = weekday.entries.isEmpty
         ? 0
         : weekday.entries.reduce((a, b) => a.value > b.value ? a : b).key;
-    const dayNames = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+
+    final maxDayName = maxDay > 0
+        ? DateFormatter.formatWeekdayName(maxDay, locale: context.locale.languageCode)
+        : '';
 
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
@@ -38,14 +43,14 @@ class AnalyticsWeekdayCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Pola per Hari',
+              Text('daily_pattern'.tr(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: txtPrim,
                       letterSpacing: -0.3,),),
               const SizedBox(height: 3),
-              Text('Hari dengan pengeluaran terbanyak',
+              Text('highest_spending_day'.tr(),
                   style: TextStyle(fontSize: 11, color: txtSec),),
             ],),
             if (weekday.values.any((v) => v > 0))
@@ -59,7 +64,7 @@ class AnalyticsWeekdayCard extends StatelessWidget {
                   const Icon(Icons.local_fire_department_rounded,
                       size: 11, color: AppColors.primary,),
                   const SizedBox(width: 4),
-                  Text(dayNames[(maxDay - 1).clamp(0, 6)],
+                  Text(maxDayName,
                       style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -88,14 +93,13 @@ class _WeekdayBarChart extends StatelessWidget {
         ? AppColors.borderDark.withValues(alpha: 0.5)
         : AppColors.border.withValues(alpha: 0.7);
     final maxVal = data.values.fold(0.0, (a, b) => a > b ? a : b);
-    const days = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
     final today = DateTime.now().weekday;
 
     if (maxVal == 0) {
-      return const SizedBox(
+      return SizedBox(
         height: 100,
         child: Center(
-          child: Text('Belum ada data',
+          child: Text('no_data_yet'.tr(),
               style: TextStyle(fontSize: 12, color: AppColors.textHint),),
         ),
       );
@@ -114,13 +118,20 @@ class _WeekdayBarChart extends StatelessWidget {
             tooltipBorder: BorderSide(
                 color: isDark ? AppColors.borderDark : AppColors.border,
                 width: 0.5,),
-            getTooltipItem: (group, _, rod, __) => BarTooltipItem(
-              '${days[group.x]}\n${CurrencyFormatter.formatCompact(rod.toY)}',
-              const TextStyle(
+            getTooltipItem: (group, _, rod, __) {
+              final dName = DateFormatter.formatWeekdayName(
+                group.x + 1,
+                locale: context.locale.languageCode,
+              );
+              return BarTooltipItem(
+                '$dName\n${CurrencyFormatter.formatCompact(rod.toY)}',
+                const TextStyle(
                   color: AppColors.primary,
                   fontSize: 11,
-                  fontWeight: FontWeight.w700,),
-            ),
+                  fontWeight: FontWeight.w700,
+                ),
+              );
+            },
           ),
         ),
         titlesData: FlTitlesData(
@@ -131,10 +142,12 @@ class _WeekdayBarChart extends StatelessWidget {
               getTitlesWidget: (v, _) {
                 final i = v.toInt();
                 final isToday = (i + 1) == today;
-                if (i < 0 || i >= days.length) return const SizedBox.shrink();
+                if (i < 0 || i >= 7) return const SizedBox.shrink();
+                final dName = DateFormatter.formatWeekdayName(i + 1, locale: context.locale.languageCode);
+                final shortName = dName.length > 3 ? dName.substring(0, 3) : dName;
                 return Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Text(days[i],
+                  padding: const EdgeInsetsDirectional.only(top: 6),
+                  child: Text(shortName,
                       style: TextStyle(
                           fontSize: 10.5,
                           fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,

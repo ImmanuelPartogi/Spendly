@@ -31,7 +31,7 @@ class BudgetSummaryWidget extends StatelessWidget {
             if (onSeeAll != null)
               GestureDetector(
                 onTap: onSeeAll,
-                child: const Text(
+                child: Text(
                   'Lihat Semua',
                   style: TextStyle(
                     fontSize: 13,
@@ -67,7 +67,7 @@ class _BudgetRow extends StatelessWidget {
             : item.color;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsetsDirectional.only(bottom: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -81,7 +81,7 @@ class _BudgetRow extends StatelessWidget {
                           fontSize: 13, fontWeight: FontWeight.w600,),),
                   if (isWarning)
                     Padding(
-                      padding: const EdgeInsets.only(left: 6),
+                      padding: const EdgeInsetsDirectional.only(start: 6),
                       child: Icon(
                         isExceeded
                             ? Icons.warning_rounded

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/currency_formatter.dart';
@@ -47,13 +48,13 @@ class ComparisonInsightPanel extends StatelessWidget {
       final diff = last - prev;
       final pct = prev != 0 ? (diff / prev.abs() * 100).abs() : 0.0;
       if (diff > 0) {
-        trendText = 'Tabungan naik ${pct.toStringAsFixed(0)}% vs periode sebelumnya';
+        trendText = 'trend_savings_up'.tr(namedArgs: {'pct': pct.toStringAsFixed(0)});
         trendColor = AppColors.income;
       } else if (diff < 0) {
-        trendText = 'Tabungan turun ${pct.toStringAsFixed(0)}% vs periode sebelumnya';
+        trendText = 'trend_savings_down'.tr(namedArgs: {'pct': pct.toStringAsFixed(0)});
         trendColor = AppColors.expense;
       } else {
-        trendText = 'Tabungan stabil vs periode sebelumnya';
+        trendText = 'trend_savings_stable'.tr();
         trendColor = AppColors.primary;
       }
     }
@@ -73,14 +74,14 @@ class ComparisonInsightPanel extends StatelessWidget {
         border: Border.all(color: bdr, width: 0.5),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Ringkasan Keuangan',
+        Text('financial_summary'.tr(),
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: txtPrim,
                 letterSpacing: -0.3,),),
         const SizedBox(height: 3),
-        Text('Gambaran kondisi finansial kamu saat ini',
+        Text('financial_overview'.tr(),
             style: TextStyle(fontSize: 11, color: txtSec),),
         const SizedBox(height: 16),
 
@@ -130,8 +131,8 @@ class ComparisonInsightPanel extends StatelessWidget {
             child: _StatItem(
               icon: Icons.south_rounded,
               color: AppColors.income,
-              label: 'Rata-rata Masuk',
-              value: CurrencyFormatter.formatCompact(avgIncome),
+              label: 'avg_income'.tr(),
+              value: CurrencyFormatter.formatCompact(avgIncome, locale: context.locale.languageCode),
               isDark: isDark,
             ),
           ),
@@ -140,8 +141,8 @@ class ComparisonInsightPanel extends StatelessWidget {
             child: _StatItem(
               icon: Icons.north_rounded,
               color: AppColors.expense,
-              label: 'Rata-rata Keluar',
-              value: CurrencyFormatter.formatCompact(avgExpense),
+              label: 'avg_expense'.tr(),
+              value: CurrencyFormatter.formatCompact(avgExpense, locale: context.locale.languageCode),
               isDark: isDark,
             ),
           ),
@@ -174,35 +175,38 @@ class ComparisonInsightPanel extends StatelessWidget {
 
 enum _HealthStatus {
   sehat(
-    title: 'Kondisi Sehat',
-    subtitle: 'Kamu berhasil menyimpan > 20% pemasukan',
+    titleKey: 'health_healthy_title',
+    subtitleKey: 'health_healthy_sub',
     color: AppColors.income,
     icon: Icons.verified_rounded,
   ),
   waspada(
-    title: 'Perlu Perhatian',
-    subtitle: 'Tabungan masih positif, coba tingkatkan',
+    titleKey: 'health_caution_title',
+    subtitleKey: 'health_caution_sub',
     color: AppColors.warning,
     icon: Icons.info_rounded,
   ),
   defisit(
-    title: 'Kondisi Defisit',
-    subtitle: 'Pengeluaran melebihi pemasukan',
+    titleKey: 'health_deficit_title',
+    subtitleKey: 'health_deficit_sub',
     color: AppColors.expense,
     icon: Icons.warning_amber_rounded,
   );
 
-  final String title;
-  final String subtitle;
+  final String titleKey;
+  final String subtitleKey;
   final Color color;
   final IconData icon;
 
   const _HealthStatus({
-    required this.title,
-    required this.subtitle,
+    required this.titleKey,
+    required this.subtitleKey,
     required this.color,
     required this.icon,
   });
+
+  String get title => titleKey.tr();
+  String get subtitle => subtitleKey.tr();
 }
 
 class _HealthBadge extends StatelessWidget {

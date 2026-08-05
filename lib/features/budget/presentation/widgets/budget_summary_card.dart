@@ -3,8 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../shared/widgets/spendly_card.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BudgetSummaryCard extends ConsumerWidget {
   final bool isDark;
@@ -24,7 +23,6 @@ class BudgetSummaryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final overallPct =
         totalLimit > 0 ? (totalSpent / totalLimit).clamp(0.0, 1.0) : 0.0;
     final diff = totalLimit - totalSpent;
@@ -43,7 +41,7 @@ class BudgetSummaryCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    AppStrings.get('total_monthly_budget', locale),
+                    'total_monthly_budget'.tr(),
                     style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 12,
@@ -73,7 +71,7 @@ class BudgetSummaryCard extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '$budgetCount ${AppStrings.get('categories', locale)}',
+                  '$budgetCount ${'categories'.tr()}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -104,7 +102,7 @@ class BudgetSummaryCard extends ConsumerWidget {
           Row(
             children: [
               _SummaryChip(
-                label: AppStrings.get('used', locale),
+                label: 'used'.tr(),
                 value: CurrencyFormatter.format(totalSpent),
                 icon: Icons.arrow_upward_rounded,
                 valueColor:
@@ -112,7 +110,7 @@ class BudgetSummaryCard extends ConsumerWidget {
               ),
               const Spacer(),
               _SummaryChip(
-                label: isOver ? AppStrings.get('exceeded', locale) : AppStrings.get('remaining', locale),
+                label: isOver ? 'exceeded'.tr() : 'remaining'.tr(),
                 value: isOver
                     ? '+ ${CurrencyFormatter.format(diff.abs())}'
                     : CurrencyFormatter.format(diff),

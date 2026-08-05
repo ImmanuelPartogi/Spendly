@@ -31,9 +31,17 @@ class RestoreService {
   Future<void> restoreFromFirebase() async {
     debugPrint('[Restore] Starting restore from Firebase...');
 
-    await clearLocalData();
+    final isOnline = await SyncService.isOnline;
+    if (!isOnline) {
+      debugPrint('[Restore] Offline — keeping local cache');
+      return;
+    }
 
+    // 1. Unduh data dari Firestore DULU sebelum menghapus data lokal
     final result = await SyncService.downloadAll();
+
+    // 2. HANYA setelah unduhan dipastikan berhasil, bersihkan data lokal
+    await clearLocalData();
 
     // Restore wallets
     for (final data in result.wallets) {
@@ -79,6 +87,7 @@ class RestoreService {
           category:    data['category'] as String,
           limitAmount: (data['limitAmount'] as num).toDouble(),
           period:      Value(data['period'] as String? ?? 'monthly'),
+          synced:      const Value(true),
         ),);
       } catch (e) {
         debugPrint('[Restore] Budget error (${data['category']}): $e');

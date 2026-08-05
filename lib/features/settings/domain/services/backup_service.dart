@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -151,7 +152,7 @@ class _BackupScreenState extends State<BackupScreen> {
       await _loadLastBackup();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Backup berhasil dibuat')),
+          SnackBar(content: Text('snackbar_backup_success'.tr())),
         );
       }
     } catch (e) {
@@ -170,19 +171,19 @@ class _BackupScreenState extends State<BackupScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Restore Data?'),
-        content: const Text(
+        title: Text('restore_data_title'.tr()),
+        content: Text(
           'Data yang ada saat ini akan digantikan dengan data dari file backup. '
           'Pastikan kamu memilih file backup Spendly yang valid.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Batal'),
+            child: Text('dialog_cancel'.tr()),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Lanjutkan'),
+            child: Text('dialog_continue'.tr()),
           ),
         ],
       ),
@@ -204,7 +205,7 @@ class _BackupScreenState extends State<BackupScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data berhasil dipulihkan')),
+          SnackBar(content: Text('snackbar_restore_success'.tr())),
         );
       }
     } catch (e) {
@@ -231,7 +232,7 @@ class _BackupScreenState extends State<BackupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Backup & Restore')),
+      appBar: AppBar(title: Text('backup_restore_title'.tr())),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -281,7 +282,7 @@ class _BackupScreenState extends State<BackupScreen> {
             // ── Backup section ────────────────────────────────────────────
             Text('Backup', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Export semua data (transaksi, wallet, budget, goals) ke file JSON '
               'yang bisa disimpan di perangkat atau dibagikan.',
               style: TextStyle(
@@ -303,7 +304,7 @@ class _BackupScreenState extends State<BackupScreen> {
             // ── Restore section ───────────────────────────────────────────
             Text('Restore', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Pulihkan data dari file backup JSON yang sebelumnya dibuat. '
               'Data yang ada saat ini akan digantikan.',
               style: TextStyle(

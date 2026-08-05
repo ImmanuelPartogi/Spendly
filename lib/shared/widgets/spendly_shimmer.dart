@@ -176,7 +176,7 @@ class TransactionTileShimmer extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 73),
+          padding: const EdgeInsetsDirectional.only(start: 73),
           child: Divider(height: 1, thickness: 1, color: divColor),
         ),
       ],
@@ -297,7 +297,7 @@ class AnalyticsSkeleton extends StatelessWidget {
             // Period chips
             Row(
               children: List.generate(5, (i) => Padding(
-                padding: EdgeInsets.only(right: i < 4 ? 8 : 0),
+                padding: EdgeInsetsDirectional.only(end: i < 4 ? 8 : 0),
                 child: ShimmerBox(
                   width: i == 0 ? 72 : 56,
                   height: 32,
@@ -362,7 +362,7 @@ class BudgetCardShimmer extends StatelessWidget {
           children: List.generate(
             3,
             (_) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsetsDirectional.only(bottom: 12),
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -446,7 +446,7 @@ class WalletCardShimmer extends StatelessWidget {
           children: List.generate(
             2,
             (_) => const Padding(
-              padding: EdgeInsets.only(bottom: 12),
+              padding: EdgeInsetsDirectional.only(bottom: 12),
               child: ShimmerBox(
                 width: double.infinity,
                 height: 80,
@@ -511,7 +511,7 @@ class SearchResultShimmer extends StatelessWidget {
             ),
             if (i < count - 1)
               Padding(
-                padding: const EdgeInsets.only(left: 73),
+                padding: const EdgeInsetsDirectional.only(start: 73),
                 child: Divider(height: 1, color: divColor),
               ),
           ],

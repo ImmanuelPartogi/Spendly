@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,7 @@ import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/utils/date_formatter.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MiniExpenseChart — Redesigned bar chart
@@ -149,10 +151,17 @@ class _MiniExpenseChartState extends ConsumerState<MiniExpenseChart>
                       }
                       final weekday  = idx + 1;
                       final isToday  = weekday == todayWeekday;
+                      final dayLabel = DateFormatter.formatWeekdayName(
+                        weekday,
+                        locale: context.locale.languageCode,
+                      );
+                      final shortLabel = dayLabel.length > 3
+                          ? dayLabel.substring(0, 3)
+                          : dayLabel;
                       return Padding(
-                        padding: const EdgeInsets.only(top: 6),
+                        padding: const EdgeInsetsDirectional.only(top: 6),
                         child: Text(
-                          AppConstants.daysOfWeek[idx],
+                          shortLabel,
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: isToday
@@ -301,7 +310,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Belum ada data minggu ini',
+              'no_data_this_week'.tr(),
               style: TextStyle(
                 color: isDark
                     ? AppColors.textHintDark

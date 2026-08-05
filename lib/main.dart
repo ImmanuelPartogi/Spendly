@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ String? _activeUid;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initializeDateFormatting('id', null); // ← tambah ini
+  await EasyLocalization.ensureInitialized();
+  await initializeDateFormatting(null, null);
 
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(
@@ -42,6 +44,9 @@ void main() async {
   }
 
   _container = ProviderContainer();
+
+  // Inisialisasi _activeUid awal dari user aktif (jika ada) sebelum listener didaftarkan
+  _activeUid = FirebaseAuth.instance.currentUser?.uid;
 
   // ── Auth state listener ───────────────────────────────────────────────────
   //
@@ -89,15 +94,39 @@ void main() async {
     try {
       final repo = _container.read(transactionRepositoryImplProvider);
       await repo.syncPending();
+      final budgetDao = _container.read(budgetDaoProvider);
+      await SyncService.syncPendingBudgets(budgetDao);
     } catch (e) {
       debugPrint('[Main] Sync error: $e');
     }
   });
 
-  runApp(UncontrolledProviderScope(
-    container: _container,
-    child: const SpendlyApp(),
-  ),);
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('id'),
+        Locale('en'),
+        Locale('ms'),
+        Locale('es'),
+        Locale('zh'),
+        Locale('hi'),
+        Locale('fr'),
+        Locale('pt'),
+        Locale('ja'),
+        Locale('de'),
+        Locale('ru'),
+        Locale('ko'),
+        Locale('vi'),
+      ],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      startLocale: const Locale('id'),
+      child: UncontrolledProviderScope(
+        container: _container,
+        child: const SpendlyApp(),
+      ),
+    ),
+  );
 }
 
 class SpendlyApp extends ConsumerWidget {
@@ -112,6 +141,9 @@ class SpendlyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       home: const AppGate(),
     );
   }

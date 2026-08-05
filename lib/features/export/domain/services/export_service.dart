@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -20,11 +21,11 @@ class ExportService {
   }) async {
     final rows = <List<dynamic>>[
       // Header
-      ['Tanggal', 'Tipe', 'Kategori', 'Nominal', 'Catatan'],
+      ['date'.tr(), 'wallet_type'.tr(), 'category'.tr(), 'amount'.tr(), 'note'.tr()],
       // Data
       ...transactions.map((tx) => [
             _formatDate(tx.date),
-            tx.isExpense ? 'Pengeluaran' : 'Pemasukan',
+            tx.isExpense ? 'expense'.tr() : 'income'.tr(),
             tx.category,
             tx.amount.toStringAsFixed(0),
             tx.note ?? '',
@@ -62,7 +63,7 @@ class ExportService {
         build: (ctx) => [
           // Title
           pw.Text(
-            'Spendly — Laporan Keuangan',
+            'pdf_report_title'.tr(),
             style: pw.TextStyle(
               fontSize: 20,
               fontWeight: pw.FontWeight.bold,
@@ -84,13 +85,13 @@ class ExportService {
               mainAxisAlignment:
                   pw.MainAxisAlignment.spaceAround,
               children: [
-                _pdfStat('Pemasukan',
+                _pdfStat('pdf_total_income'.tr(),
                     CurrencyFormatter.format(totalIncome),
                     PdfColors.green700,),
-                _pdfStat('Pengeluaran',
+                _pdfStat('pdf_total_expense'.tr(),
                     CurrencyFormatter.format(totalExpense),
                     PdfColors.red700,),
-                _pdfStat('Tabungan',
+                _pdfStat('pdf_net_balance'.tr(),
                     CurrencyFormatter.format(savings),
                     savings >= 0
                         ? PdfColors.blue700
@@ -116,11 +117,11 @@ class ExportService {
                 decoration:
                     const pw.BoxDecoration(color: PdfColors.blue100),
                 children: [
-                  'Tanggal',
-                  'Tipe',
-                  'Kategori',
-                  'Nominal',
-                  'Catatan',
+                  'date'.tr(),
+                  'wallet_type'.tr(),
+                  'category'.tr(),
+                  'amount'.tr(),
+                  'note'.tr(),
                 ]
                     .map((h) => pw.Padding(
                           padding: const pw.EdgeInsets.all(8),
@@ -136,8 +137,8 @@ class ExportService {
                     children: [
                       _pdfCell(_formatDate(tx.date)),
                       _pdfCell(tx.isExpense
-                          ? 'Pengeluaran'
-                          : 'Pemasukan',),
+                          ? 'expense'.tr()
+                          : 'income'.tr(),),
                       _pdfCell(tx.category),
                       _pdfCell(
                           CurrencyFormatter.formatCompact(tx.amount),),
@@ -148,7 +149,7 @@ class ExportService {
           ),
           pw.SizedBox(height: 16),
           pw.Text(
-            'Dibuat oleh Spendly • ${_formatDate(DateTime.now())}',
+            'Spendly • ${_formatDate(DateTime.now())}',
             style: const pw.TextStyle(
                 fontSize: 9, color: PdfColors.grey500,),
           ),

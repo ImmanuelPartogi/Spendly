@@ -189,8 +189,8 @@ class _ActionButtonState extends State<_ActionButton> {
                 widget.color,
                 Color.lerp(widget.color, Colors.white, 0.15)!,
               ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              begin: AlignmentDirectional.topStart,
+              end: AlignmentDirectional.bottomEnd,
             ),
             borderRadius: BorderRadius.circular(14),
             boxShadow: [

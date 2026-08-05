@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../../../core/database/daos/transaction_dao.dart';
 import '../../../../core/database/daos/wallet_dao.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/services/sync_service.dart';
 import '../../domain/entities/transaction_entity.dart';
 import '../../domain/repositories/transaction_repository.dart';
@@ -58,6 +60,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   Future<String> addTransaction(TransactionEntity tx) async {
     final id = await _dao.insertTransaction(TransactionModel.toCompanion(tx));
     _syncTransactionAndWallet(tx, id);
+    unawaited(_checkBudgetThreshold(tx));
     return id;
   }
 
@@ -65,6 +68,32 @@ class TransactionRepositoryImpl implements TransactionRepository {
   Future<void> updateTransaction(String oldId, TransactionEntity newTx) async {
     await _dao.updateTransactionById(oldId, TransactionModel.toCompanion(newTx));
     _syncTransactionAndWallet(newTx, newTx.id);
+    unawaited(_checkBudgetThreshold(newTx));
+  }
+
+  Future<void> _checkBudgetThreshold(TransactionEntity tx) async {
+    if (!tx.isExpense) return;
+    try {
+      final db = _dao.attachedDatabase;
+      final budgetRow = await (db.select(db.budgets)
+            ..where((b) => b.category.equals(tx.category))
+            ..limit(1))
+          .getSingleOrNull();
+
+      if (budgetRow == null || budgetRow.limitAmount <= 0) return;
+
+      final catTotals = await _dao.getCategoryTotals(tx.date.year, tx.date.month, 'expense');
+      final totalSpent = catTotals[tx.category] ?? 0.0;
+
+      await NotificationService().checkAndSendBudgetNotification(
+        category: tx.category,
+        spent: totalSpent,
+        limit: budgetRow.limitAmount,
+        month: tx.date,
+      );
+    } catch (e) {
+      debugPrint('[TransactionRepo] Budget notification check error: $e');
+    }
   }
 
   @override

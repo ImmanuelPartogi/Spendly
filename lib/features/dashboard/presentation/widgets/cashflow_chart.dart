@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +50,7 @@ class _CashflowChartState extends ConsumerState<CashflowChart> {
         // ── Touch tooltip ─────────────────────────────────────────────────
         if (_touchedX != null)
           Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsetsDirectional.only(bottom: 12),
             child: Row(
               children: [
                 _TooltipBadge(
@@ -104,7 +105,7 @@ class _CashflowChartState extends ConsumerState<CashflowChart> {
                         return const SizedBox.shrink();
                       }
                       return Padding(
-                        padding: const EdgeInsets.only(top: 6),
+                        padding: const EdgeInsetsDirectional.only(top: 6),
                         child: Text(
                           labels[i],
                           style: const TextStyle(
@@ -146,11 +147,11 @@ class _CashflowChartState extends ConsumerState<CashflowChart> {
         const SizedBox(height: 12),
 
         // ── Legend ────────────────────────────────────────────────────────
-        const Row(
+        Row(
           children: [
-            _LegendDot(color: AppColors.income, label: 'Pemasukan'),
-            SizedBox(width: 16),
-            _LegendDot(color: AppColors.expense, label: 'Pengeluaran'),
+            _LegendDot(color: AppColors.income, label: 'income'.tr()),
+            const SizedBox(width: 16),
+            _LegendDot(color: AppColors.expense, label: 'expense'.tr()),
           ],
         ),
       ],

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -21,7 +22,7 @@ class RecurringScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Transaksi Berulang')),
+      appBar: AppBar(title: Text('recurring_transactions'.tr())),
       body: recurringAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
@@ -31,7 +32,7 @@ class RecurringScreen extends ConsumerWidget {
               const Icon(Icons.error_outline_rounded,
                   size: 48, color: AppColors.expense,),
               const SizedBox(height: 12),
-              Text('Gagal memuat data',
+              Text('failed_to_load_data'.tr(),
                   style: Theme.of(context).textTheme.bodyLarge,),
             ],
           ),
@@ -118,13 +119,13 @@ class RecurringScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Hapus?'),
-        content: const Text(
+        title: Text('Hapus?'),
+        content: Text(
             'Transaksi berulang ini akan dihapus permanen.',),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
+            child: Text('Batal'),
           ),
           ElevatedButton(
             onPressed: () {
@@ -133,7 +134,7 @@ class RecurringScreen extends ConsumerWidget {
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.expense,),
-            child: const Text('Hapus'),
+            child: Text('Hapus'),
           ),
         ],
       ),
@@ -187,7 +188,7 @@ class _RecurringCard extends StatelessWidget {
     final catColor = CategoryUtils.getColor(item.category);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsetsDirectional.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color:
@@ -407,16 +408,16 @@ class _AddRecurringSheetState
         : AppConstants.incomeCategories;
 
     return Container(
-      margin: const EdgeInsets.only(top: 60),
+      margin: const EdgeInsetsDirectional.only(top: 60),
       decoration: const BoxDecoration(
         color: AppColors.background,
         borderRadius:
             BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      padding: EdgeInsets.only(
+      padding: EdgeInsetsDirectional.only(
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        left: 20,
-        right: 20,
+        start: 20,
+        end: 20,
         top: 16,
       ),
       child: SingleChildScrollView(
@@ -570,7 +571,7 @@ class _AddRecurringSheetState
                         setState(() => _frequency = f),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 180),
-                      margin: const EdgeInsets.only(right: 8),
+                      margin: const EdgeInsetsDirectional.only(end: 8),
                       padding:
                           const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
@@ -605,7 +606,7 @@ class _AddRecurringSheetState
             ),
             if (_frequency == RecurringFrequency.monthly) ...[
               const SizedBox(height: 16),
-              Text('Tanggal Jatuh Tempo',
+              Text('due_date'.tr(),
                   style: Theme.of(context).textTheme.titleSmall,),
               const SizedBox(height: 8),
               Wrap(
@@ -668,7 +669,7 @@ class _AddRecurringSheetState
                         child: CircularProgressIndicator(
                             color: Colors.white, strokeWidth: 2,),
                       )
-                    : const Text('Simpan'),
+                    : Text('Simpan'),
               ),
             ),
           ],

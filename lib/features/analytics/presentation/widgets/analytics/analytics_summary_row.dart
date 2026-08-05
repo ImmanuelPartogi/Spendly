@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/currency_formatter.dart';
@@ -26,7 +27,7 @@ class AnalyticsSummaryRow extends StatelessWidget {
     return Row(children: [
       Expanded(
         child: _SummaryTile(
-          label: 'Pengeluaran', value: expense,
+          label: 'expense'.tr(), value: expense,
           color: AppColors.expense, icon: Icons.north_rounded,
           card: card, bdr: bdr, sec: sec,
         ),
@@ -34,7 +35,7 @@ class AnalyticsSummaryRow extends StatelessWidget {
       const SizedBox(width: 10),
       Expanded(
         child: _SummaryTile(
-          label: 'Pemasukan', value: income,
+          label: 'income'.tr(), value: income,
           color: AppColors.income, icon: Icons.south_rounded,
           card: card, bdr: bdr, sec: sec,
         ),
@@ -42,7 +43,7 @@ class AnalyticsSummaryRow extends StatelessWidget {
       const SizedBox(width: 10),
       Expanded(
         child: _SummaryTile(
-          label: savings >= 0 ? 'Tabungan' : 'Defisit',
+          label: savings >= 0 ? 'savings'.tr() : 'monthly_deficit'.tr(),
           value: savings.abs(), color: savColor,
           icon: savings >= 0
               ? Icons.trending_up_rounded

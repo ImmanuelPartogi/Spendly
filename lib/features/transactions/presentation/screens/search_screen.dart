@@ -364,7 +364,7 @@ class _SearchHeader extends StatelessWidget {
                     GestureDetector(
                       onTap: onClear,
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 10),
+                        padding: const EdgeInsetsDirectional.only(end: 10),
                         child: Container(
                           width: 18,
                           height: 18,
@@ -524,8 +524,8 @@ class _SearchTile extends StatelessWidget {
                           catColor.withValues(alpha: isDark ? 0.20 : 0.14),
                           catColor.withValues(alpha: isDark ? 0.10 : 0.07),
                         ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                        begin: AlignmentDirectional.topStart,
+                        end: AlignmentDirectional.bottomEnd,
                       ),
                       borderRadius: BorderRadius.circular(13),
                       border: Border.all(
@@ -616,7 +616,7 @@ class _SearchTile extends StatelessWidget {
         ),
         if (showDivider)
           Padding(
-            padding: const EdgeInsets.only(left: 73),
+            padding: const EdgeInsetsDirectional.only(start: 73),
             child: Divider(height: 1, color: divColor),
           ),
       ],
@@ -1027,7 +1027,7 @@ class _TileShimmer extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 57),
+          padding: const EdgeInsetsDirectional.only(start: 57),
           child: Divider(height: 1, color: divColor),
         ),
       ],

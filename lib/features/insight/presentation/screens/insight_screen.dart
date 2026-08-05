@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
@@ -14,7 +15,7 @@ class InsightScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Analisis')),
+      appBar: AppBar(title: Text('Analisis')),
       body: insightsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
@@ -37,18 +38,18 @@ class InsightScreen extends ConsumerWidget {
                 ),
                 child: Row(
                   children: [
-                    const Text('✨', style: TextStyle(fontSize: 36)),
+                    Text('✨', style: TextStyle(fontSize: 36)),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Analisis Cerdas',
+                          Text('smart_analysis'.tr(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,),),
-                          Text('Berdasarkan transaksi kamu bulan ini',
+                          Text('based_on_month_transactions'.tr(),
                               style: TextStyle(
                                   color: Colors.white.withValues(alpha: 0.8),
                                   fontSize: 12,),),
@@ -59,10 +60,10 @@ class InsightScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Text('Bulan Ini', style: Theme.of(context).textTheme.titleLarge),
+              Text('this_month'.tr(), style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 12),
               ...insights.map((insight) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsetsDirectional.only(bottom: 12),
                     child: SpendlyCard(
                       color: insight.isWarning
                           ? AppColors.warning.withValues(alpha: 0.06)

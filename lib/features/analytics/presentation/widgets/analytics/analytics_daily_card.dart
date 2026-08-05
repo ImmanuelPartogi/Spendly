@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/currency_formatter.dart';
+import '../../../../../core/utils/date_formatter.dart';
 
 class AnalyticsDailyCard extends StatefulWidget {
   final Map<String, double> daily;
@@ -46,17 +48,17 @@ class _AnalyticsDailyCardState extends State<AnalyticsDailyCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Pengeluaran Harian',
+              Text('daily_expenses'.tr(),
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: txtPrim,
                       letterSpacing: -0.3,),),
               const SizedBox(height: 3),
-              Text('Tap bar untuk melihat detail hari',
+              Text('tap_bar_for_details'.tr(),
                   style: TextStyle(fontSize: 11, color: txtSec),),
             ],),
-            const _ChartBadge(label: 'Harian', color: AppColors.expense),
+            _ChartBadge(label: 'period_daily'.tr(), color: AppColors.expense),
           ],
         ),
 
@@ -66,7 +68,7 @@ class _AnalyticsDailyCardState extends State<AnalyticsDailyCard> {
           curve: Curves.easeOutQuart,
           child: _selected >= 0 && _selected < sorted.length
               ? Padding(
-                  padding: const EdgeInsets.only(top: 14),
+                  padding: const EdgeInsetsDirectional.only(top: 14),
                   child: _DayDetailTile(
                     entry: sorted[_selected],
                     isDark: widget.isDark,
@@ -104,18 +106,10 @@ class _DayDetailTile extends StatelessWidget {
     required this.onDismiss,
   });
 
-  static const _days = [
-    'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu',
-  ];
-  static const _months = [
-    'Jan','Feb','Mar','Apr','Mei','Jun',
-    'Jul','Agt','Sep','Okt','Nov','Des',
-  ];
-
-  String get _dateLabel {
+  String _dateLabel(BuildContext context) {
     try {
       final d = DateTime.parse(entry.key);
-      return '${_days[d.weekday - 1]}, ${d.day} ${_months[d.month - 1]}';
+      return DateFormatter.formatDayMonth(d, locale: context.locale.languageCode);
     } catch (_) {
       return entry.key;
     }
@@ -149,10 +143,10 @@ class _DayDetailTile extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(_dateLabel,
+            Text(_dateLabel(context),
                 style: TextStyle(
                     fontSize: 12, fontWeight: FontWeight.w700, color: txtPrim,),),
-            Text('Total pengeluaran', style: TextStyle(fontSize: 10, color: txtSec)),
+            Text('total_expenses'.tr(), style: TextStyle(fontSize: 10, color: txtSec)),
           ],),
         ),
         Text(CurrencyFormatter.formatCompact(entry.value),
@@ -186,11 +180,11 @@ class _DailyBarChart extends StatelessWidget {
     required this.onSelect,
   });
 
-  static const _dayShort = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
-
-  String _label(String key) {
+  String _label(BuildContext context, String key) {
     try {
-      return _dayShort[DateTime.parse(key).weekday - 1];
+      final d = DateTime.parse(key);
+      final dName = DateFormatter.formatWeekdayName(d.weekday, locale: context.locale.languageCode);
+      return dName.length > 3 ? dName.substring(0, 3) : dName;
     } catch (_) {
       return key.split('-').last;
     }
@@ -230,8 +224,8 @@ class _DailyBarChart extends StatelessWidget {
                 if (i < 0 || i >= sorted.length) return const SizedBox.shrink();
                 final isSel = i == selected;
                 return Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Text(_label(sorted[i].key),
+                  padding: const EdgeInsetsDirectional.only(top: 6),
+                  child: Text(_label(context, sorted[i].key),
                       style: TextStyle(
                           fontSize: 9.5,
                           fontWeight: isSel ? FontWeight.w700 : FontWeight.w500,
@@ -316,10 +310,10 @@ class _EmptyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
       height: 100,
       child: Center(
-        child: Text('Belum ada data pengeluaran',
+        child: Text('no_expense_data'.tr(),
             style: TextStyle(fontSize: 12, color: AppColors.textSecondary),),
       ),
     );

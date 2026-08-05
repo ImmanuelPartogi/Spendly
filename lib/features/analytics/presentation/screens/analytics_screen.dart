@@ -1,16 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/spendly_shimmer.dart';
+import '../widgets/analytics/analytics_category_donut_card.dart';
 import '../widgets/analytics/analytics_comparison_cta.dart';
 import '../widgets/analytics/analytics_daily_card.dart';
 import '../widgets/analytics/analytics_date_header.dart';
+import '../widgets/analytics/analytics_health_score_card.dart';
 import '../widgets/analytics/analytics_insight_card.dart';
+import '../widgets/analytics/analytics_six_month_trend_card.dart';
 import '../widgets/analytics/analytics_summary_row.dart';
 import '../widgets/analytics/analytics_weekday_card.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
 
 const double _kBottomPad = 108.0;
 
@@ -109,7 +111,6 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = ref.watch(localeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final safeTop = MediaQuery.of(context).padding.top;
@@ -130,7 +131,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       body: txAsync.when(
         loading: () => const SafeArea(child: AnalyticsSkeleton()),
         error: (e, _) =>
-            Center(child: Text('${AppStrings.get('error_occurred', locale)}: $e', style: TextStyle(color: txtSec))),
+            Center(child: Text('${'error_occurred'.tr()}: $e', style: TextStyle(color: txtSec))),
         data: (_) => CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
@@ -156,7 +157,17 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   AnalyticsSummaryRow(
                       expense: expense, income: income, isDark: isDark,),
                   const SizedBox(height: 16),
+                  AnalyticsHealthScoreCard(isDark: isDark),
+                  const SizedBox(height: 16),
                   AnalyticsDailyCard(daily: daily, isDark: isDark),
+                  const SizedBox(height: 16),
+                  AnalyticsCategoryDonutCard(
+                    categories: categories,
+                    totalExpense: expense,
+                    isDark: isDark,
+                  ),
+                  const SizedBox(height: 16),
+                  AnalyticsSixMonthTrendCard(isDark: isDark),
                   const SizedBox(height: 16),
                   AnalyticsWeekdayCard(weekday: weekdayData, isDark: isDark),
                   const SizedBox(height: 16),
@@ -196,7 +207,6 @@ class _AnalyticsAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final bgColor = isDark ? AppColors.backgroundDark : AppColors.background;
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
@@ -219,22 +229,22 @@ class _AnalyticsAppBar extends ConsumerWidget {
             opacity: isCollapsed ? 0.0 : 1.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, safeTop + 12, 60, 14),
                 child: OverflowBox(
-                  alignment: Alignment.bottomLeft,
+                  alignment: AlignmentDirectional.bottomStart,
                   maxHeight: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(AppStrings.get('reports_and', locale),
+                      Text('reports_and'.tr(),
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                               color: txtSec,),),
-                      Text(AppStrings.get('analytics', locale),
+                      Text('analytics'.tr(),
                           style: TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.w800,
@@ -252,10 +262,10 @@ class _AnalyticsAppBar extends ConsumerWidget {
             opacity: isCollapsed ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 60, 14),
-                child: Text(AppStrings.get('analytics', locale),
+                child: Text('analytics'.tr(),
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
@@ -318,7 +328,6 @@ class _FilterSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final txtPrim = isDark ? AppColors.textPrimaryDark : AppColors.textPrimary;
     final txtSec =
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
@@ -334,42 +343,42 @@ class _FilterSheet extends ConsumerWidget {
               child: Container(
                 width: 36,
                 height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsetsDirectional.only(bottom: 16),
                 decoration: BoxDecoration(
                   color: isDark ? AppColors.borderDark : AppColors.border,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
-            Text(AppStrings.get('period_filter', locale),
+            Text('period_filter'.tr(),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: txtPrim,
                     letterSpacing: -0.4,),),
             const SizedBox(height: 4),
-            Text(AppStrings.get('select_time_range', locale),
+            Text('select_time_range'.tr(),
                 style: TextStyle(fontSize: 12, color: txtSec),),
             const SizedBox(height: 16),
             _SheetOption(
-              label: AppStrings.get('this_week', locale),
-              subtitle: AppStrings.get('this_week_sub', locale),
+              label: 'this_week'.tr(),
+              subtitle: 'this_week_sub'.tr(),
               icon: Icons.calendar_view_week_rounded,
               onTap: onThisWeek,
               isDark: isDark,
             ),
             const SizedBox(height: 8),
             _SheetOption(
-              label: AppStrings.get('this_month', locale),
-              subtitle: AppStrings.get('this_month_sub', locale),
+              label: 'this_month'.tr(),
+              subtitle: 'this_month_sub'.tr(),
               icon: Icons.calendar_month_rounded,
               onTap: onThisMonth,
               isDark: isDark,
             ),
             const SizedBox(height: 8),
             _SheetOption(
-              label: AppStrings.get('custom_range', locale),
-              subtitle: AppStrings.get('custom_range_sub', locale),
+              label: 'custom_range'.tr(),
+              subtitle: 'custom_range_sub'.tr(),
               icon: Icons.date_range_rounded,
               onTap: onCustom,
               isDark: isDark,

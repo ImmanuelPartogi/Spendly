@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 /// Wallet types yang didukung.
@@ -12,17 +13,17 @@ enum WalletType {
   String get label {
     switch (this) {
       case WalletType.cash:
-        return 'Tunai';
+        return 'wallet_cash'.tr();
       case WalletType.bank:
-        return 'Bank';
+        return 'wallet_bank'.tr();
       case WalletType.ewallet:
-        return 'Dompet Digital';
+        return 'wallet_ewallet'.tr();
       case WalletType.credit:
-        return 'Kartu Kredit';
+        return 'wallet_credit'.tr();
       case WalletType.investment:
-        return 'Investasi';
+        return 'wallet_investment'.tr();
       case WalletType.other:
-        return 'Lainnya';
+        return 'cat_lainnya'.tr();
     }
   }
 

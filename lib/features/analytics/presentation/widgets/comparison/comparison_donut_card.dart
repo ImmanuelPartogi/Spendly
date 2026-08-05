@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
@@ -51,14 +52,14 @@ class _ComparisonDonutCardState extends State<ComparisonDonutCard> {
         border: Border.all(color: bdr, width: 0.5),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Distribusi Keuangan',
+        Text('financial_distribution'.tr(),
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: txtPrim,
                 letterSpacing: -0.3,),),
         const SizedBox(height: 3),
-        Text('Komposisi pemasukan dan pengeluaran per kategori',
+        Text('income_expense_composition'.tr(),
             style: TextStyle(fontSize: 11, color: txtSec),),
         const SizedBox(height: 20),
 
@@ -66,7 +67,7 @@ class _ComparisonDonutCardState extends State<ComparisonDonutCard> {
           SizedBox(
             height: 100,
             child: Center(
-              child: Text('Belum ada data',
+              child: Text('no_data_yet'.tr(),
                   style: TextStyle(fontSize: 12, color: txtSec),),
             ),
           )
@@ -75,7 +76,7 @@ class _ComparisonDonutCardState extends State<ComparisonDonutCard> {
             // Income donut
             Expanded(
               child: _DonutSection(
-                label: 'Pemasukan',
+                label: 'income'.tr(),
                 entries: incomeEntries,
                 total: widget.totalIncome,
                 touched: _touchedIncome,
@@ -93,7 +94,7 @@ class _ComparisonDonutCardState extends State<ComparisonDonutCard> {
             // Expense donut
             Expanded(
               child: _DonutSection(
-                label: 'Pengeluaran',
+                label: 'expense'.tr(),
                 entries: expenseEntries,
                 total: widget.totalExpense,
                 touched: _touchedExpense,
@@ -152,7 +153,7 @@ class _DonutSection extends StatelessWidget {
                   color: isDark ? AppColors.textHintDark : AppColors.textHint,),
             ),
             const SizedBox(height: 6),
-            Text('Tidak ada data', style: TextStyle(fontSize: 11, color: txtSec)),
+            Text('no_data'.tr(), style: TextStyle(fontSize: 11, color: txtSec)),
           ],),
         ),
       );
@@ -229,7 +230,7 @@ class _DonutSection extends StatelessWidget {
           final color = CategoryUtils.getColor(e.key);
           final pct = (e.value / total * 100).toStringAsFixed(0);
           return Padding(
-            padding: const EdgeInsets.only(bottom: 3),
+            padding: const EdgeInsetsDirectional.only(bottom: 3),
             child: Row(children: [
               Container(
                   width: 6, height: 6,

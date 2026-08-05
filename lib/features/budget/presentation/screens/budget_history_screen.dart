@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -85,7 +86,7 @@ class BudgetHistoryScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Riwayat Budget')),
+      appBar: AppBar(title: Text('budget_history'.tr())),
       body: Column(
         children: [
           // ── Summary row ─────────────────────────────────────────────────
@@ -246,7 +247,7 @@ class _HistoryCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Pengeluaran',
                     style:
                         TextStyle(fontSize: 10, color: AppColors.textSecondary),
@@ -264,7 +265,7 @@ class _HistoryCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text(
+                  Text(
                     'Budget',
                     style:
                         TextStyle(fontSize: 10, color: AppColors.textSecondary),

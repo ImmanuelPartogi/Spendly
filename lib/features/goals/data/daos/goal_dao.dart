@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:drift/drift.dart';
 import '../../../../core/database/app_database.dart';
+import '../../../../core/services/notification_service.dart';
 
 part 'goal_dao.g.dart';
 
@@ -46,6 +48,7 @@ class GoalDao extends DatabaseAccessor<AppDatabase>
     final goal = await getGoalById(id);
     if (goal == null) return;
 
+    final wasCompleted = goal.isCompleted;
     final newAmount =
         (goal.currentAmount + amount).clamp(0.0, goal.targetAmount);
     final completed = newAmount >= goal.targetAmount;
@@ -57,5 +60,9 @@ class GoalDao extends DatabaseAccessor<AppDatabase>
         isCompleted: Value(completed),
       ),
     );
+
+    if (!wasCompleted && completed) {
+      unawaited(NotificationService().sendGoalAchievedNotification(goalTitle: goal.title));
+    }
   }
 }

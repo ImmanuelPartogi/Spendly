@@ -1,3 +1,5 @@
+import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,17 +24,17 @@ const List<Widget> _screens = [
 const double kScrollPaddingBottom = 100.0;
 
 const _navItems = [
-  _NavMeta(icon: Icons.home_rounded,         label: 'Beranda'),
-  _NavMeta(icon: Icons.receipt_long_rounded, label: 'Transaksi'),
-  _NavMeta(icon: Icons.bar_chart_rounded,    label: 'Analitik'),
-  _NavMeta(icon: Icons.savings_rounded,      label: 'Anggaran'),
-  _NavMeta(icon: Icons.person_rounded,       label: 'Profil'),
+  _NavMeta(icon: Icons.home_rounded,         labelKey: 'dashboard'),
+  _NavMeta(icon: Icons.receipt_long_rounded, labelKey: 'transactions'),
+  _NavMeta(icon: Icons.bar_chart_rounded,    labelKey: 'analytics'),
+  _NavMeta(icon: Icons.savings_rounded,      labelKey: 'budget'),
+  _NavMeta(icon: Icons.person_rounded,       labelKey: 'profile'),
 ];
 
 class _NavMeta {
   final IconData icon;
-  final String label;
-  const _NavMeta({required this.icon, required this.label});
+  final String labelKey;
+  const _NavMeta({required this.icon, required this.labelKey});
 }
 
 // ─── Shell utama ──────────────────────────────────────────────────────────────
@@ -45,7 +47,6 @@ class MainNavigation extends ConsumerWidget {
     final index = ref.watch(bottomNavIndexProvider);
 
     return Scaffold(
-      // extendBody agar konten bisa scroll di balik nav bar
       extendBody: true,
       body: IndexedStack(index: index, children: _screens),
       bottomNavigationBar: _FloatingNavBar(
@@ -59,7 +60,7 @@ class MainNavigation extends ConsumerWidget {
   }
 }
 
-// ─── Nav Bar Mengambang ───────────────────────────────────────────────────────
+// ─── Nav Bar Mengambang (Glassmorphic) ────────────────────────────────────────
 
 class _FloatingNavBar extends StatelessWidget {
   final int currentIndex;
@@ -73,40 +74,48 @@ class _FloatingNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark   = Theme.of(context).brightness == Brightness.dark;
-    final bgColor  = isDark ? AppColors.cardDark : AppColors.card;
-    final bdrColor = isDark ? AppColors.borderDark : AppColors.border;
+    final bgColor  = isDark 
+        ? AppColors.cardDark.withValues(alpha: 0.88) 
+        : AppColors.card.withValues(alpha: 0.88);
+    final bdrColor = isDark 
+        ? AppColors.borderDark.withValues(alpha: 0.6) 
+        : AppColors.border.withValues(alpha: 0.6);
 
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-        child: Container(
-          height: 64,
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: bdrColor, width: 1),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? Colors.black.withValues(alpha: 0.35)
-                    : AppColors.primary.withValues(alpha: 0.10),
-                blurRadius: 24,
-                offset: const Offset(0, 8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+            child: Container(
+              height: 64,
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: bdrColor, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark
+                        ? Colors.black.withValues(alpha: 0.35)
+                        : AppColors.primary.withValues(alpha: 0.12),
+                    blurRadius: 28,
+                    offset: const Offset(0, 10),
+                    spreadRadius: -2,
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: Row(
-              children: List.generate(
-                _navItems.length,
-                (i) => Expanded(
-                  child: _NavItem(
-                    meta: _navItems[i],
-                    index: i,
-                    currentIndex: currentIndex,
-                    isDark: isDark,
-                    onTap: onTap,
+              child: Row(
+                children: List.generate(
+                  _navItems.length,
+                  (i) => Expanded(
+                    child: _NavItem(
+                      meta: _navItems[i],
+                      index: i,
+                      currentIndex: currentIndex,
+                      isDark: isDark,
+                      onTap: onTap,
+                    ),
                   ),
                 ),
               ),
@@ -154,16 +163,26 @@ class _NavItem extends StatelessWidget {
             height: isSelected ? 34 : 30,
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppColors.primary.withValues(alpha: 0.13)
+                  ? AppColors.primary.withValues(alpha: 0.15)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.20),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]
+                  : null,
             ),
             child: Center(
               child: AnimatedSwitcher(
                 duration: kDurationFast,
                 transitionBuilder: (child, anim) => ScaleTransition(
                   scale: Tween<double>(begin: 0.75, end: 1.0).animate(
-                      CurvedAnimation(parent: anim, curve: kCurveSpring),),
+                    CurvedAnimation(parent: anim, curve: kCurveSpring),
+                  ),
                   child: FadeTransition(opacity: anim, child: child),
                 ),
                 child: Icon(
@@ -176,7 +195,7 @@ class _NavItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 3),
-          // ── Label animasi ──────────────────────────────────────────────
+          // ── Label animasi terlokalisasi ────────────────────────────────
           AnimatedDefaultTextStyle(
             duration: kDurationFast,
             curve: kCurveDefault,
@@ -185,7 +204,7 @@ class _NavItem extends StatelessWidget {
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               color:      isSelected ? AppColors.primary : inactiveColor,
             ),
-            child: Text(meta.label),
+            child: Text(meta.labelKey.tr()),
           ),
         ],
       ),

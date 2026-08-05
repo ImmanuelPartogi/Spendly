@@ -4,9 +4,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/category_utils.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../shared/widgets/spendly_card.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../domain/entities/budget_entity.dart';
-import '../../../../core/localization/app_strings.dart';
-import '../../../../core/localization/locale_provider.dart';
 
 class BudgetCard extends ConsumerWidget {
   final BudgetEntity budget;
@@ -24,7 +23,6 @@ class BudgetCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
     final color = CategoryUtils.getColor(budget.category);
     final icon = CategoryUtils.getIcon(budget.category);
     final pct = budget.percentage;
@@ -42,10 +40,10 @@ class BudgetCard extends ConsumerWidget {
             : AppColors.income;
 
     final pctLabel = budget.isExceeded
-        ? AppStrings.get('exceeded_status', locale)
+        ? 'exceeded_status'.tr()
         : budget.isWarning
-            ? AppStrings.get('near_limit_status', locale)
-            : '${(pct * 100).round()}% ${AppStrings.get('used', locale)}';
+            ? 'near_limit_status'.tr()
+            : '${(pct * 100).round()}% ${'used'.tr()}';
 
     return SpendlyCard(
       padding: const EdgeInsets.all(16),
@@ -120,7 +118,7 @@ class BudgetCard extends ConsumerWidget {
                         const Icon(Icons.edit_rounded,
                             size: 15, color: AppColors.primary,),
                         const SizedBox(width: 8),
-                        Text(AppStrings.get('edit', locale),
+                        Text('edit'.tr(),
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -134,7 +132,7 @@ class BudgetCard extends ConsumerWidget {
                         const Icon(Icons.delete_outline_rounded,
                             size: 15, color: AppColors.error,),
                         const SizedBox(width: 8),
-                        Text(AppStrings.get('delete', locale),
+                        Text('delete'.tr(),
                             style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -191,7 +189,7 @@ class BudgetCard extends ConsumerWidget {
           // ── Amounts row ──────────────────────────────────────────────────
           Row(children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(AppStrings.get('used', locale),
+              Text('used'.tr(),
                   style: TextStyle(
                       fontSize: 10,
                       color: txtHint,
@@ -227,7 +225,7 @@ class BudgetCard extends ConsumerWidget {
             ),
             const Spacer(),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(AppStrings.get('limit', locale),
+              Text('limit'.tr(),
                   style: TextStyle(
                       fontSize: 10,
                       color: txtHint,
@@ -270,9 +268,9 @@ class BudgetCard extends ConsumerWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    budget.isExceeded
-                        ? '${AppStrings.get('exceeded_by', locale)} ${CurrencyFormatter.formatCompact(budget.spent - budget.limitAmount)}'
-                        : '${AppStrings.get('remaining', locale)} ${CurrencyFormatter.formatCompact(budget.remaining)}',
+                     budget.isExceeded
+                        ? '${'exceeded_by'.tr()} ${CurrencyFormatter.formatCompact(budget.spent - budget.limitAmount)}'
+                        : '${'remaining'.tr()} ${CurrencyFormatter.formatCompact(budget.remaining)}',
                     style: TextStyle(
                       fontSize: 11,
                       color: progressColor,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/category_utils.dart';
@@ -87,14 +88,14 @@ class AnalyticsInsightCard extends StatelessWidget {
         border: Border.all(color: bdr, width: 0.5),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Analisis Minggu Ini',
+        Text('weekly_analysis'.tr(),
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: txtPrim,
                 letterSpacing: -0.3,),),
         const SizedBox(height: 3),
-        Text('Ringkasan pola pengeluaran kamu',
+        Text('spending_pattern_summary'.tr(),
             style: TextStyle(fontSize: 11, color: txtSec),),
         const SizedBox(height: 16),
         ...insights.asMap().entries.map((e) {

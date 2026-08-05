@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -196,23 +197,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Notifikasi'),
+        title: Text('Notifikasi'),
         actions: [
           if (_unreadCount > 0)
             TextButton(
               onPressed: _markAllRead,
-              child: const Text('Tandai Dibaca'),
+              child: Text('mark_as_read'.tr()),
             ),
         ],
       ),
       body: _notifications.isEmpty
-          ? const Center(
+          ? Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('🔔', style: TextStyle(fontSize: 48)),
                   SizedBox(height: 12),
-                  Text('Tidak ada notifikasi',
+                  Text('no_notifications'.tr(),
                       style: TextStyle(
                           fontSize: 16,
                           color: AppColors.textSecondary,),),
@@ -312,7 +313,7 @@ class _NotificationTile extends StatelessWidget {
             ),
             if (!n.isRead)
               Padding(
-                padding: const EdgeInsets.only(left: 8, top: 2),
+                padding: const EdgeInsetsDirectional.only(start: 8, top: 2),
                 child: Container(
                   width: 8, height: 8,
                   decoration: BoxDecoration(

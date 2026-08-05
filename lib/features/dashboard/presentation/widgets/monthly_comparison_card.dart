@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -78,7 +79,7 @@ class MonthlyComparisonCard extends ConsumerWidget {
           children: [
             Expanded(
               child: _CompareItem(
-                label: 'Pengeluaran',
+                label: 'expense'.tr(),
                 current: current.expense,
                 previous: previous.expense,
                 positiveIsGood: false, // naik = buruk
@@ -88,7 +89,7 @@ class MonthlyComparisonCard extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: _CompareItem(
-                label: 'Pemasukan',
+                label: 'income'.tr(),
                 current: current.income,
                 previous: previous.income,
                 positiveIsGood: true,
@@ -98,7 +99,7 @@ class MonthlyComparisonCard extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: _CompareItem(
-                label: 'Tabungan',
+                label: 'savings'.tr(),
                 current: current.savings,
                 previous: previous.savings,
                 positiveIsGood: true,

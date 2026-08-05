@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -238,7 +239,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               duration: const Duration(milliseconds: 200),
                               child: _step != _AuthStep.email
                                   ? Align(
-                                      alignment: Alignment.centerLeft,
+                                      alignment: AlignmentDirectional.centerStart,
                                       child: _BackBtn(
                                         key: const ValueKey('back'),
                                         isDark: isDark,
@@ -357,7 +358,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         ),
         const SizedBox(height: 8),
         Align(
-          alignment: Alignment.centerRight,
+          alignment: AlignmentDirectional.centerEnd,
           child: GestureDetector(
             onTap: _isLoading ? null : _forgotPassword,
             child: const Padding(
@@ -461,7 +462,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         isDark ? AppColors.textSecondaryDark : AppColors.textSecondary;
     return Center(
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text('Belum punya akun?  ',
+        Text('dont_have_account'.tr(),
             style: TextStyle(
                 fontSize: 14, color: txtSec, fontWeight: FontWeight.w400,),),
         GestureDetector(
@@ -470,7 +471,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             _confirmCtrl.clear();
             _transitionTo(_AuthStep.register);
           },
-          child: const Text(
+          child: Text(
             'Daftar sekarang',
             style: TextStyle(
               fontSize: 14,
@@ -502,8 +503,8 @@ class _BrandLogo extends StatelessWidget {
               AppColors.primary,
               Color.lerp(AppColors.primary, AppColors.accentPurple, 0.5)!,
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: AlignmentDirectional.topStart,
+            end: AlignmentDirectional.bottomEnd,
           ),
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
@@ -523,7 +524,7 @@ class _BrandLogo extends StatelessWidget {
               color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
               letterSpacing: -0.5,
             ),),
-        Text('Kelola keuanganmu',
+        Text('manage_finances'.tr(),
             style: TextStyle(
               fontSize: 12,
               color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
@@ -648,7 +649,7 @@ class _EmailChip extends StatelessWidget {
         const SizedBox(width: 10),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Masuk sebagai',
+            Text('login_as'.tr(),
                 style: TextStyle(
                   fontSize: 10.5,
                   color: AppColors.primary.withValues(alpha: 0.7),
@@ -836,7 +837,7 @@ class _ProFormFieldState extends State<_ProFormField> {
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
-        padding: const EdgeInsets.only(left: 1, bottom: 7),
+        padding: const EdgeInsetsDirectional.only(start: 1, bottom: 7),
         child: Text(widget.label,
             style: TextStyle(
               fontSize: 12.5, fontWeight: FontWeight.w600,
@@ -871,7 +872,7 @@ class _ProFormFieldState extends State<_ProFormField> {
             hintText: widget.hint,
             hintStyle: TextStyle(color: txtHint, fontSize: 14, fontWeight: FontWeight.w400),
             prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: 4, right: 2),
+              padding: const EdgeInsetsDirectional.only(start: 4, end: 2),
               child: Icon(widget.icon, size: 17,
                   color: isFocused ? AppColors.primary : txtSec.withValues(alpha: 0.6),),
             ),
@@ -967,8 +968,8 @@ class _PrimaryButtonState extends State<_PrimaryButton>
                       AppColors.primary,
                       Color.lerp(AppColors.primary, AppColors.accentPurple, 0.45)!,
                     ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
+                    begin: AlignmentDirectional.centerStart,
+                    end: AlignmentDirectional.centerEnd,
                   ),
             color: widget.isLoading ? AppColors.primary.withValues(alpha: 0.5) : null,
             borderRadius: BorderRadius.circular(15),
@@ -1024,7 +1025,7 @@ class _ErrorBanner extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 1),
+              padding: const EdgeInsetsDirectional.only(top: 1),
               child: Container(
                 width: 20, height: 20,
                 decoration: BoxDecoration(

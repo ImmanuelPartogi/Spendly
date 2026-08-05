@@ -3,6 +3,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'auth_service_firebase.dart';
 
+import '../database/daos/budget_dao.dart';
+
 class SyncService {
   static final _firestore = FirebaseFirestore.instance;
   static final _connectivity = Connectivity();
@@ -160,6 +162,31 @@ class SyncService {
   }
 
   // ── PENDING SYNC ──────────────────────────────────────────────────────────
+
+  static Future<void> syncPendingBudgets(BudgetDao budgetDao) async {
+    if (!await isOnline) return;
+    try {
+      final pending = await budgetDao.getUnsyncedBudgets();
+      if (pending.isEmpty) return;
+
+      debugPrint('[Sync] Syncing ${pending.length} pending budgets...');
+      final syncedCategories = <String>[];
+      for (final b in pending) {
+        await uploadBudget({
+          'category': b.category,
+          'limitAmount': b.limitAmount,
+          'period': b.period,
+        });
+        syncedCategories.add(b.category);
+      }
+      if (syncedCategories.isNotEmpty) {
+        await budgetDao.markAsSynced(syncedCategories);
+        debugPrint('[Sync] Batch budget sync complete: ${syncedCategories.length} items');
+      }
+    } catch (e) {
+      debugPrint('[Sync] Batch budget sync error: $e');
+    }
+  }
 
   static Future<void> syncPendingTransactions(
     List<Map<String, dynamic>> pending,

@@ -264,8 +264,8 @@ class SpendlyStatCard extends StatelessWidget {
                       color.withValues(alpha: isDark ? 0.22 : 0.15),
                       color.withValues(alpha: isDark ? 0.10 : 0.07),
                     ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    begin: AlignmentDirectional.topStart,
+                    end: AlignmentDirectional.bottomEnd,
                   ),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(

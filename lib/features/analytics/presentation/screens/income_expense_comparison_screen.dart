@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/date_formatter.dart';
 import '../../../../features/transactions/domain/entities/transaction_entity.dart';
 import '../../../../shared/widgets/spendly_shimmer.dart';
 import '../widgets/comparison/comparison_category_card.dart';
@@ -15,13 +17,15 @@ import '../widgets/comparison/comparison_summary_row.dart';
 // ─── Model ────────────────────────────────────────────────────────────────────
 
 enum ComparisonPeriod {
-  weekly('Mingguan'),
-  monthly('Bulanan'),
-  quarterly('3 Bulan'),
-  yearly('Tahunan');
+  weekly('period_weekly'),
+  monthly('period_monthly'),
+  quarterly('period_quarterly'),
+  yearly('period_yearly');
 
-  final String label;
-  const ComparisonPeriod(this.label);
+  final String translationKey;
+  const ComparisonPeriod(this.translationKey);
+
+  String get label => translationKey.tr();
 }
 
 class ComparisonData {
@@ -127,11 +131,6 @@ class _IncomeExpenseComparisonScreenState
     }
   }
 
-  static const _months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-    'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des',
-  ];
-
   String _periodLabel(String key) {
     if (key.contains('-W')) return 'W${key.split('-W')[1]}';
     if (key.contains('-Q')) {
@@ -140,8 +139,9 @@ class _IncomeExpenseComparisonScreenState
     }
     if (key.contains('-')) {
       final p = key.split('-');
+      final y = int.tryParse(p[0]) ?? 2026;
       final m = int.tryParse(p[1]) ?? 1;
-      return '${_months[m - 1]} ${p[0].substring(2)}';
+      return DateFormatter.formatMonthShort(DateTime(y, m), locale: context.locale.languageCode);
     }
     return key;
   }
@@ -340,7 +340,7 @@ class _ComparisonAppBar extends StatelessWidget {
             opacity: isCollapsed ? 0.0 : 1.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(16, safeTop, 20, 14),
                 child: Row(
@@ -348,7 +348,7 @@ class _ComparisonAppBar extends StatelessWidget {
                   children: [
                     // Back button sejajar dengan baseline teks terbesar
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
+                      padding: const EdgeInsetsDirectional.only(bottom: 2),
                       child: backButton,
                     ),
                     const SizedBox(width: 12),
@@ -357,7 +357,7 @@ class _ComparisonAppBar extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Laporan &',
+                          'reports_and'.tr(),
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -365,7 +365,7 @@ class _ComparisonAppBar extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Perbandingan',
+                          'comparison'.tr(),
                           style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
@@ -387,7 +387,7 @@ class _ComparisonAppBar extends StatelessWidget {
             opacity: isCollapsed ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 150),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: AlignmentDirectional.bottomStart,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 20, 10),
                 child: Row(
@@ -396,7 +396,7 @@ class _ComparisonAppBar extends StatelessWidget {
                     backButton,
                     const SizedBox(width: 12),
                     Text(
-                      'Perbandingan',
+                      'comparison'.tr(),
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,

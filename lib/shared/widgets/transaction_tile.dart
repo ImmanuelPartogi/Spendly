@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
@@ -159,7 +160,7 @@ class _TileContent extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          transaction.category,
+                          CategoryUtils.getLocalizedName(transaction.category),
                           style: TextStyle(
                             fontSize: 13.5,
                             fontWeight: FontWeight.w600,
@@ -179,7 +180,9 @@ class _TileContent extends StatelessWidget {
                                 transaction.note?.isNotEmpty == true
                                     ? transaction.note!
                                     : DateFormatter.formatRelative(
-                                        transaction.date,),
+                                        transaction.date,
+                                        locale: context.locale.languageCode,
+                                      ),
                                 style: TextStyle(
                                   fontSize: 11.5,
                                   color: txtSec,
@@ -222,7 +225,7 @@ class _TileContent extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        DateFormatter.formatDayMonth(transaction.date),
+                        DateFormatter.formatDayMonth(transaction.date, locale: context.locale.languageCode),
                         style: TextStyle(
                           fontSize: 10.5,
                           color: txtSec.withValues(alpha: 0.7),
@@ -240,7 +243,7 @@ class _TileContent extends StatelessWidget {
         // ── Separator ─────────────────────────────────────────────────────
         if (showDivider)
           Padding(
-            padding: const EdgeInsets.only(left: 71),
+            padding: const EdgeInsetsDirectional.only(start: 71),
             child: Divider(
               height: 1,
               thickness: 1,
@@ -276,8 +279,8 @@ class _CategoryIcon extends StatelessWidget {
             color.withValues(alpha: isDark ? 0.20 : 0.14),
             color.withValues(alpha: isDark ? 0.10 : 0.07),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: AlignmentDirectional.topStart,
+          end: AlignmentDirectional.bottomEnd,
         ),
         borderRadius: BorderRadius.circular(13),
         border: Border.all(
@@ -332,7 +335,7 @@ class TransactionTileShimmer extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 71),
+          padding: const EdgeInsetsDirectional.only(start: 71),
           child: Divider(height: 1, color: divColor),
         ),
       ],

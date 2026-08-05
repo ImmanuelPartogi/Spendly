@@ -273,7 +273,7 @@ class SpendlyCardSkeleton extends StatelessWidget {
           ],
           ...List.generate(rowCount, (i) {
             return Padding(
-              padding: EdgeInsets.only(
+              padding: EdgeInsetsDirectional.only(
                 top: i == 0 ? 0 : AppSpacing.md,
               ),
               child: const Row(
